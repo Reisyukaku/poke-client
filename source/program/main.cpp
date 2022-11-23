@@ -6,6 +6,7 @@
 #include "nn/mouse.hpp"
 #include "nn/keyboard.hpp"
 #include "filelogger.hpp"
+#include "tcplogger.hpp"
 #include "lua.h"
 #include <map>
 #include <string>
@@ -35,12 +36,36 @@ typedef struct {
 * ---------------------------------------------
 */
 
+bool isInit = false;
+exl::TcpLogger *sock = exl::TcpLogger::getInstance();
+int EndsWith(const char *str, const char *suffix)
+{
+    if (!str || !suffix)
+        return 0;
+    size_t lenstr = strlen(str);
+    size_t lensuffix = strlen(suffix);
+    if (lensuffix >  lenstr)
+        return 0;
+    return strncmp(str + lenstr - lensuffix, suffix, lensuffix) == 0;
+}
 HOOK_DEFINE_TRAMPOLINE(test) {
-	static void Callback(FileStruct *file) {
+	static void Callback(void *unk) {
+        char *p = *(char**)(*(unsigned long*)(unk+0x40)+0x38);
+        if(!isInit){
+            sock->init("192.168.1.158", 3080);
+            isInit = true;
+        }
+        else {
+            size_t sz=strlen(p);
+            char buf[sz+2];
+            buf[0] = 0;
+            strcpy(buf, p);
+            buf[sz] = '\n';
+            buf[sz+1] = 0;
+            sock->sendMessage(buf);
+        }
+        Orig(unk);
         
-        Orig(file);
-        //std::string s1(file->path);
-        //logs.push_back(s1);
     }
 };
 
@@ -138,7 +163,7 @@ extern "C" void exl_main(void *x0, void *x1) {
 	//Hooks  
     luaNewState::InstallAtOffset(offsetMan->GetOffset("LuaNewState"));
     luaprint::InstallAtOffset(0x45f80);
-    //test::InstallAtOffset(0xa2ce30);
+    test::InstallAtOffset(0xa17fe4);
     
 }
 

@@ -42,7 +42,8 @@ public:
         switch(Title) {
             case 0x01001F5010DFA000: ret = PLA_offsets[offsetName]; break;
             case 0x0100ABF008968000: ret = Sword_offsets[offsetName]; break;
-            case 0x0100A3D008C5C000: ret = Scarlet_offsets[offsetName]; break;
+            case 0x01008F6008C5E000:
+            case 0x0100A3D008C5C000: ret = SV_offsets[offsetName]; break;
         }
         
         return ret;
@@ -84,7 +85,7 @@ private:
         {"LuaType", 0}
     };
     
-    std::map<std::string, uintptr_t> Scarlet_offsets = { //1.0.0
+    std::map<std::string, uintptr_t> SV_offsets = { //1.0.0
         {"LuaNewState", 0xadae00},
         {"LuaLoadbuffer", 0xd69e70},
         {"LuaPCall", 0x99e3b0},

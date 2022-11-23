@@ -15,14 +15,17 @@ public:
 		return instance;
 	};
     
-    void Log(const char *fmt, ...){
-        va_list args;
-        va_start(args, fmt);
-        char buffer[256] = {};
-        vsnprintf (buffer,256,fmt, args);
-        va_end(args);
-        nn::fs::OpenFile(&handleOut, logPath.c_str(), nn::fs::OpenMode_ReadWrite | nn::fs::OpenMode_Append);
-        nn::fs::WriteFile(handleOut, 0, buffer, strlen(buffer), nn::fs::WriteOption::MakeValue(nn::fs::WriteOptionFlag_Flush));
+    void Log(std::string str){
+        std::string path("sd:/logs.txt");
+        nn::fs::DirectoryEntryType type;
+        Result rc = nn::fs::GetEntryType(&type, path.c_str());
+        if (rc == 0x202)
+            rc = nn::fs::CreateFile(path.c_str(), 0);
+        
+        s64 offset = 0;
+        nn::fs::OpenFile(&handleOut, path.c_str(), nn::fs::OpenMode_Write | nn::fs::OpenMode_Append);
+        str += '\n';
+        nn::fs::WriteFile(handleOut, offset, str.c_str(), str.size(), nn::fs::WriteOption::MakeValue(nn::fs::WriteOptionFlag_Flush));
         nn::fs::CloseFile(handleOut);
     }
     

@@ -1,6 +1,6 @@
 #include "ui.h"
 
-void UI::WriteMenuItem(std::string str, int currRow) {
+void UI::WriteMenuItem(std::string str, uint32_t currRow) {
     if(currRow == selectedRow){
         ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0,255,0,255));
         
@@ -24,7 +24,7 @@ void UI::Initialize(std::string name, ImVec2 winSize) {
 	exl::FileLogger::getInstance();
     
 	hexForm->Initialize("Hex Viewer");
-    hexForm->SetAddr(offsetMan->GetAddr(0));
+    hexForm->SetAddr(offsetMan->GetAddr(0x43811c0));
     
 	infoForm->Initialize("Info");
     luaForm->Initialize("Lua");
@@ -108,7 +108,7 @@ void UI::Draw() {
 			}
 			case DEBUG: {
 				if(ImGui::Button(std::get<0>(opt).c_str(), buttonSize)) {
-                    //
+                    exl::FileLogger::getInstance()->Log(std::string("test"));
 				}
 				break;
 			}

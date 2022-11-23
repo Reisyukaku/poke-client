@@ -53,7 +53,7 @@ public:
         selectedRow++;
     }
     
-    void SetSelectRow(int r) {
+    void SetSelectRow(uint32_t r) {
         selectedRow = r;
     }
     
@@ -67,7 +67,7 @@ public:
 	
 private:
     std::string selectedStringPrefix(int cur);
-    void WriteMenuItem(std::string str, int currRow);
+    void WriteMenuItem(std::string str, uint32_t currRow);
 	std::vector<u32> ks;
     exl::Mouse *mouse;
     exl::Keyboard *keyboard;

@@ -1,16 +1,16 @@
 #pragma once
 
-typedef int __fastcall (*_luaLoadbuffer)(void*, const char*, size_t, char*, char*);
-typedef int __fastcall (*_luaPcall)(void*, int, int, int, uintptr_t, void*);
-typedef char* __fastcall (*_luaToString)(void*, int, void*);
-typedef void __fastcall (*_luaSetTop)(void*, int);
-typedef int __fastcall (*_luaGetTop)(void*);
-typedef void __fastcall (*_luaPushNum)(void*, double);
-typedef void __fastcall (*_luaGetGlobal)(void*, char*);
-typedef int __fastcall (*_luaLoadFile)(void*, const char *, const char*);
-typedef void __fastcall (*_luapushstring)(void*, char*);
-typedef int __fastcall (*_luaType)(void*, int);
-static char luaTypes[][11] = {
+typedef int (*_luaLoadbuffer)(void*, const char*, size_t, char*, char*);
+typedef int (*_luaPcall)(void*, int, int, int, uintptr_t, void*);
+typedef char* (*_luaToString)(void*, int, void*);
+typedef void (*_luaSetTop)(void*, int);
+typedef int (*_luaGetTop)(void*);
+typedef void (*_luaPushNum)(void*, double);
+typedef void (*_luaGetGlobal)(void*, char*);
+typedef int (*_luaLoadFile)(void*, const char *, const char*);
+typedef void (*_luapushstring)(void*, char*);
+typedef int (*_luaType)(void*, int);
+static const char luaTypes[][11] = {
     "nil",
     "boolean",
     "userdata",
