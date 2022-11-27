@@ -52,7 +52,7 @@ nn::Result exl::TcpLogger::init(const char *ip, u16 port) {
     nn::Result result = nn::socket::Connect(mSocketFd, &serverAddress, sizeof(serverAddress));
 
     mState = result.isSuccess() ? SocketState::CONNECTED : SocketState::DISCONNECTED;
-
+    
     return result;
 }
 

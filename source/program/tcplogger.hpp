@@ -30,7 +30,10 @@ public:
     void sendMessage(const char* message);
     const char* receiveMessage();
     void close();
-	
+    bool IsConnected(){
+        return mState == SocketState::CONNECTED;
+    }
+    
 private:
 	static TcpLogger* instance;
     SocketState mState;
@@ -39,7 +42,6 @@ private:
 	TcpLogger() {
 		//
 	}
-    
 	
 	TcpLogger(const TcpLogger&);
 	TcpLogger& operator=(const TcpLogger&);

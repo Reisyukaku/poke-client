@@ -69,7 +69,7 @@ void LuaForm::Draw() {
     
     ImGui::Separator();
     
-    if(ImGui::Button("Run", ImVec2(220, 30))) {
+    if(ImGui::Button("Run Lua from SD", ImVec2(220, 30))) {
         Run();
     }
     ImGui::SameLine();

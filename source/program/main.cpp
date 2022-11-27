@@ -16,6 +16,7 @@
 #include <cstring>
 
 UI *ui;
+exl::TcpLogger *sock = exl::TcpLogger::getInstance();
 
 std::vector<std::string> logs;
 
@@ -36,8 +37,6 @@ typedef struct {
 * ---------------------------------------------
 */
 
-bool isInit = false;
-exl::TcpLogger *sock = exl::TcpLogger::getInstance();
 int EndsWith(const char *str, const char *suffix)
 {
     if (!str || !suffix)
@@ -48,14 +47,10 @@ int EndsWith(const char *str, const char *suffix)
         return 0;
     return strncmp(str + lenstr - lensuffix, suffix, lensuffix) == 0;
 }
-HOOK_DEFINE_TRAMPOLINE(test) {
+HOOK_DEFINE_TRAMPOLINE(trpfd) {
 	static void Callback(void *unk) {
         char *p = *(char**)(*(unsigned long*)(unk+0x40)+0x38);
-        if(!isInit){
-            sock->init("192.168.1.158", 3080);
-            isInit = true;
-        }
-        else {
+        if(sock->IsConnected()){
             size_t sz=strlen(p);
             char buf[sz+2];
             buf[0] = 0;
@@ -74,30 +69,14 @@ HOOK_DEFINE_TRAMPOLINE(luaprint) {
         _luaToString toString = reinterpret_cast<_luaToString>(exl::OffsetManager::getInstance()->GetAddr("LuaToString"));
         _luaSetTop setTop = reinterpret_cast<_luaSetTop>(exl::OffsetManager::getInstance()->GetAddr("LuaSetTop"));
         _luaGetTop getTop = reinterpret_cast<_luaGetTop>(exl::OffsetManager::getInstance()->GetAddr("LuaGetTop"));
-
         int nresults = getTop(L);
         for(int i = 0, j = -1; i < nresults; i++)
-            logs.push_back(toString(L, j--, NULL));
+            if(sock->IsConnected()) 
+                logs.push_back(toString(L, j--, NULL));
         luaPop(L, nresults);
         return 0;
     }
 };
-
-/*HOOK_DEFINE_TRAMPOLINE(trpak) {
-	static void Callback(const char **file) {
-        const char *str = (const char*)file[0];
-        uintptr_t x8;
-        asm volatile ("mov %0, X8" : "=r"(x8));
-        
-        auto s1 = std::string(str);
-        std::string s2(".blua");
-        if(s1.find(s2) != -1)
-            logs.push_back(s1);
-            
-        asm volatile ("mov X8, %0" : "+r"(x8));
-        Orig(file);
-    }
-};*/
 
 HOOK_DEFINE_TRAMPOLINE(luaNewState) {
 	static void *Callback(void *L1, void *L2) {
@@ -124,6 +103,7 @@ void nvnImguiFontGetTexDataAsAlpha8(unsigned char **out_pixels, int *out_width, 
 
 /* This method is called during initialization. You can create your imgui context, add fonts etc. */
 void nvnImguiInitialize() {
+    //sock->init("192.168.1.158", 3080);
     
     ui = new UI();
     ui->Initialize("PokeClient by Rei", {250.0f, 600.0f});
@@ -163,8 +143,7 @@ extern "C" void exl_main(void *x0, void *x1) {
 	//Hooks  
     luaNewState::InstallAtOffset(offsetMan->GetOffset("LuaNewState"));
     luaprint::InstallAtOffset(0x45f80);
-    test::InstallAtOffset(0xa17fe4);
-    
+    //trpfd::InstallAtOffset(0xa17fe4);    
 }
 
 extern "C" NORETURN void exl_exception_entry() {
