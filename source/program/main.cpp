@@ -142,7 +142,7 @@ extern "C" void exl_main(void *x0, void *x1) {
     
 	//Hooks  
     luaNewState::InstallAtOffset(offsetMan->GetOffset("LuaNewState"));
-    luaprint::InstallAtOffset(0x45f80);
+    luaprint::InstallAtOffset(offsetMan->GetOffset("LuaPrint"));
     //trpfd::InstallAtOffset(0xa17fe4);    
 }
 

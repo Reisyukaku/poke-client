@@ -5,9 +5,20 @@ void LuaForm::Initialize(std::string name) {
 	isVisible = false;
     logger = exl::FileLogger::getInstance();
     offsetMan = exl::OffsetManager::getInstance();
+    scriptDir = "sd:/luaScripts/";
+    
+    scriptList = nullptr;
+    nn::fs::DirectoryHandle dirHandle;
+    if(!nn::fs::OpenDirectory(&dirHandle, scriptDir.c_str(), nn::fs::OpenDirectoryMode_All)){
+        nn::fs::GetDirectoryEntryCount(&scriptCnt, dirHandle);
+        if(scriptCnt > 0){
+            scriptList = new nn::fs::DirectoryEntry[scriptCnt];
+            nn::fs::ReadDirectory(&scriptCnt, scriptList, dirHandle, scriptCnt);
+        }
+    }
 }
 
-void LuaForm::Run() {    
+void LuaForm::Run(std::string file) {    
     _luaLoadbuffer loadBuffer = reinterpret_cast<_luaLoadbuffer>(offsetMan->GetAddr("LuaLoadbuffer"));
     _luaPcall pcallk = reinterpret_cast<_luaPcall>(offsetMan->GetAddr("LuaPCall"));
     _luaToString toString = reinterpret_cast<_luaToString>(offsetMan->GetAddr("LuaToString"));
@@ -19,7 +30,7 @@ void LuaForm::Run() {
     
     nn::fs::FileHandle lua;
     long sz;
-    nn::fs::OpenFile(&lua, "sd:/test.lua", nn::fs::OpenMode_Read);
+    nn::fs::OpenFile(&lua, file.c_str(), nn::fs::OpenMode_Read);
     nn::fs::GetFileSize(&sz, lua);
     char buffer[sz];
     memset(buffer, 0, sz);
@@ -55,7 +66,7 @@ void LuaForm::Run() {
 }
 
 void LuaForm::Draw() {
-    ImGui::SetNextWindowSize(ImVec2(600.0f, 400.0f), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(800.0f, 400.0f), ImGuiCond_FirstUseEver);
 	if (!ImGui::Begin(Name.c_str(), &isVisible, ImGuiWindowFlags_NoScrollbar)){
 		ImGui::End();
 		return;
@@ -69,12 +80,27 @@ void LuaForm::Draw() {
     
     ImGui::Separator();
     
-    if(ImGui::Button("Run Lua from SD", ImVec2(220, 30))) {
-        Run();
+    if(ImGui::Button("Run Selected Script", ImVec2(220, 30))) {
+        if(scriptCnt > 0 && selectedScript != "")
+            Run(scriptDir + selectedScript);
     }
     ImGui::SameLine();
     if(ImGui::Button("Clear", ImVec2(220, 30))) {
         Logs.clear();
+    }
+    
+    ImGui::SameLine();
+        
+    if (ImGui::BeginCombo("##combo", selectedScript.c_str())) {
+        for (int n = 0; n < scriptCnt; n++) {
+            std::string file(scriptList[n].m_Name);
+            bool isSelected = (selectedScript == file);
+            if (ImGui::Selectable(file.c_str(), isSelected))
+                selectedScript = file;
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();
+        }
+        ImGui::EndCombo();
     }
     
 	ImGui::End();
