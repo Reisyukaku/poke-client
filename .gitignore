@@ -1,6 +1,7 @@
 build/*
 out/*
 deploy/*
+.vscode/*
 
 *.elf
 *.nso
