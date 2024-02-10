@@ -6,6 +6,7 @@
 #include "nn/hid.h"
 #include "offsetManager.hpp"
 #include "nn/mouse.hpp"
+#include "nn/keyboard.hpp"
 #include "form.hpp"
 #include "types.h"
 
@@ -31,6 +32,7 @@ public:
     
     void SetAddr(uintptr_t addr) {
         DataAddr = addr;
+		snprintf(levelInput, IM_ARRAYSIZE(levelInput), "%016lX", DataAddr);
     }
 	
 private:
@@ -39,5 +41,7 @@ private:
 	size_t DataSize;
     int Rows;
 	bool OptGreyOutZeroes;
-	size_t highlightMin, highlightMax;
+	int highlightMin, highlightMax;
+	exl::Keyboard *keyboard;
+	static char levelInput[32];
 };

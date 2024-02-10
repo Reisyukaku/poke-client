@@ -40,19 +40,9 @@ typedef struct {
 * ---------------------------------------------
 */
 
-int EndsWith(const char *str, const char *suffix)
-{
-    if (!str || !suffix)
-        return 0;
-    size_t lenstr = strlen(str);
-    size_t lensuffix = strlen(suffix);
-    if (lensuffix >  lenstr)
-        return 0;
-    return strncmp(str + lenstr - lensuffix, suffix, lensuffix) == 0;
-}
 HOOK_DEFINE_TRAMPOLINE(trpfd) {
 	static void Callback(void *unk) {
-        char *p = *(char**)(*(unsigned long*)(unk+0x40)+0x38);
+        char *p = *(char**)(*(unsigned long*)((long)unk+0x40)+0x38);
         if(sock->IsConnected()){
             size_t sz=strlen(p);
             char buf[sz+2];
@@ -67,7 +57,7 @@ HOOK_DEFINE_TRAMPOLINE(trpfd) {
     }
 };
 
-HOOK_DEFINE_TRAMPOLINE(test) {
+/*HOOK_DEFINE_TRAMPOLINE(test) {
 	static void Callback(void *obj,  char *str) {
         void (*func)(void*, uint64_t*) = (void (*)(void*, uint64_t*))exl::OffsetManager::getInstance()->GetAddr(0x1d78f98);
         uint64_t hash = Utils::FNVA1Hash(str);
@@ -75,7 +65,7 @@ HOOK_DEFINE_TRAMPOLINE(test) {
         void (*fun_ptr)(void*, void (*)(void*, uint64_t*), int, uint64_t*) = (void (*)(void*, void (*)(void*, uint64_t*), int, uint64_t*))exl::OffsetManager::getInstance()->GetAddr(0x1352270);
         fun_ptr(obj, func, 0, &hash);
     }
-};
+};*/
 
 HOOK_DEFINE_TRAMPOLINE(luaprint) {
 	static int Callback(void *L) {

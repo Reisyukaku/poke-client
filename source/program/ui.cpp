@@ -63,7 +63,6 @@ void UI::Update() {
 	io.AddMouseButtonEvent(1, mouse->state.buttons & nn::hid::MouseButtons::RightClick);
 }
 
-//https://github.com/EwanMac3/splat2-test-mod-menu/blob/master/source/program/main.cpp
 void UI::Draw() {
 	ImGui::NewFrame();
     
@@ -115,10 +114,7 @@ void UI::Draw() {
 		}
         currentRow++;
     }
-    keyboard->AddKeys();
-	static char levelInput[128] = {};
-	ImGui::InputTextMultiline("level", levelInput, IM_ARRAYSIZE(levelInput));
-    
+	
 	if(hexForm->IsOpen()) hexForm->Draw();
 	if(luaForm->IsOpen()) luaForm->Draw();
     if(infoForm->IsOpen()) infoForm->Draw();
