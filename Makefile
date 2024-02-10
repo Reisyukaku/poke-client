@@ -30,7 +30,7 @@ export TARGET		:=	$(notdir $(CURDIR))
 # DIST_DIR is the dir the file build will be copied to
 # SD_OUT is the optional path to which the final build will be copied to
 
-PROGRAM_ID 		:= 	0100A3D008C5C000
+PROGRAM_ID 		:= 	01008F6008C5E000
 LOAD_KIND_ENUM 	:= 	2
 BINARY_NAME 	:= 	subsdk9
 DIST_DIR 		:= 	$(TOPDIR)/deploy

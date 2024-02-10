@@ -1,6 +1,6 @@
 #pragma once
 
-typedef int (*_luaLoadbuffer)(void*, const char*, size_t, char*, char*);
+typedef int (*_luaLoadbuffer)(void*, const char*, size_t, const char*, char*);
 typedef int (*_luaPcall)(void*, int, int, int, uintptr_t, void*);
 typedef char* (*_luaToString)(void*, int, void*);
 typedef void (*_luaSetTop)(void*, int);

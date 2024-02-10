@@ -7,7 +7,9 @@
 #include "nn/keyboard.hpp"
 #include "filelogger.hpp"
 #include "tcplogger.hpp"
+#include "infoform.hpp"
 #include "lua.h"
+#include "utils.hpp"
 #include <map>
 #include <string>
 #include <cstdio>
@@ -15,15 +17,15 @@
 #include <cstdarg>
 #include <cstring>
 
-UI *ui;
-exl::TcpLogger *sock = exl::TcpLogger::getInstance();
-
-std::vector<std::string> logs;
-
 exl::Mouse *exl::Mouse::instance = nullptr;
 exl::Keyboard *exl::Keyboard::instance = nullptr;
 exl::FileLogger *exl::FileLogger::instance = nullptr;
 exl::OffsetManager *exl::OffsetManager::instance = nullptr;
+
+UI *ui;
+exl::TcpLogger *sock = exl::TcpLogger::getInstance();
+
+std::vector<std::string> logs;
 
 typedef struct {
     uint64_t unk;
@@ -33,6 +35,7 @@ typedef struct {
     uint64_t unk2;
     int fsType;
 } FileStruct;
+
 /*
 * ---------------------------------------------
 */
@@ -64,6 +67,16 @@ HOOK_DEFINE_TRAMPOLINE(trpfd) {
     }
 };
 
+HOOK_DEFINE_TRAMPOLINE(test) {
+	static void Callback(void *obj,  char *str) {
+        void (*func)(void*, uint64_t*) = (void (*)(void*, uint64_t*))exl::OffsetManager::getInstance()->GetAddr(0x1d78f98);
+        uint64_t hash = Utils::FNVA1Hash(str);
+        logs.push_back(std::string(str));
+        void (*fun_ptr)(void*, void (*)(void*, uint64_t*), int, uint64_t*) = (void (*)(void*, void (*)(void*, uint64_t*), int, uint64_t*))exl::OffsetManager::getInstance()->GetAddr(0x1352270);
+        fun_ptr(obj, func, 0, &hash);
+    }
+};
+
 HOOK_DEFINE_TRAMPOLINE(luaprint) {
 	static int Callback(void *L) {
         _luaToString toString = reinterpret_cast<_luaToString>(exl::OffsetManager::getInstance()->GetAddr("LuaToString"));
@@ -71,7 +84,7 @@ HOOK_DEFINE_TRAMPOLINE(luaprint) {
         _luaGetTop getTop = reinterpret_cast<_luaGetTop>(exl::OffsetManager::getInstance()->GetAddr("LuaGetTop"));
         int nresults = getTop(L);
         for(int i = 0, j = -1; i < nresults; i++)
-            if(sock->IsConnected()) 
+            //if(sock->IsConnected()) 
                 logs.push_back(toString(L, j--, NULL));
         luaPop(L, nresults);
         return 0;
@@ -143,7 +156,8 @@ extern "C" void exl_main(void *x0, void *x1) {
 	//Hooks  
     luaNewState::InstallAtOffset(offsetMan->GetOffset("LuaNewState"));
     luaprint::InstallAtOffset(offsetMan->GetOffset("LuaPrint"));
-    //trpfd::InstallAtOffset(0xa17fe4);    
+    //trpfd::InstallAtOffset(0xa17fe4);
+    //test::InstallAtOffset(0x1352134); 
 }
 
 extern "C" NORETURN void exl_exception_entry() {

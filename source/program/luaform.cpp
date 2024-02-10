@@ -37,7 +37,7 @@ void LuaForm::Run(std::string file) {
     nn::fs::ReadFile(lua, 0, buffer, sz);
     nn::fs::CloseFile(lua);
     
-    loadBuffer(L, buffer, sz, "vm", NULL);
+    loadBuffer(L, buffer, sz, "poke-client VM", NULL);
     int ret = pcallk(L, 0, LUA_MULTRET, 0, 0, 0);
     if(!ret){
         int nresults = getTop(L);
@@ -46,15 +46,15 @@ void LuaForm::Run(std::string file) {
             int retType = ltype(L,j);
             std::string res = std::string(luaTypes[retType]) + std::string(": ");
             switch(retType){
-                case 1:
-                case 3:
-                case 4:
+                case 1: //Bool
+                case 3: //Number
+                case 4: //String
                 {
                     res += std::string(toString(L, j--, NULL));
                     break;
                 }
                 default:
-                    res += std::string("<ommited>");
+                    res += std::string("<ommited> Type: " + std::string(luaTypes[retType]));
                     break;
             }
             Logs.push_back(res.c_str());
@@ -62,7 +62,7 @@ void LuaForm::Run(std::string file) {
         luaPop(L, nresults);
     }
     else
-        Logs.push_back(std::string("Error in lua"));
+        Logs.push_back(std::string("Error in lua:\n") + std::string(toString(L, -1, NULL)));
 }
 
 void LuaForm::Draw() {
