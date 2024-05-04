@@ -18,12 +18,6 @@ public:
     void AddString(std::string s) {
         AddToQueue(s);
     }
-    
-    void AddLogs(std::vector<std::string> logs) {
-        for(auto l : logs){
-            AddToQueue(l);
-        }
-    }
 	
     static InfoForm* getInstance() {
 		if (instance == nullptr)

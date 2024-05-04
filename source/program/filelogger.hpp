@@ -7,13 +7,7 @@
 
 namespace exl {
 class FileLogger {
-public:
-	static FileLogger* getInstance() {
-		if (instance == nullptr)
-			instance = new FileLogger();
-		return instance;
-	};
-    
+public:    
     void Log(std::string str){
         std::string path("sd:/logs.txt");
         nn::fs::DirectoryEntryType type;
@@ -45,18 +39,22 @@ public:
         nn::fs::CloseFile(handleOut);
     }
     
-	
+	static FileLogger* getInstance() {
+		if (instance == nullptr)
+			instance = new FileLogger();
+		return instance;
+	};
+
 private:
     nn::fs::FileHandle handleOut;
     std::string logPath;
-    
-	FileLogger() {
-		nn::fs::MountSdCardForDebug("sd");
-	}
     
     static FileLogger* instance;
 	FileLogger(const FileLogger&);
 	FileLogger& operator=(const FileLogger&);
     
+	FileLogger() {
+		nn::fs::MountSdCardForDebug("sd");
+	}    
 };
 };

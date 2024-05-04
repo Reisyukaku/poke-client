@@ -34,8 +34,6 @@ public:
     bool IsVisible() {
         return isVisible;
     }
-    
-    void AddLogs(std::vector<std::string> logs);
 	
 private:
     exl::Mouse *mouse;

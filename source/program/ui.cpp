@@ -76,10 +76,6 @@ void UI::Draw() {
     ImGui::End();
 }
 
-void UI::AddLogs(std::vector<std::string> logs){
-    InfoForm::getInstance()->AddLogs(logs);
-}
-
 void UI::Render() {
     ImGui::Render();
 }

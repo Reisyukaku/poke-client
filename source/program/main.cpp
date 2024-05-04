@@ -25,8 +25,6 @@ exl::OffsetManager *exl::OffsetManager::instance = nullptr;
 UI *ui;
 exl::TcpLogger *sock = exl::TcpLogger::getInstance();
 
-std::vector<std::string> logs;
-
 typedef struct {
     uint64_t unk;
     uint64_t FnvHash;
@@ -57,16 +55,6 @@ HOOK_DEFINE_TRAMPOLINE(trpfd) {
     }
 };
 
-/*HOOK_DEFINE_TRAMPOLINE(test) {
-	static void Callback(void *obj,  char *str) {
-        void (*func)(void*, uint64_t*) = (void (*)(void*, uint64_t*))exl::OffsetManager::getInstance()->GetAddr(0x1d78f98);
-        uint64_t hash = Utils::FNVA1Hash(str);
-        logs.push_back(std::string(str));
-        void (*fun_ptr)(void*, void (*)(void*, uint64_t*), int, uint64_t*) = (void (*)(void*, void (*)(void*, uint64_t*), int, uint64_t*))exl::OffsetManager::getInstance()->GetAddr(0x1352270);
-        fun_ptr(obj, func, 0, &hash);
-    }
-};*/
-
 HOOK_DEFINE_TRAMPOLINE(luaprint) {
 	static int Callback(void *L) {
         _luaToString toString = reinterpret_cast<_luaToString>(exl::OffsetManager::getInstance()->GetAddr("LuaToString"));
@@ -75,7 +63,7 @@ HOOK_DEFINE_TRAMPOLINE(luaprint) {
         int nresults = getTop(L);
         for(int i = 0, j = -1; i < nresults; i++)
             //if(sock->IsConnected()) 
-                logs.push_back(toString(L, j--, NULL));
+                InfoForm::getInstance()->AddString(toString(L, j--, NULL));
         luaPop(L, nresults);
         return 0;
     }
@@ -114,10 +102,6 @@ void nvnImguiInitialize() {
 
 ImDrawData *nvnImguiCalc() {
 	ui->Update();
-    if(logs.size() > 0){
-        ui->AddLogs(logs);
-        logs.clear();
-    }
 	ui->Draw();
     ui->Render();
     
