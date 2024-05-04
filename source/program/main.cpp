@@ -7,8 +7,8 @@
 #include "nn/keyboard.hpp"
 #include "filelogger.hpp"
 #include "tcplogger.hpp"
-#include "infoform.hpp"
-#include "lua.h"
+#include "UI/infoform.hpp"
+#include "UI/lua.h"
 #include "utils.hpp"
 #include <map>
 #include <string>
@@ -109,13 +109,7 @@ void nvnImguiInitialize() {
     //sock->init("192.168.1.158", 3080);
     
     ui = new UI();
-    ui->Initialize("PokeClient by Rei", {250.0f, 600.0f});
-	
-    ui->AddMenuButton("Show HexViewer", UI::MenuItems::HEX);
-    ui->AddMenuButton("Show Info", UI::MenuItems::INFO);
-    ui->AddMenuButton("Show Lua", UI::MenuItems::LUA);
-	ui->AddMenuButton("Debug", UI::MenuItems::DEBUG);
-    ui->AddMenuButton("Settings", UI::MenuItems::SETTINGS);
+    ui->Initialize("Poke-Client", {250.0f, 600.0f});
 }
 
 ImDrawData *nvnImguiCalc() {

@@ -1,18 +1,12 @@
 #include "hexform.hpp"
 
-char HexForm::levelInput[32] = {};
+HexForm * HexForm::instance = nullptr;
 
-void HexForm::Initialize(std::string name) {
-	Name = name;
-	isVisible = false;
-	Rows = 16;
-    DataSize = 0x1000;
-    DataAddr = 0;
-	OptGreyOutZeroes = false;
-	highlightMin = -1;
-	highlightMax = -1;
+char HexForm::startAddrStr[16] = {};
 
-	keyboard = exl::Keyboard::getInstance();
+void HexForm::Initialize()
+{
+	//
 }
     
 void HexForm::Draw() {
@@ -97,8 +91,8 @@ void HexForm::Draw() {
 	//ImGui::Text("Range %08lX..%08lX", (uint64_t)DataAddr, (uint64_t)(DataAddr + DataSize-1));
 	ImGui::Text("Start Addr: ");
 	ImGui::SameLine();
-	keyboard->AddKeys();
-	ImGui::InputText("##Addr", levelInput, IM_ARRAYSIZE(levelInput));
+	
+	ImGui::InputText("##Addr", startAddrStr, IM_ARRAYSIZE(startAddrStr), ImGuiInputTextFlags_CharsHexadecimal);
 	ImGui::SameLine();
 	
 	ImGui::End();

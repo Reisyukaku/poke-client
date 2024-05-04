@@ -1,8 +1,9 @@
 #include "luaform.hpp"
 
-void LuaForm::Initialize(std::string name) {
-	Name = name;
-	isVisible = false;
+LuaForm * LuaForm::instance = nullptr;
+
+void LuaForm::Initialize()
+{
     logger = exl::FileLogger::getInstance();
     offsetMan = exl::OffsetManager::getInstance();
     scriptDir = "sd:/luaScripts/";

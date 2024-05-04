@@ -15,11 +15,25 @@
 class LuaForm : public BasicForm{
 public:
     
-    void Initialize(std::string name) override;
+    void Initialize() override;
     void Draw() override;
     
-	
+	static LuaForm* getInstance() {
+		if (instance == nullptr)
+			instance = new LuaForm();
+		return instance;
+	};
+
 private:
+    static LuaForm* instance;
+	LuaForm(const LuaForm&);
+	LuaForm& operator=(const LuaForm&);
+
+    LuaForm()
+    {
+        Name = "Lua Interface";
+    }
+
     void Run(std::string file);
     std::vector<std::string> Logs;
     exl::FileLogger *logger;

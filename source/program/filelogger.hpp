@@ -4,7 +4,6 @@
 #include <string>
 #include <deque>
 #include "nn/fs.hpp"
-#include "../types.h"
 
 namespace exl {
 class FileLogger {
@@ -48,7 +47,6 @@ public:
     
 	
 private:
-	static FileLogger* instance;
     nn::fs::FileHandle handleOut;
     std::string logPath;
     
@@ -56,6 +54,7 @@ private:
 		nn::fs::MountSdCardForDebug("sd");
 	}
     
+    static FileLogger* instance;
 	FileLogger(const FileLogger&);
 	FileLogger& operator=(const FileLogger&);
     

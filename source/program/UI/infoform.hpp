@@ -12,7 +12,7 @@
 class InfoForm : public BasicForm{
 public:
     
-    void Initialize(std::string name) override;
+    void Initialize() override;
     void Draw() override;
     
     void AddString(std::string s) {
@@ -25,7 +25,24 @@ public:
         }
     }
 	
+    static InfoForm* getInstance() {
+		if (instance == nullptr)
+			instance = new InfoForm();
+		return instance;
+	};
+
 private:
+    static InfoForm* instance;
+	InfoForm(const InfoForm&);
+	InfoForm& operator=(const InfoForm&);
+
+    InfoForm()
+    {
+        Name = "Info";
+        isVisible = false;
+        logger = exl::FileLogger::getInstance();
+    }
+
     void AddToQueue(std::string str) {
         if(Logs.size() > 100)
             Logs.pop_front();

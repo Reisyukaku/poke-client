@@ -49,9 +49,7 @@ public:
         return ret;
     }
 	
-private:
-	static OffsetManager* instance;
-    
+private:    
 	OffsetManager() {
 		luaState = NULL;
         BaseAddr = 0;
@@ -62,6 +60,7 @@ private:
     uintptr_t BaseAddr;
     void *luaState;
 	
+    static OffsetManager* instance;
 	OffsetManager(const OffsetManager&);
 	OffsetManager& operator=(const OffsetManager&);
     

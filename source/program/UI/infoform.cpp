@@ -1,9 +1,10 @@
 #include "infoform.hpp"
 
-void InfoForm::Initialize(std::string name) {
-	Name = name;
-	isVisible = false;
-    logger = exl::FileLogger::getInstance();
+InfoForm * InfoForm::instance = nullptr;
+
+void InfoForm::Initialize()
+{
+    //
 }
 
 void InfoForm::Draw() {

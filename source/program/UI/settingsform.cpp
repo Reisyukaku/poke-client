@@ -1,8 +1,10 @@
 #include "settingsform.hpp"
 
-void SettingsForm::Initialize(std::string name) {
-	Name = name;
-	isVisible = false;
+SettingsForm * SettingsForm::instance = nullptr;
+
+void SettingsForm::Initialize()
+{
+	//
 }
 
 void SettingsForm::Draw() {

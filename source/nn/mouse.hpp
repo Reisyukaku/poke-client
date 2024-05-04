@@ -11,14 +11,21 @@ public:
 		return instance;
 	};
 	
-	void Poll() {
+	void Poll()	{
 		nn::hid::GetMouseState(&state);
 	}
+
+	void Update() {
+		ImGuiIO& io = ImGui::GetIO();
+		io.AddMousePosEvent((float)state.x, (float)state.y);
+		io.AddMouseButtonEvent(0, state.buttons.isBitSet(nn::hid::MouseButton::Left));
+		io.AddMouseButtonEvent(1, state.buttons.isBitSet(nn::hid::MouseButton::Right));
+	}
 	
-	nn::hid::MouseState state;
 	
 private:
 	static Mouse* instance;
+	nn::hid::MouseState state;
 	
 	Mouse() {
 		nn::hid::InitializeMouse();

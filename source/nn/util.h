@@ -55,12 +55,16 @@ namespace nn {
             u32 mSize;                 // _1C
         };
 
-        template <s32 size, typename T>
+        template<s32 size, typename T>
         struct BitFlagSet {
-            u32 field: size;
+            using type = std::conditional_t<size <= 32, u32, u64>;
+            static const int storageBits = static_cast<int>(sizeof(type)) * 8;
+            static const int storageCount = static_cast<int>((size + storageBits - 1)) / storageBits;
+            type field[storageCount];
 
-            inline bool isFlagSet(T t) const {
-                return (field & static_cast<u32>(t)) != 0;
+            inline bool isBitSet(T index) const {
+                return (this->field[static_cast<u64>(index) / storageBits] &
+                        (static_cast<type>(1) << static_cast<u64>(index) % storageBits)) != 0;
             }
         };
 

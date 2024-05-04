@@ -21,7 +21,7 @@
 class HexForm : public BasicForm{
 public:
 	
-    void Initialize(std::string name) override;
+	void Initialize() override;
     void Draw() override;
     
 	void DrawContents(void* mem_data_void, size_t mem_size);
@@ -32,10 +32,34 @@ public:
     
     void SetAddr(uintptr_t addr) {
         DataAddr = addr;
-		snprintf(levelInput, IM_ARRAYSIZE(levelInput), "%016lX", DataAddr);
+		snprintf(startAddrStr, IM_ARRAYSIZE(startAddrStr), "%016lX", DataAddr);
     }
+
+	static HexForm* getInstance() {
+		if (instance == nullptr)
+			instance = new HexForm();
+		return instance;
+	};
 	
 private:
+	static HexForm* instance;
+	HexForm(const HexForm&);
+	HexForm& operator=(const HexForm&);
+
+	HexForm()
+	{
+		Name = "Hex Viewer";
+		isVisible = false;
+		Rows = 16;
+		DataSize = 0x1000;
+		DataAddr = 0;
+		OptGreyOutZeroes = false;
+		highlightMin = -1;
+		highlightMax = -1;
+
+		keyboard = exl::Keyboard::getInstance();
+	}
+
     uintptr_t DataAddr;
 	uint64_t Offset;
 	size_t DataSize;
@@ -43,5 +67,5 @@ private:
 	bool OptGreyOutZeroes;
 	int highlightMin, highlightMax;
 	exl::Keyboard *keyboard;
-	static char levelInput[32];
+	static char startAddrStr[16];
 };

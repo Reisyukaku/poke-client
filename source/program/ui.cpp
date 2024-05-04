@@ -13,22 +13,11 @@ void UI::WriteMenuItem(std::string str, uint32_t currRow) {
 void UI::Initialize(std::string name, ImVec2 winSize) {
     Name = name;
 	WinSize = winSize;
-	hexForm = new HexForm();
-	infoForm = new InfoForm();
-    luaForm = new LuaForm();
-    settingsForm = new SettingsForm();
     
     mouse = exl::Mouse::getInstance();
     keyboard = exl::Keyboard::getInstance();
     offsetMan = exl::OffsetManager::getInstance();
 	exl::FileLogger::getInstance();
-    
-	hexForm->Initialize("Hex Viewer");
-    hexForm->SetAddr(offsetMan->GetAddr(0x43811c0));
-    
-	infoForm->Initialize("Info");
-    luaForm->Initialize("Lua");
-    settingsForm->Initialize("Settings");
 	
     ImGui::CreateContext();
     
@@ -44,23 +33,29 @@ void UI::Initialize(std::string name, ImVec2 winSize) {
     
     selectedRow = 0;
     isVisible = true;
-    
-    keyboard->SetMap();
-    //ImGui::SetNextWindowCollapsed(true);
-}
 
-void UI::AddMenuButton(std::string name, UI::MenuItems func) {
-    MenuOptions.push_back(std::tuple<std::string, UI::MenuItems>{name, func});
+    hexForm = HexForm::getInstance();
+    hexForm->Initialize();
+    hexForm->SetAddr(offsetMan->GetAddr(0x43811c0));
+
+    infoForm = InfoForm::getInstance();
+    infoForm->Initialize();
+
+    luaForm = LuaForm::getInstance();
+    luaForm->Initialize();
+
+    settingsForm = SettingsForm::getInstance();
+    settingsForm->Initialize();
+
+    //ImGui::SetNextWindowCollapsed(true);
 }
 
 void UI::Update() {
 	mouse->Poll();
 	keyboard->Poll();
-	
-	ImGuiIO& io = ImGui::GetIO();
-	io.AddMousePosEvent((float)mouse->state.x, (float)mouse->state.y);
-	io.AddMouseButtonEvent(0, mouse->state.buttons & nn::hid::MouseButtons::LeftClick);
-	io.AddMouseButtonEvent(1, mouse->state.buttons & nn::hid::MouseButtons::RightClick);
+
+	mouse->Update();
+    keyboard->Update();
 }
 
 void UI::Draw() {
@@ -77,50 +72,22 @@ void UI::Draw() {
     ImGui::SetWindowPos(pos);
 	
 	ImVec2 buttonSize = ImVec2(220, 40);
-    int currentRow = 0;
 
-    for (const auto &opt: MenuOptions) {
-        switch(std::get<1>(opt)) {
-			case HEX: {
-				if(ImGui::Button(std::get<0>(opt).c_str(), buttonSize)) {
-					hexForm->Open();
-				}
-				break;
-			}
-			case INFO: {
-				if(ImGui::Button(std::get<0>(opt).c_str(), buttonSize)) {
-					infoForm->Open();
-				}
-				break;
-			}
-            case LUA: {
-				if(ImGui::Button(std::get<0>(opt).c_str(), buttonSize)) {
-					luaForm->Open();
-				}
-				break;
-			}
-            case SETTINGS: {
-				if(ImGui::Button(std::get<0>(opt).c_str(), buttonSize)) {
-					settingsForm->Open();
-				}
-				break;
-			}
-			case DEBUG: {
-				if(ImGui::Button(std::get<0>(opt).c_str(), buttonSize)) {
-                    exl::FileLogger::getInstance()->Log(std::string("test"));
-				}
-				break;
-			}
-		}
-        currentRow++;
-    }
+    if(ImGui::Button(hexForm->GetName().c_str(), buttonSize)) hexForm->Open();
+    if(ImGui::Button(infoForm->GetName().c_str(), buttonSize)) infoForm->Open();
+    if(ImGui::Button(luaForm->GetName().c_str(), buttonSize)) luaForm->Open();
+    if(ImGui::Button(settingsForm->GetName().c_str(), buttonSize)) settingsForm->Open();
 	
 	if(hexForm->IsOpen()) hexForm->Draw();
-	if(luaForm->IsOpen()) luaForm->Draw();
     if(infoForm->IsOpen()) infoForm->Draw();
+    if(luaForm->IsOpen()) luaForm->Draw();
     if(settingsForm->IsOpen()) settingsForm->Draw();
     
     ImGui::End();
+}
+
+void UI::AddLogs(std::vector<std::string> logs){
+    InfoForm::getInstance()->AddLogs(logs);
 }
 
 void UI::Render() {

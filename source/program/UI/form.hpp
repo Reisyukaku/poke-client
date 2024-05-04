@@ -10,7 +10,7 @@
 class BasicForm {
 public:
     
-    virtual void Initialize(std::string name);
+	virtual void Initialize();
     virtual void Draw();
 	
 	void Open() {
@@ -20,8 +20,13 @@ public:
 	bool IsOpen() {
 		return isVisible;
 	}
+
+	std::string GetName()
+	{
+		return Name;
+	}
 	
 protected:
 	std::string Name;
-	bool isVisible;
+	bool isVisible = false;
 };

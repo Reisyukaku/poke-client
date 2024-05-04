@@ -10,11 +10,10 @@
 #include "imgui/font.h"
 #include "nn/hid.h"
 #include "nn/fs.hpp"
-#include "hexform.hpp"
-#include "infoform.hpp"
-#include "luaform.hpp"
-#include "settingsform.hpp"
-#include "form.hpp"
+#include "UI/hexform.hpp"
+#include "UI/infoform.hpp"
+#include "UI/luaform.hpp"
+#include "UI/settingsform.hpp"
 #include "nn/mouse.hpp"
 #include "nn/keyboard.hpp"
 #include "filelogger.hpp"
@@ -22,20 +21,12 @@
 
 class UI {
 public:
-    enum MenuItems {
-		HEX = 0,
-		INFO,
-        LUA,
-        SETTINGS,
-		DEBUG
-	};
-	
     void Initialize(std::string name, ImVec2 winSize);
 	void Update();
 	void Draw();
     void Render();
     
-    void AddMenuButton(std::string name, MenuItems func);
+    void AddMenuButton(std::string name, std::function<void()> func);
     
     void ToggleVisibility() {
         isVisible = !isVisible;
@@ -61,9 +52,7 @@ public:
         return selectedRow;
     }
     
-    void AddLogs(std::vector<std::string> logs){
-        infoForm->AddLogs(logs);
-    }
+    void AddLogs(std::vector<std::string> logs);
 	
 private:
     std::string selectedStringPrefix(int cur);
@@ -74,12 +63,12 @@ private:
     exl::OffsetManager *offsetMan;
     std::string Name;
     ImVec2 WinSize;
-    std::vector<std::tuple<std::string, MenuItems>> MenuOptions;
-    uint32_t selectedRow, currentRow;
+    uint32_t selectedRow;
     bool isVisible;
     ImGuiStyle* style;
-	HexForm *hexForm;
-	InfoForm *infoForm;
-    LuaForm *luaForm;
-    SettingsForm *settingsForm;
+
+    HexForm *hexForm = nullptr;
+    InfoForm *infoForm = nullptr;
+    LuaForm *luaForm = nullptr;
+    SettingsForm *settingsForm = nullptr;
 };
