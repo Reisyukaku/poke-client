@@ -1,15 +1,5 @@
 #include "ui.h"
 
-void UI::WriteMenuItem(std::string str, uint32_t currRow) {
-    if(currRow == selectedRow){
-        ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0,255,0,255));
-        
-        ImGui::Text(str.c_str());
-        ImGui::PopStyleColor();
-    }else
-        ImGui::Text(str.c_str());
-}
-
 void UI::Initialize(std::string name, ImVec2 winSize) {
     Name = name;
 	WinSize = winSize;
@@ -26,12 +16,7 @@ void UI::Initialize(std::string name, ImVec2 winSize) {
     io.Fonts->AddFontFromMemoryCompressedTTF(LiberationMono_compressed_data, LiberationMono_compressed_size, 20.0f);
     io.MouseDrawCursor = true;
 	ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
-	
-    //Set menu select style
-    style = &ImGui::GetStyle();
-    style->Colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);
-    
-    selectedRow = 0;
+
     isVisible = true;
 
     hexForm = HexForm::getInstance();
@@ -46,6 +31,9 @@ void UI::Initialize(std::string name, ImVec2 winSize) {
 
     settingsForm = SettingsForm::getInstance();
     settingsForm->Initialize();
+
+    aboutForm = AboutForm::getInstance();
+    aboutForm->Initialize();
 
     //ImGui::SetNextWindowCollapsed(true);
 }
@@ -77,11 +65,13 @@ void UI::Draw() {
     if(ImGui::Button(infoForm->GetName().c_str(), buttonSize)) infoForm->Open();
     if(ImGui::Button(luaForm->GetName().c_str(), buttonSize)) luaForm->Open();
     if(ImGui::Button(settingsForm->GetName().c_str(), buttonSize)) settingsForm->Open();
+    if(ImGui::Button(aboutForm->GetName().c_str(), buttonSize)) aboutForm->Open();
 	
 	if(hexForm->IsOpen()) hexForm->Draw();
     if(infoForm->IsOpen()) infoForm->Draw();
     if(luaForm->IsOpen()) luaForm->Draw();
     if(settingsForm->IsOpen()) settingsForm->Draw();
+    if(aboutForm->IsOpen()) aboutForm->Draw();
     
     ImGui::End();
 }

@@ -26,8 +26,6 @@ void HexForm::Draw() {
 	if (ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows) && ImGui::IsMouseReleased(ImGuiMouseButton_Right))
 		ImGui::OpenPopup("context");
 	
-	
-    
     ImGui::BeginChild("##scrolling", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()));
     
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0,0));

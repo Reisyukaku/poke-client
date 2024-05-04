@@ -14,6 +14,7 @@
 #include "UI/infoform.hpp"
 #include "UI/luaform.hpp"
 #include "UI/settingsform.hpp"
+#include "UI/aboutform.hpp"
 #include "nn/mouse.hpp"
 #include "nn/keyboard.hpp"
 #include "filelogger.hpp"
@@ -26,8 +27,6 @@ public:
 	void Draw();
     void Render();
     
-    void AddMenuButton(std::string name, std::function<void()> func);
-    
     void ToggleVisibility() {
         isVisible = !isVisible;
     }
@@ -36,39 +35,19 @@ public:
         return isVisible;
     }
     
-    void RowSelectUp() {
-        selectedRow--;
-    }
-    
-    void RowSelectDown() {
-        selectedRow++;
-    }
-    
-    void SetSelectRow(uint32_t r) {
-        selectedRow = r;
-    }
-    
-    uint32_t GetSelectRow() {
-        return selectedRow;
-    }
-    
     void AddLogs(std::vector<std::string> logs);
 	
 private:
-    std::string selectedStringPrefix(int cur);
-    void WriteMenuItem(std::string str, uint32_t currRow);
-	std::vector<u32> ks;
     exl::Mouse *mouse;
     exl::Keyboard *keyboard;
     exl::OffsetManager *offsetMan;
     std::string Name;
     ImVec2 WinSize;
-    uint32_t selectedRow;
     bool isVisible;
-    ImGuiStyle* style;
 
     HexForm *hexForm = nullptr;
     InfoForm *infoForm = nullptr;
     LuaForm *luaForm = nullptr;
     SettingsForm *settingsForm = nullptr;
+    AboutForm *aboutForm = nullptr;
 };
