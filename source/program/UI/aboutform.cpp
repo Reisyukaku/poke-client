@@ -1,5 +1,9 @@
 #include "aboutform.hpp"
 
+#ifndef GIT_COMMIT_HASH
+#define GIT_COMMIT_HASH "?"
+#endif
+
 AboutForm * AboutForm::instance = nullptr;
 
 void AboutForm::Initialize()
@@ -15,7 +19,12 @@ void AboutForm::Draw() {
 	}
     
     ImGui::BeginChild("##scrolling", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()));
-    ImGui::Text("Poke-Client created by Rei");
+    ImGui::Text(
+		"Poke-Client created by Rei\n\n"
+		"Build: " GIT_COMMIT_HASH "\n\n"
+		"Credits:\n"
+		"- Exlaunch by shadowninja108\n"
+	);
 	ImGui::EndChild();
     
 

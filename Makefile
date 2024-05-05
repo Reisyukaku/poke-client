@@ -44,6 +44,7 @@ ROOT_SOURCE	:=	$(TOPDIR)/source
 MODULES		:=	$(shell find $(ROOT_SOURCE) -mindepth 1 -maxdepth 1 -type d)
 SOURCES		:=	$(foreach module,$(MODULES),$(shell find $(module) -type d))
 SOURCES		:= 	$(foreach source,$(SOURCES),$(source:$(TOPDIR)/%=%)/)
+GIT_SHA_FETCH := $(shell git rev-parse HEAD | cut -c 1-16)
 
 DATA		:=	data
 INCLUDES	:=	include
@@ -64,6 +65,7 @@ CFLAGS	+=	$(INCLUDE) -D__SWITCH__ -D__RTLD_6XX__
 CFLAGS	+=  -DEXL_LOAD_KIND="Module" \
 			-DEXL_LOAD_KIND_ENUM=$(LOAD_KIND_ENUM) \
 			-DEXL_PROGRAM_ID=0x$(PROGRAM_ID) \
+			-DGIT_COMMIT_HASH=\"$(GIT_SHA_FETCH)\" \
 			-I"$(DEVKITPRO)/libnx/include" \
 			-I$(ROOT_SOURCE) $(addprefix -I,$(MODULES))
 
