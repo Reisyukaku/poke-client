@@ -40,16 +40,21 @@ private:
 	HexForm(const HexForm&);
 	HexForm& operator=(const HexForm&);
 
+	static void WriteData(ImU8 *data, size_t off, ImU8 d);
+	static ImU8 ReadData(const ImU8* data, size_t off);
+
 	HexForm()
 	{
 		Name = "Hex Editor";
 		isVisible = false;
 		DataAddr = 0;
+		DataSize = 0x1000;
 
 		keyboard = exl::Keyboard::getInstance();
 	}
 
     uintptr_t DataAddr;
+	size_t DataSize;
 	exl::Keyboard *keyboard;
 	static MemoryEditor *editor;
 };

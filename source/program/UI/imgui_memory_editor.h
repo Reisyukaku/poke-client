@@ -198,7 +198,7 @@ struct MemoryEditor
         {
             if (ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows) && ImGui::IsMouseReleased(ImGuiMouseButton_Right))
                 ImGui::OpenPopup("context");
-            //DrawContents(mem_data, mem_size, base_display_addr);
+            DrawContents(mem_data, mem_size, base_display_addr);
             if (ContentsWidthChanged)
             {
                 CalcSizes(s, mem_size, base_display_addr);
