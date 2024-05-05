@@ -33,7 +33,6 @@ private:
     InfoForm()
     {
         Name = "Info Log";
-        isVisible = false;
         logger = exl::FileLogger::getInstance();
     }
 

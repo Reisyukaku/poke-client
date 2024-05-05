@@ -2,17 +2,17 @@
 
 Very WIP tool for debugging and reversing pokemon games. Based on exlaunch.
 
-Designed to be ran on real hardware, but should work on emu as well.
+Designed to be ran on real hardware.
 
 ## Features
-- Hex viewer
+- Hex editor
 - Lua VM (runs a lua script off the SD card)
 - Lua print hooked to output to info panel
 - Write logs to SD card
 - Mouse and keyboard support
 
 ## Screenshot
-![sv](https://i.imgur.com/XxItAzp.jpeg)
+![sv](https://i.imgur.com/5wCTwOr.jpeg)
 
 ## Building
 Run `make -j8`

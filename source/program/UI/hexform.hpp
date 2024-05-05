@@ -46,7 +46,6 @@ private:
 	HexForm()
 	{
 		Name = "Hex Editor";
-		isVisible = false;
 		DataAddr = 0;
 		DataSize = 0x1000;
 
