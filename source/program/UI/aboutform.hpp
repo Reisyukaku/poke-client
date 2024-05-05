@@ -4,7 +4,7 @@
 #include "imgui/imgui_nvn.h"
 #include "form.hpp"
 
-class AboutForm : public BasicForm{
+class AboutForm : public BasicForm {
 public:
     
     void Initialize() override;

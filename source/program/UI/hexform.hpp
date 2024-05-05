@@ -9,6 +9,7 @@
 #include "nn/keyboard.hpp"
 #include "form.hpp"
 #include "types.h"
+#include "imgui_memory_editor.h"
 
 #ifdef _MSC_VER
 #define _PRISizeT   "I"
@@ -23,16 +24,9 @@ public:
 	
 	void Initialize() override;
     void Draw() override;
-    
-	void DrawContents(void* mem_data_void, size_t mem_size);
-    
-	void SetCursorOffset(uint64_t offset) {
-		Offset = offset;
-	}
-    
+
     void SetAddr(uintptr_t addr) {
         DataAddr = addr;
-		snprintf(startAddrStr, IM_ARRAYSIZE(startAddrStr), "%016lX", DataAddr);
     }
 
 	static HexForm* getInstance() {
@@ -48,24 +42,14 @@ private:
 
 	HexForm()
 	{
-		Name = "Hex Viewer";
+		Name = "Hex Editor";
 		isVisible = false;
-		Rows = 16;
-		DataSize = 0x1000;
 		DataAddr = 0;
-		OptGreyOutZeroes = false;
-		highlightMin = -1;
-		highlightMax = -1;
 
 		keyboard = exl::Keyboard::getInstance();
 	}
 
     uintptr_t DataAddr;
-	uint64_t Offset;
-	size_t DataSize;
-    int Rows;
-	bool OptGreyOutZeroes;
-	int highlightMin, highlightMax;
 	exl::Keyboard *keyboard;
-	static char startAddrStr[16];
+	static MemoryEditor *editor;
 };
