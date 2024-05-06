@@ -1,4 +1,4 @@
-#include "ui.h"
+#include "ui.hpp"
 
 void UI::Initialize(std::string name, ImVec2 winSize) {
     Name = name;

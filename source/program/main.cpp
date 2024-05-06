@@ -1,7 +1,7 @@
 #include "lib.hpp"
 #include "imgui/imgui_nvn.h"
 #include "nn/hid.h"
-#include "ui.h"
+#include "ui.hpp"
 #include "offsetManager.hpp"
 #include "nn/mouse.hpp"
 #include "nn/keyboard.hpp"
