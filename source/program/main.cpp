@@ -8,7 +8,7 @@
 #include "filelogger.hpp"
 #include "tcplogger.hpp"
 #include "UI/infoform.hpp"
-#include "UI/lua.h"
+#include "hooks/lua.h"
 #include "utils.hpp"
 #include <map>
 #include <string>
@@ -16,6 +16,7 @@
 #include <vector>
 #include <cstdarg>
 #include <cstring>
+#include "hooks/lua_hooks.h"
 
 exl::Mouse *exl::Mouse::instance = nullptr;
 exl::Keyboard *exl::Keyboard::instance = nullptr;
@@ -52,28 +53,6 @@ HOOK_DEFINE_TRAMPOLINE(trpfd) {
         }
         Orig(unk);
         
-    }
-};
-
-HOOK_DEFINE_TRAMPOLINE(luaprint) {
-	static int Callback(void *L) {
-        _luaToString toString = reinterpret_cast<_luaToString>(exl::OffsetManager::getInstance()->GetAddr("LuaToString"));
-        _luaSetTop setTop = reinterpret_cast<_luaSetTop>(exl::OffsetManager::getInstance()->GetAddr("LuaSetTop"));
-        _luaGetTop getTop = reinterpret_cast<_luaGetTop>(exl::OffsetManager::getInstance()->GetAddr("LuaGetTop"));
-        int nresults = getTop(L);
-        for(int i = 0, j = -1; i < nresults; i++)
-            //if(sock->IsConnected()) 
-                InfoForm::getInstance()->AddString(toString(L, j--, NULL));
-        luaPop(L, nresults);
-        return 0;
-    }
-};
-
-HOOK_DEFINE_TRAMPOLINE(luaNewState) {
-	static void *Callback(void *L1, void *L2) {
-        void *L = Orig(L1, L2);
-        exl::OffsetManager::getInstance()->SetLuaState(L);
-        return L;
     }
 };
 
@@ -122,8 +101,7 @@ extern "C" void exl_main(void *x0, void *x1) {
     exl::hook::Initialize();
     
 	//Hooks  
-    luaNewState::InstallAtOffset(offsetMan->GetOffset("LuaNewState"));
-    luaprint::InstallAtOffset(offsetMan->GetOffset("LuaPrint"));
+    lua_hooks();
     //trpfd::InstallAtOffset(0xa17fe4);
     //test::InstallAtOffset(0x1352134); 
 }
