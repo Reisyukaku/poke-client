@@ -1,23 +1,10 @@
 #include "ui.hpp"
 
-void UI::Initialize(std::string name, ImVec2 winSize) {
-    Name = name;
-	WinSize = winSize;
-    
+UI::UI(std::string name, ImVec2 winSize) : Name(name), WinSize(winSize), isVisible(true)
+{
     mouse = exl::Mouse::getInstance();
     keyboard = exl::Keyboard::getInstance();
     offsetMan = exl::OffsetManager::getInstance();
-	exl::FileLogger::getInstance();
-	
-    ImGui::CreateContext();
-    
-    //Set font
-    ImGuiIO &io = ImGui::GetIO();
-    io.Fonts->AddFontFromMemoryCompressedTTF(LiberationMono_compressed_data, LiberationMono_compressed_size, 20.0f);
-    io.MouseDrawCursor = true;
-	ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
-
-    isVisible = true;
 
     hexForm = HexForm::getInstance();
     hexForm->Initialize();
@@ -35,6 +22,7 @@ void UI::Initialize(std::string name, ImVec2 winSize) {
     aboutForm = AboutForm::getInstance();
     aboutForm->Initialize();
 
+    
     //ImGui::SetNextWindowCollapsed(true);
 }
 
@@ -46,9 +34,7 @@ void UI::Update() {
     keyboard->Update();
 }
 
-void UI::Draw() {
-	ImGui::NewFrame();
-    
+void UI::Draw() {    
     if(!ImGui::Begin(Name.c_str(), NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize)) {
         ImGui::End();
         return;

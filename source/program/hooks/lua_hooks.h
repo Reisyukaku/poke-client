@@ -4,6 +4,7 @@
 #include "offsetManager.hpp"
 #include "lib.hpp"
 #include "lua.h"
+#include "tcplogger.hpp"
 
 HOOK_DEFINE_TRAMPOLINE(luaprint) {
 	static int Callback(void *L) {

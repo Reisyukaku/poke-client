@@ -88,10 +88,13 @@ namespace exl::util {
                 return *this;
             }
 
+            void Flush();
+
             inline const Claim& GetClaim() const { return m_Claim; }
 
             inline uintptr_t GetRo() const { return GetClaim().m_Ro; }
             inline uintptr_t GetRw() const { return GetClaim().m_Rw; }
+            inline uintptr_t GetSize() const{ return GetClaim().m_Size; }
 
             ~RwPages();        
         };

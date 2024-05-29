@@ -22,7 +22,8 @@
 
 class UI {
 public:
-    void Initialize(std::string name, ImVec2 winSize);
+    UI(std::string name, ImVec2 winSize);
+
 	void Update();
 	void Draw();
     void Render();

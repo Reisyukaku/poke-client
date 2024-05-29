@@ -17,14 +17,15 @@
 #include <cstdarg>
 #include <cstring>
 #include "hooks/lua_hooks.h"
+#include "hooks/nvn_hooks.h"
 
 exl::Mouse *exl::Mouse::instance = nullptr;
 exl::Keyboard *exl::Keyboard::instance = nullptr;
-exl::FileLogger *exl::FileLogger::instance = nullptr;
 exl::OffsetManager *exl::OffsetManager::instance = nullptr;
 
 UI *ui;
 exl::TcpLogger *sock = exl::TcpLogger::getInstance();
+exl::FileLogger *fileLog = exl::FileLogger::getInstance();
 
 typedef struct {
     uint64_t unk;
@@ -39,7 +40,17 @@ typedef struct {
 * ---------------------------------------------
 */
 
-HOOK_DEFINE_TRAMPOLINE(trpfd) {
+HOOK_DEFINE_TRAMPOLINE(nnMainHook) {
+    static void Callback()
+    {
+        //Init loggers
+        fileLog->init();
+        sock->init(TCPLOG_IP, 3080);
+        Orig();
+    }
+};
+
+/*HOOK_DEFINE_TRAMPOLINE(trpfd) {
 	static void Callback(void *unk) {
         char *p = *(char**)(*(unsigned long*)((long)unk+0x40)+0x38);
         if(sock->IsConnected()){
@@ -54,32 +65,22 @@ HOOK_DEFINE_TRAMPOLINE(trpfd) {
         Orig(unk);
         
     }
-};
+};*/
 
 /*
 * ---------------------------------------------
 */
 
-/* This method shouldn't be edited */
-ImGuiIO &nvnImguiGetIO() {
-    return ImGui::GetIO();
+bool nvnImguiInitialize()
+{
+    exl::TcpLogger::sendMessage("Initializing UI\n");
+
+    ui = new UI("Poke-Client", {250.0f, 600.0f});
+
+    return true;
 }
 
-/* This method shouldn't be edited */
-void nvnImguiFontGetTexDataAsAlpha8(unsigned char **out_pixels, int *out_width, int *out_height, int *out_bytes_per_pixel) {
-    ImGuiIO &io = ImGui::GetIO();
-    io.Fonts->GetTexDataAsAlpha8(out_pixels, out_width, out_height, out_bytes_per_pixel); // Make sure you have enough memory
-}
-
-/* This method is called during initialization. You can create your imgui context, add fonts etc. */
-void nvnImguiInitialize() {
-    //sock->init("192.168.1.158", 3080);
-    
-    ui = new UI();
-    ui->Initialize("Poke-Client", {250.0f, 600.0f});
-}
-
-ImDrawData *nvnImguiCalc() {
+ImDrawData *nvnImguiDraw() {
 	ui->Update();
 	ui->Draw();
     ui->Render();
@@ -88,20 +89,20 @@ ImDrawData *nvnImguiCalc() {
 }
 
 extern "C" void exl_main(void *x0, void *x1) {
-
-    /* Setup hooking enviroment. */
-    envSetOwnProcessHandle(exl::util::proc_handle::Get());
-	
-	//Setup offset manager before hooks are set
+    //Init hook env
+    exl::hook::Initialize();
+    
+    //Setup offset manager before hooks are set
 	auto offsetMan = exl::OffsetManager::getInstance();
     offsetMan->SetBaseAddr(exl::util::modules::GetTargetStart());
     offsetMan->SetTitleID(exl::setting::ProgramId);
-	
-	//Initialize hook
-    exl::hook::Initialize();
-    
-	//Hooks  
+
+    nnMainHook::InstallAtSymbol("nnMain");
+
+	//Hooks
+    nvn_hooks();
     lua_hooks();
+
     //trpfd::InstallAtOffset(0xa17fe4);
     //test::InstallAtOffset(0x1352134); 
 }

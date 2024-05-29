@@ -20,8 +20,6 @@ namespace exl::setting {
 
     static constexpr LoadKind SelfLoadKind = LoadKind::EXL_LOAD_KIND;
     static constexpr u64 ProgramId = EXL_PROGRAM_ID;
-    
-    //static_assert(std::find(whitelist.begin(), whitelist.end(), ProgramId) != whitelist.end());
 };
 
 #ifndef EXL_LOAD_KIND_ENUM

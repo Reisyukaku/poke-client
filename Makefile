@@ -36,6 +36,7 @@ BINARY_NAME 	:= 	subsdk9
 DIST_DIR 		:= 	$(TOPDIR)/deploy
 CONFIG_JSON		:=	$(PROGRAM_ID).json
 SD_OUT 			:= 	I:/atmosphere/contents/$(PROGRAM_ID)/exefs
+TCPLOG_IP		:= 	192.168.1.158
 
 #-------------------------- End of user configuration --------------------------
 
@@ -65,6 +66,7 @@ CFLAGS	+=	$(INCLUDE) -D__SWITCH__ -D__RTLD_6XX__
 CFLAGS	+=  -DEXL_LOAD_KIND="Module" \
 			-DEXL_LOAD_KIND_ENUM=$(LOAD_KIND_ENUM) \
 			-DEXL_PROGRAM_ID=0x$(PROGRAM_ID) \
+			-DTCPLOG_IP=\"$(TCPLOG_IP)\" \
 			-DGIT_COMMIT_HASH=\"$(GIT_SHA_FETCH)\" \
 			-I"$(DEVKITPRO)/libnx/include" \
 			-I$(ROOT_SOURCE) $(addprefix -I,$(MODULES))
@@ -160,7 +162,6 @@ $(BUILD):
 	@mkdir -p $(DIST_DIR)
 	@mv $(TARGET).nso $(DIST_DIR)/$(BINARY_NAME)
 	@mv $(TARGET).npdm $(DIST_DIR)/main.npdm
-	@cp imguirenderer.nso $(DIST_DIR)/subsdk8
 	
 
 #---------------------------------------------------------------------------------

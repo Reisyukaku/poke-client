@@ -6,6 +6,8 @@
 #include "../types.h"
 #include "nn/socket.hpp"
 #include "nn/result.h"
+#include "nn/util.h"
+#include <stdarg.h>
 
 #define PACKET_MAX_SIZE 0x500
 
@@ -27,16 +29,18 @@ public:
     
     nn::Result init(const char* ip, u16 port);
 
-    void sendMessage(const char* message);
-    const char* receiveMessage();
+    static void sendMessage(const char* fmt, ...);
+    static const char* receiveMessage();
     void close();
     bool IsConnected(){
         return mState == SocketState::CONNECTED;
     }
     
+protected:
+    SocketState mState;
+
 private:
 	static TcpLogger* instance;
-    SocketState mState;
     int mSocketFd;
     
 	TcpLogger() {

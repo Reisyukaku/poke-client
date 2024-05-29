@@ -2,13 +2,17 @@
 #include "nn/nifm.h"
 #include "nn/socket.hpp"
 
-constexpr inline auto DefaultTcpAutoBufferSizeMax      = 192 * 1024;
+constexpr inline auto DefaultTcpAutoBufferSizeMax      = 192 * 1024; /* 192kb */
 constexpr inline auto MinTransferMemorySize            = (2 * DefaultTcpAutoBufferSizeMax + (128 * 1024));
 constexpr inline auto MinSocketAllocatorSize           = 128 * 1024;
+
 constexpr inline auto SocketAllocatorSize = MinSocketAllocatorSize * 1;
 constexpr inline auto TransferMemorySize = MinTransferMemorySize * 1;
+
 constexpr inline auto SocketPoolSize = SocketAllocatorSize + TransferMemorySize;
+
 char socketPool[SocketPoolSize] __attribute__((aligned(0x4000)));
+
 exl::TcpLogger *exl::TcpLogger::instance = nullptr;
 
 nn::Result exl::TcpLogger::init(const char *ip, u16 port) {
@@ -52,7 +56,7 @@ nn::Result exl::TcpLogger::init(const char *ip, u16 port) {
     nn::Result result = nn::socket::Connect(mSocketFd, &serverAddress, sizeof(serverAddress));
 
     mState = result.isSuccess() ? SocketState::CONNECTED : SocketState::DISCONNECTED;
-    
+
     return result;
 }
 
@@ -60,27 +64,27 @@ void exl::TcpLogger::close() {
     mState = SocketState::UNINITIALIZED;
 }
 
-void exl::TcpLogger::sendMessage(const char *message) {
-    if (mState != SocketState::CONNECTED)
+void exl::TcpLogger::sendMessage(const char *fmt, ...) {
+    if (getInstance()->mState != SocketState::CONNECTED)
         return;
 
-    size_t length = strlen(message);
-    size_t offset = 0;
-    while (offset < length) {
-        size_t minSize = std::min(length - offset, (size_t)PACKET_MAX_SIZE);
-        int sent = nn::socket::Send(mSocketFd, message + offset, minSize, 0);
-        offset += sent;
-    }
+    va_list args;
+    va_start(args, fmt);
+    char buffer[0x1000] = {};
+
+    nn::util::VSNPrintf(buffer, sizeof(buffer), fmt, args);
+
+    int sent = nn::socket::Send(getInstance()->mSocketFd, buffer, sizeof(buffer), 0);
 }
 
 const char *exl::TcpLogger::receiveMessage() {
-    if (mState != SocketState::CONNECTED)
+    if (getInstance()->mState != SocketState::CONNECTED)
         return nullptr;
 
     std::string message;
     char buffer[PACKET_MAX_SIZE] = {};
     while (!message.ends_with('\n')) {
-        if (nn::socket::Recv(mSocketFd, buffer, sizeof(buffer), 0) > 0) {
+        if (nn::socket::Recv(getInstance()->mSocketFd, buffer, sizeof(buffer), 0) > 0) {
             message.append(buffer);
         } else {
             return nullptr;
