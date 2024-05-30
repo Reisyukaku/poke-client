@@ -7,7 +7,6 @@
 class AboutForm : public BasicForm {
 public:
     
-    void Initialize() override;
     void Draw() override;
     
     static AboutForm* getInstance() {

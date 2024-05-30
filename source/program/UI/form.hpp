@@ -10,7 +10,6 @@
 class BasicForm {
 public:
     
-	virtual void Initialize();
     virtual void Draw();
 	
 	void Open() {

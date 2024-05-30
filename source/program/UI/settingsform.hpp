@@ -12,7 +12,6 @@
 class SettingsForm : public BasicForm{
 public:
     
-    void Initialize() override;
     void Draw() override;
     
     static SettingsForm* getInstance() {

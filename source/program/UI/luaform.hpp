@@ -15,7 +15,6 @@
 class LuaForm : public BasicForm{
 public:
     
-    void Initialize() override;
     void Draw() override;
     
 	static LuaForm* getInstance() {
@@ -32,6 +31,20 @@ private:
     LuaForm()
     {
         Name = "Lua Interface";
+
+        logger = exl::FileLogger::getInstance();
+        offsetMan = exl::OffsetManager::getInstance();
+        scriptDir = "sd:/luaScripts/";
+        
+        scriptList = nullptr;
+        nn::fs::DirectoryHandle dirHandle;
+        if(!nn::fs::OpenDirectory(&dirHandle, scriptDir.c_str(), nn::fs::OpenDirectoryMode_All)){
+            nn::fs::GetDirectoryEntryCount(&scriptCnt, dirHandle);
+            if(scriptCnt > 0){
+                scriptList = new nn::fs::DirectoryEntry[scriptCnt];
+                nn::fs::ReadDirectory(&scriptCnt, scriptList, dirHandle, scriptCnt);
+            }
+        }
     }
 
     void Run(std::string file);

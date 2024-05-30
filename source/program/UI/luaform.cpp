@@ -2,23 +2,6 @@
 
 LuaForm * LuaForm::instance = nullptr;
 
-void LuaForm::Initialize()
-{
-    logger = exl::FileLogger::getInstance();
-    offsetMan = exl::OffsetManager::getInstance();
-    scriptDir = "sd:/luaScripts/";
-    
-    scriptList = nullptr;
-    nn::fs::DirectoryHandle dirHandle;
-    if(!nn::fs::OpenDirectory(&dirHandle, scriptDir.c_str(), nn::fs::OpenDirectoryMode_All)){
-        nn::fs::GetDirectoryEntryCount(&scriptCnt, dirHandle);
-        if(scriptCnt > 0){
-            scriptList = new nn::fs::DirectoryEntry[scriptCnt];
-            nn::fs::ReadDirectory(&scriptCnt, scriptList, dirHandle, scriptCnt);
-        }
-    }
-}
-
 void LuaForm::Run(std::string file) {    
     _luaLoadbuffer loadBuffer = reinterpret_cast<_luaLoadbuffer>(offsetMan->GetAddr("LuaLoadbuffer"));
     _luaPcall pcallk = reinterpret_cast<_luaPcall>(offsetMan->GetAddr("LuaPCall"));

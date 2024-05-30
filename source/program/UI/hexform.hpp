@@ -22,7 +22,6 @@
 class HexForm : public BasicForm{
 public:
 	
-	void Initialize() override;
     void Draw() override;
 
     void SetAddr(uintptr_t addr) {
@@ -48,6 +47,10 @@ private:
 		Name = "Hex Editor";
 		DataAddr = 0;
 		DataSize = 0x1000;
+
+		editor = new MemoryEditor();
+		editor->WriteFn = HexForm::WriteData;
+		editor->ReadFn = HexForm::ReadData;
 
 		keyboard = exl::Keyboard::getInstance();
 	}

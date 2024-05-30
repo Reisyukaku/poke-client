@@ -39,10 +39,6 @@ NVNboolean cmdBufInit(nvn::CommandBuffer *buffer, nvn::Device *device) {
         ImGuiIO &io = ImGui::GetIO();
         (void) io;
 
-        ImGui::StyleColorsDark();
-        ImGuiStyle *style = &ImGui::GetStyle();
-        style->Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.06f, 0.06f, 0.74f);
-
         ImguiNvnBackend::NvnBackendInitInfo initInfo = {
             .device = nvnDevice,
             .queue = nvnQueue,

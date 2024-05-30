@@ -91,10 +91,10 @@ namespace ImguiNvnBackend {
         fnt_cfg.FontDataOwnedByAtlas = false;
         ImWchar extended_range[] = {0xe000, 0xe152};
 
-        io.Fonts->AddFontFromMemoryTTF(addr_std, size_std, 14.0f, &fnt_cfg, io.Fonts->GetGlyphRangesJapanese());
+        io.Fonts->AddFontFromMemoryTTF(addr_std, size_std, 16.0f, &fnt_cfg, io.Fonts->GetGlyphRangesJapanese());
 
         fnt_cfg.MergeMode = true;
-        io.Fonts->AddFontFromMemoryTTF(addr_ext, size_ext, 14.0f, &fnt_cfg, extended_range);
+        io.Fonts->AddFontFromMemoryTTF(addr_ext, size_ext, 16.0f, &fnt_cfg, extended_range);
 
         io.Fonts->Flags |= ImFontAtlasFlags_NoPowerOfTwoHeight;
         if (!io.Fonts->Build()) {

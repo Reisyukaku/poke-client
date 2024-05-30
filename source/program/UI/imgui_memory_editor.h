@@ -116,7 +116,7 @@ struct MemoryEditor
         OptShowDataPreview = false;
         OptShowHexII = false;
         OptShowAscii = true;
-        OptGreyOutZeroes = true;
+        OptGreyOutZeroes = false;
         OptUpperCaseHex = true;
         OptMidColsCount = 8;
         OptAddrDigitsCount = 0;

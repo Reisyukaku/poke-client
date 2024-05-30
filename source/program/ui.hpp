@@ -18,6 +18,7 @@
 #include "nn/mouse.hpp"
 #include "nn/keyboard.hpp"
 #include "filelogger.hpp"
+#include "UI/themeManager.hpp"
 #include "types.h"
 
 class UI {

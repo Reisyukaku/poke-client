@@ -6,11 +6,6 @@
 
 AboutForm * AboutForm::instance = nullptr;
 
-void AboutForm::Initialize()
-{
-	//
-}
-
 void AboutForm::Draw() {
     ImGui::SetNextWindowSize(ImVec2(500.0f, 250.0f), ImGuiCond_FirstUseEver);
 	if (!ImGui::Begin(Name.c_str(), &isVisible, ImGuiWindowFlags_NoScrollbar)){

@@ -1,5 +1,7 @@
 #include "ui.hpp"
 
+ThemeManager *ThemeManager::instance = nullptr;
+
 UI::UI(std::string name, ImVec2 winSize) : Name(name), WinSize(winSize), isVisible(true)
 {
     mouse = exl::Mouse::getInstance();
@@ -7,22 +9,14 @@ UI::UI(std::string name, ImVec2 winSize) : Name(name), WinSize(winSize), isVisib
     offsetMan = exl::OffsetManager::getInstance();
 
     hexForm = HexForm::getInstance();
-    hexForm->Initialize();
     hexForm->SetAddr(offsetMan->GetAddr(0x43811c0));
 
     infoForm = InfoForm::getInstance();
-    infoForm->Initialize();
-
     luaForm = LuaForm::getInstance();
-    luaForm->Initialize();
-
     settingsForm = SettingsForm::getInstance();
-    settingsForm->Initialize();
-
     aboutForm = AboutForm::getInstance();
-    aboutForm->Initialize();
 
-    
+    ThemeManager::getInstance()->SetTheme(ThemeManager::Themes::Default);
     //ImGui::SetNextWindowCollapsed(true);
 }
 

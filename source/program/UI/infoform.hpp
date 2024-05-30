@@ -12,7 +12,6 @@
 class InfoForm : public BasicForm{
 public:
     
-    void Initialize() override;
     void Draw() override;
     
     void AddString(std::string s) {
