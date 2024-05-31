@@ -64,17 +64,18 @@ void LuaForm::Draw() {
     
     ImGui::Separator();
     
-    if(ImGui::Button("Run Selected Script", ImVec2(220, 30))) {
+    if(ImGui::Button("Run Selected Script", ImVec2(220, 0))) {
         if(scriptCnt > 0 && selectedScript != "")
             Run(scriptDir + selectedScript);
     }
     ImGui::SameLine();
-    if(ImGui::Button("Clear", ImVec2(220, 30))) {
+    if(ImGui::Button("Clear", ImVec2(220, 0))) {
         Logs.clear();
     }
     
     ImGui::SameLine();
-        
+    
+    ImGui::SetNextItemWidth(300);
     if (ImGui::BeginCombo("##combo", selectedScript.c_str())) {
         for (int n = 0; n < scriptCnt; n++) {
             std::string file(scriptList[n].m_Name);

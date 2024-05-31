@@ -4,7 +4,6 @@
 #include "imgui/imgui_nvn.h"
 #include "imgui/imgui.h"
 #include "nn/hid.h"
-#include "imgui/font.h"
 #include "hid.h"
 
 constexpr int npad_mapping[][2] = {

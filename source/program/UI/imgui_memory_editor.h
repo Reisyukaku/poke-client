@@ -109,7 +109,6 @@ struct MemoryEditor
     MemoryEditor()
     {
         // Settings
-        Open = true;
         ReadOnly = false;
         Cols = 16;
         OptShowOptions = true;
@@ -186,15 +185,14 @@ struct MemoryEditor
     }
 
     // Standalone Memory Editor window
-    void DrawWindow(const char* title, void* mem_data, size_t mem_size, size_t base_display_addr = 0x0000)
+    void DrawWindow(const char* title, bool *isVisible, void* mem_data, size_t mem_size, size_t base_display_addr = 0x0000)
     {
         Sizes s;
         CalcSizes(s, mem_size, base_display_addr);
         ImGui::SetNextWindowSize(ImVec2(s.WindowWidth, s.WindowWidth * 0.60f), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSizeConstraints(ImVec2(0.0f, 0.0f), ImVec2(s.WindowWidth, FLT_MAX));
 
-        Open = true;
-        if (ImGui::Begin(title, &Open, ImGuiWindowFlags_NoScrollbar))
+        if (ImGui::Begin(title, isVisible, ImGuiWindowFlags_NoScrollbar))
         {
             if (ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows) && ImGui::IsMouseReleased(ImGuiMouseButton_Right))
                 ImGui::OpenPopup("context");

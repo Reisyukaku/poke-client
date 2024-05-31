@@ -17,11 +17,11 @@ void InfoForm::Draw() {
     
     ImGui::Separator();
     
-    if(ImGui::Button("Write to SD", ImVec2(220, 30))) {
+    if(ImGui::Button("Write to SD", ImVec2(220, 0))) {
         logger->Log(Logs);
     }
     ImGui::SameLine();
-    if(ImGui::Button("Clear", ImVec2(220, 30))) {
+    if(ImGui::Button("Clear", ImVec2(220, 0))) {
         Logs.clear();
     }
     

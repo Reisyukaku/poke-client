@@ -13,7 +13,5 @@ void SettingsForm::Draw() {
     //
 	ImGui::EndChild();
     
-
-    
 	ImGui::End();
 }

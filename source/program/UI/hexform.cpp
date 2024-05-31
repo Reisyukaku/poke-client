@@ -14,5 +14,5 @@ ImU8 HexForm::ReadData(const ImU8* data, size_t off)
 }
     
 void HexForm::Draw() {
-	editor->DrawWindow(Name.c_str(), (void*)DataAddr, DataSize, DataAddr);
+	editor->DrawWindow(Name.c_str(), &isVisible, (void*)DataAddr, DataSize, DataAddr);
 }

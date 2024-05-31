@@ -7,7 +7,6 @@
 #include <sstream>
 #include <unordered_map>
 #include "imgui/imgui_nvn.h"
-#include "imgui/font.h"
 #include "nn/hid.h"
 #include "nn/fs.hpp"
 #include "UI/hexform.hpp"
