@@ -48,6 +48,10 @@ namespace nn
             int concurLimit; // 0x54
             int padding;
         };
+        struct TimeVal {
+            long sec;
+            long usec;
+        };
         nn::Result Initialize(Config const& config);
         nn::Result Initialize(void* pool, ulong poolSize, ulong allocPoolSize, int concurLimit);
         s32 SetSockOpt(s32 socket, s32 socketLevel, s32 option, void const*, u32 len);

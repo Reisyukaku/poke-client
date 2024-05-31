@@ -1,7 +1,5 @@
 #include "ui.hpp"
 
-ThemeManager *ThemeManager::instance = nullptr;
-
 UI::UI(std::string name, ImVec2 winSize) : Name(name), WinSize(winSize), isVisible(true)
 {
     mouse = exl::Mouse::getInstance();
@@ -16,7 +14,7 @@ UI::UI(std::string name, ImVec2 winSize) : Name(name), WinSize(winSize), isVisib
     settingsForm = SettingsForm::getInstance();
     aboutForm = AboutForm::getInstance();
 
-    ThemeManager::getInstance()->SetTheme(ThemeManager::Themes::Default);
+    ThemeManager::SetTheme(ThemeManager::Themes::Default);
     //ImGui::SetNextWindowCollapsed(true);
 }
 

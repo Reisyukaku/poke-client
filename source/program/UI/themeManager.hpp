@@ -13,7 +13,7 @@ public:
 		Green_Black
 	};
 
-	void SetTheme(Themes theme)
+	static void SetTheme(Themes theme)
 	{
 		ImGuiStyle *style = &ImGui::GetStyle();
 		ImGui::StyleColorsDark(style);
@@ -61,21 +61,5 @@ public:
 				break;
 			}
 		}
-	}
-
-	static ThemeManager* getInstance() {
-		if (instance == nullptr)
-			instance = new ThemeManager();
-		return instance;
-	};
-	
-private:
-	static ThemeManager* instance;
-	ThemeManager(const ThemeManager&);
-	ThemeManager& operator=(const ThemeManager&);
-
-	ThemeManager()
-	{
-        //
 	}
 };
