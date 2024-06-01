@@ -2,6 +2,12 @@
 
 #include "hid.h"
 
+constexpr int mouse_mapping[][2] = {
+    {ImGuiMouseButton_Left,   static_cast<const int>(nn::hid::MouseButton::Left)},
+    {ImGuiMouseButton_Right,  static_cast<const int>(nn::hid::MouseButton::Right)},
+    {ImGuiMouseButton_Middle, static_cast<const int>(nn::hid::MouseButton::Middle)},
+};
+
 namespace exl {
 class Mouse {
 public:
@@ -16,10 +22,12 @@ public:
 	}
 
 	void Update() {
-		ImGuiIO& io = ImGui::GetIO();
+		ImGuiIO &io = ImGui::GetIO();
 		io.AddMousePosEvent((float)state.x, (float)state.y);
-		io.AddMouseButtonEvent(0, state.buttons.isBitSet(nn::hid::MouseButton::Left));
-		io.AddMouseButtonEvent(1, state.buttons.isBitSet(nn::hid::MouseButton::Right));
+		for (auto [im_k, nx_k]: mouse_mapping)
+		{
+			io.AddMouseButtonEvent(im_k, state.buttons.isBitSet((nn::hid::MouseButton) nx_k));
+		}
 	}
 	
 	
