@@ -304,7 +304,7 @@ namespace ImguiNvnBackend {
         bd->isInitialized = false;
 
         // set this to true if your implementation does not need to convert sRGB to linear
-        bd->mShaderUBO.isUseSrgb = false;
+        bd->mShaderUBO.isUseSrgb = true;
 
         if (createShaders()) {
             exl::TcpLogger::sendMessage("Shader Binaries Loaded! Setting up Render Data.\n");
