@@ -3,14 +3,16 @@
 LuaForm * LuaForm::instance = nullptr;
 
 void LuaForm::Run(std::string file) {    
-    _luaLoadbuffer loadBuffer = reinterpret_cast<_luaLoadbuffer>(offsetMan->GetAddr("LuaLoadbuffer"));
-    _luaPcall pcallk = reinterpret_cast<_luaPcall>(offsetMan->GetAddr("LuaPCall"));
-    _luaToString toString = reinterpret_cast<_luaToString>(offsetMan->GetAddr("LuaToString"));
-    _luaSetTop setTop = reinterpret_cast<_luaSetTop>(offsetMan->GetAddr("LuaSetTop"));
-    _luaGetTop getTop = reinterpret_cast<_luaGetTop>(offsetMan->GetAddr("LuaGetTop"));
-    _luaType ltype = reinterpret_cast<_luaType>(offsetMan->GetAddr("LuaType"));
-    
-    void* L = offsetMan->GetLuaState();
+    auto offsetMan = exl::OffsetManager::getInstance();
+
+    lua_toString = reinterpret_cast<_luaToString>(offsetMan->GetAddr("LuaToString"));
+    lua_setTop = reinterpret_cast<_luaSetTop>(offsetMan->GetAddr("LuaSetTop"));
+    lua_getTop = reinterpret_cast<_luaGetTop>(offsetMan->GetAddr("LuaGetTop"));
+    lua_loadBuffer = reinterpret_cast<_luaLoadbuffer>(offsetMan->GetAddr("LuaLoadbuffer"));
+    lua_pcallk = reinterpret_cast<_luaPcall>(offsetMan->GetAddr("LuaPCall"));
+    lua_ltype = reinterpret_cast<_luaType>(offsetMan->GetAddr("LuaType"));
+
+    void* L = LuaStateManager::getInstance()->GetLuaState();
     
     nn::fs::FileHandle lua;
     long sz;
@@ -21,20 +23,20 @@ void LuaForm::Run(std::string file) {
     nn::fs::ReadFile(lua, 0, buffer, sz);
     nn::fs::CloseFile(lua);
     
-    loadBuffer(L, buffer, sz, "poke-client VM", NULL);
-    int ret = pcallk(L, 0, LUA_MULTRET, 0, 0, 0);
+    lua_loadBuffer(L, buffer, sz, "poke-client VM", NULL);
+    int ret = lua_pcallk(L, 0, LUA_MULTRET, 0, 0, 0);
     if(!ret){
-        int nresults = getTop(L);
+        int nresults = lua_getTop(L);
         Logs.push_back(std::string("Returned ") + std::to_string(nresults) + std::string(" results."));
         for(int i = 0, j = -1; i < nresults; i++){
-            int retType = ltype(L,j);
+            int retType = lua_ltype(L,j);
             std::string res = std::string(luaTypes[retType]) + std::string(": ");
             switch(retType){
                 case 1: //Bool
                 case 3: //Number
                 case 4: //String
                 {
-                    res += std::string(toString(L, j--, NULL));
+                    res += std::string(lua_toString(L, j--, NULL));
                     break;
                 }
                 default:
@@ -43,10 +45,10 @@ void LuaForm::Run(std::string file) {
             }
             Logs.push_back(res.c_str());
         }
-        luaPop(L, nresults);
+        lua_Pop(L, nresults);
     }
     else
-        Logs.push_back(std::string("Error in lua:\n") + std::string(toString(L, -1, NULL)));
+        Logs.push_back(std::string("Error in lua:\n") + std::string(lua_toString(L, -1, NULL)));
 }
 
 void LuaForm::Draw() {

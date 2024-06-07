@@ -87,7 +87,6 @@ void polyStateSetMode(nvn::PolygonState *buf, nvn::PolygonMode mode) {
 }
 
 nvn::GenericFuncPtrFunc deviceGetProc(nvn::Device *device, const char *procName) {
-
     nvn::GenericFuncPtrFunc ptr = procAddrPtr(nvnDevice, procName);
     if (strcmp(procName, "nvnQueueInitialize") == 0) {
         queueInit_ptr = (nvn::QueueInitializeFunc) ptr;

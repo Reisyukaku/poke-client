@@ -12,14 +12,6 @@ public:
 			instance = new OffsetManager();
 		return instance;
 	};
-    
-    void *GetLuaState() {
-        return luaState;
-    }
-    
-    void SetLuaState(void *L) {
-        luaState = L;
-    }
 	
 	void SetTitleID(u64 tid) {
         Title = tid;
@@ -51,14 +43,12 @@ public:
 	
 private:    
 	OffsetManager() {
-		luaState = NULL;
         BaseAddr = 0;
         Title = 0;
 	}
     
     u64 Title;
     uintptr_t BaseAddr;
-    void *luaState;
 	
     static OffsetManager* instance;
 	OffsetManager(const OffsetManager&);

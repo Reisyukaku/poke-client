@@ -2,20 +2,17 @@
 
 #include "../UI/infoform.hpp"
 #include "offsetManager.hpp"
+#include "luaStateManager.hpp"
 #include "lib.hpp"
 #include "lua.h"
 #include "tcplogger.hpp"
 
 HOOK_DEFINE_TRAMPOLINE(luaprint) {
 	static int Callback(void *L) {
-        _luaToString toString = reinterpret_cast<_luaToString>(exl::OffsetManager::getInstance()->GetAddr("LuaToString"));
-        _luaSetTop setTop = reinterpret_cast<_luaSetTop>(exl::OffsetManager::getInstance()->GetAddr("LuaSetTop"));
-        _luaGetTop getTop = reinterpret_cast<_luaGetTop>(exl::OffsetManager::getInstance()->GetAddr("LuaGetTop"));
-        int nresults = getTop(L);
+        int nresults = lua_getTop(L);
         for(int i = 0, j = -1; i < nresults; i++)
-            //if(sock->IsConnected()) 
-                InfoForm::getInstance()->AddString(toString(L, j--, NULL));
-        luaPop(L, nresults);
+            InfoForm::getInstance()->AddString(lua_toString(L, j--, NULL));
+        lua_Pop(L, nresults);
         return 0;
     }
 };
@@ -23,8 +20,16 @@ HOOK_DEFINE_TRAMPOLINE(luaprint) {
 HOOK_DEFINE_TRAMPOLINE(luaNewState) {
 	static void *Callback(void *L1, void *L2) {
         void *L = Orig(L1, L2);
-        exl::OffsetManager::getInstance()->SetLuaState(L);
+        LuaStateManager::getInstance()->SetLuaState(L);
         return L;
+    }
+};
+
+HOOK_DEFINE_TRAMPOLINE(trscn) {
+	static int Callback(void *L) {
+        char * s = lua_toString(L, 2, NULL);
+        exl::TcpLogger::PrintString("%s\n", s);
+        return Orig(L);
     }
 };
 

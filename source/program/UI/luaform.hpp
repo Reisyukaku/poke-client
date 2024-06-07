@@ -5,6 +5,7 @@
 #include "imgui/imgui_nvn.h"
 #include "filelogger.hpp"
 #include "offsetManager.hpp"
+#include "luaStateManager.hpp"
 #include "nn/hid.h"
 #include "nn/mouse.hpp"
 #include "nn/fs.hpp"

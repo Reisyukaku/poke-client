@@ -10,6 +10,14 @@ typedef void (*_luaGetGlobal)(void*, char*);
 typedef int (*_luaLoadFile)(void*, const char *, const char*);
 typedef void (*_luapushstring)(void*, char*);
 typedef int (*_luaType)(void*, int);
+
+static _luaToString lua_toString;
+static _luaSetTop lua_setTop;
+static _luaGetTop lua_getTop;
+static _luaLoadbuffer lua_loadBuffer;
+static _luaPcall lua_pcallk;
+static _luaType lua_ltype;
+
 static const char luaTypes[][11] = {
     "nil",
     "boolean",
@@ -23,5 +31,5 @@ static const char luaTypes[][11] = {
     "upvalue",
     "proto",
 };
-#define luaPop(L,n)		setTop(L, -(n)-1)
+#define lua_Pop(L,n)		lua_setTop(L, -(n)-1)
 #define LUA_MULTRET -1

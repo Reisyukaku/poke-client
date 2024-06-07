@@ -7,7 +7,7 @@ UI::UI(std::string name, ImVec2 winSize) : Name(name), WinSize(winSize), isVisib
     offsetMan = exl::OffsetManager::getInstance();
 
     hexForm = HexForm::getInstance();
-    hexForm->SetAddr(offsetMan->GetAddr(0x43811c0));
+    //hexForm->SetAddr(offsetMan->GetAddr(0x43811c0));
 
     infoForm = InfoForm::getInstance();
     luaForm = LuaForm::getInstance();

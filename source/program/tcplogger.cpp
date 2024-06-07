@@ -64,7 +64,16 @@ void exl::TcpLogger::close() {
     mState = SocketState::UNINITIALIZED;
 }
 
-void exl::TcpLogger::sendMessage(const char *fmt, ...) {
+void exl::TcpLogger::PrintHex(char *buffer, size_t size) {
+    char b[4] = {};
+    int i = 0;
+    while(i++ < size){
+        nn::util::SNPrintf(b, 4, "%02X%s", buffer[i], (i % 16 == 0 && i > 0) ? "\n" : " ");
+        nn::socket::Send(getInstance()->mSocketFd, b, 4, 0);
+    }
+}
+
+void exl::TcpLogger::PrintString(const char *fmt, ...) {
     if (getInstance()->mState != SocketState::CONNECTED)
         return;
 
@@ -74,7 +83,7 @@ void exl::TcpLogger::sendMessage(const char *fmt, ...) {
 
     nn::util::VSNPrintf(buffer, sizeof(buffer), fmt, args);
 
-    int sent = nn::socket::Send(getInstance()->mSocketFd, buffer, sizeof(buffer), 0);
+    nn::socket::Send(getInstance()->mSocketFd, buffer, sizeof(buffer), 0);
 }
 
 const char *exl::TcpLogger::receiveMessage() {

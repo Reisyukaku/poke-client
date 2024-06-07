@@ -3,6 +3,7 @@
 #include "nn/hid.h"
 #include "ui.hpp"
 #include "offsetManager.hpp"
+#include "luaStateManager.hpp"
 #include "nn/mouse.hpp"
 #include "nn/keyboard.hpp"
 #include "filelogger.hpp"
@@ -22,6 +23,7 @@
 exl::Mouse *exl::Mouse::instance = nullptr;
 exl::Keyboard *exl::Keyboard::instance = nullptr;
 exl::OffsetManager *exl::OffsetManager::instance = nullptr;
+LuaStateManager *LuaStateManager::instance = nullptr;
 
 UI *ui;
 exl::TcpLogger *sock = exl::TcpLogger::getInstance();
@@ -53,15 +55,13 @@ HOOK_DEFINE_TRAMPOLINE(nnMainHook) {
 /*HOOK_DEFINE_TRAMPOLINE(trpfd) {
 	static void Callback(void *unk) {
         char *p = *(char**)(*(unsigned long*)((long)unk+0x40)+0x38);
-        if(sock->IsConnected()){
-            size_t sz=strlen(p);
-            char buf[sz+2];
-            buf[0] = 0;
-            strcpy(buf, p);
-            buf[sz] = '\n';
-            buf[sz+1] = 0;
-            sock->sendMessage(buf);
-        }
+        size_t sz=strlen(p);
+        char buf[sz+2];
+        buf[0] = 0;
+        strcpy(buf, p);
+        buf[sz] = '\n';
+        buf[sz+1] = 0;
+        exl::TcpLogger::PrintString(buf);
         Orig(unk);
         
     }
@@ -73,7 +73,7 @@ HOOK_DEFINE_TRAMPOLINE(nnMainHook) {
 
 bool nvnImguiInitialize()
 {
-    exl::TcpLogger::sendMessage("Initializing UI\n");
+    exl::TcpLogger::PrintString("Initializing UI\n");
 
     ui = new UI("Poke-Client", {250.0f, 600.0f});
 
@@ -104,7 +104,7 @@ extern "C" void exl_main(void *x0, void *x1) {
     lua_hooks();
 
     //trpfd::InstallAtOffset(0xa17fe4);
-    //test::InstallAtOffset(0x1352134); 
+    
 }
 
 extern "C" NORETURN void exl_exception_entry() {

@@ -10,6 +10,7 @@
 #include "form.hpp"
 #include "types.h"
 #include "imgui_memory_editor.h"
+#include "tcplogger.hpp"
 
 #ifdef _MSC_VER
 #define _PRISizeT   "I"
