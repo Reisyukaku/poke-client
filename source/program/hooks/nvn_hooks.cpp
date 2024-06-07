@@ -82,10 +82,13 @@ void presentTexture(nvn::Queue *queue, nvn::Window *window, int texIndex) {
     presentTexture_ptr(queue, window, texIndex);
 }
 
+void polyStateSetMode(nvn::PolygonState *buf, nvn::PolygonMode mode) {
+    polyStateSetMode_ptr(buf, SettingsForm::getInstance()->WireframeEnabled() ? nvn::PolygonMode::LINE : nvn::PolygonMode::FILL);
+}
+
 nvn::GenericFuncPtrFunc deviceGetProc(nvn::Device *device, const char *procName) {
 
     nvn::GenericFuncPtrFunc ptr = procAddrPtr(nvnDevice, procName);
-
     if (strcmp(procName, "nvnQueueInitialize") == 0) {
         queueInit_ptr = (nvn::QueueInitializeFunc) ptr;
         return (nvn::GenericFuncPtrFunc) &queueInit;
@@ -98,6 +101,9 @@ nvn::GenericFuncPtrFunc deviceGetProc(nvn::Device *device, const char *procName)
     } else if (strcmp(procName, "nvnQueuePresentTexture") == 0) {
         presentTexture_ptr = (nvn::QueuePresentTextureFunc) ptr;
         return (nvn::GenericFuncPtrFunc) &presentTexture;
+    } else if(strcmp(procName, "nvnPolygonStateSetPolygonMode") == 0) {
+        polyStateSetMode_ptr = (nvn::PolygonStateSetPolygonModeFunc) ptr;
+        return (nvn::GenericFuncPtrFunc) &polyStateSetMode;
     }
 
     return ptr;

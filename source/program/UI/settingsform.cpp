@@ -8,10 +8,15 @@ void SettingsForm::Draw() {
 		ImGui::End();
 		return;
 	}
-    
-    ImGui::BeginChild("##scrolling", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()));
-    //
-	ImGui::EndChild();
+
+	ImGui::BeginGroup();
+    ImGui::Text("Options");
+
+    ImGui::BeginChild("Options", ImVec2(0,0), true);
+    ImGui::Checkbox("Wireframe Mode", &wireframeMode);
+    ImGui::EndChild();
+
+    ImGui::EndGroup();
     
 	ImGui::End();
 }

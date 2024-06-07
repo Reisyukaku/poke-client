@@ -13,12 +13,20 @@ class SettingsForm : public BasicForm{
 public:
     
     void Draw() override;
+
+    bool WireframeEnabled()
+    {
+        return wireframeMode;
+    }
     
     static SettingsForm* getInstance() {
 		if (instance == nullptr)
 			instance = new SettingsForm();
 		return instance;
 	};
+
+protected:
+    bool wireframeMode;
 
 private:
     static SettingsForm* instance;
