@@ -6,6 +6,7 @@
 #include "form.hpp"
 #include "types.h"
 
+namespace pkcl {
 class ThemeManager {
 public:
 	enum Themes {
@@ -45,3 +46,4 @@ public:
 		}
 	}
 };
+}

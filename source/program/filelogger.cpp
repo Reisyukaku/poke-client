@@ -1,13 +1,13 @@
 #include "filelogger.hpp"
 
-exl::FileLogger *exl::FileLogger::instance = nullptr;
+pkcl::FileLogger *pkcl::FileLogger::instance = nullptr;
 
-void exl::FileLogger::init()
+void pkcl::FileLogger::init()
 {
     nn::fs::MountSdCardForDebug("sd");
 }
 
-void exl::FileLogger::Log(std::string str)
+void pkcl::FileLogger::Log(std::string str)
 {
     nn::fs::DirectoryEntryType type;
     Result rc = nn::fs::GetEntryType(&type, logPath.c_str());
@@ -21,7 +21,7 @@ void exl::FileLogger::Log(std::string str)
     nn::fs::CloseFile(handleOut);
 }
 
-void exl::FileLogger::Log(std::deque<std::string> logs)
+void pkcl::FileLogger::Log(std::deque<std::string> logs)
 {
     nn::fs::DirectoryEntryType type;
     Result rc = nn::fs::GetEntryType(&type, logPath.c_str());

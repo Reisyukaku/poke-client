@@ -3,7 +3,7 @@
 LuaForm * LuaForm::instance = nullptr;
 
 void LuaForm::Run(std::string file) {    
-    auto offsetMan = exl::OffsetManager::getInstance();
+    auto offsetMan = pkcl::OffsetManager::getInstance();
 
     lua_toString = reinterpret_cast<_luaToString>(offsetMan->GetAddr("LuaToString"));
     lua_setTop = reinterpret_cast<_luaSetTop>(offsetMan->GetAddr("LuaSetTop"));
@@ -12,7 +12,7 @@ void LuaForm::Run(std::string file) {
     lua_pcallk = reinterpret_cast<_luaPcall>(offsetMan->GetAddr("LuaPCall"));
     lua_ltype = reinterpret_cast<_luaType>(offsetMan->GetAddr("LuaType"));
 
-    void* L = LuaStateManager::getInstance()->GetLuaState();
+    void* L = pkcl::LuaStateManager::getInstance()->GetLuaState();
     
     nn::fs::FileHandle lua;
     long sz;

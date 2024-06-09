@@ -32,7 +32,7 @@ private:
     InfoForm()
     {
         Name = "Info Log";
-        logger = exl::FileLogger::getInstance();
+        logger = pkcl::FileLogger::getInstance();
     }
 
     void AddToQueue(std::string str) {
@@ -41,5 +41,5 @@ private:
         Logs.push_back(str);
     }
     std::deque<std::string> Logs;
-    exl::FileLogger *logger;
+    pkcl::FileLogger *logger;
 };

@@ -5,7 +5,7 @@
 #include <string>
 #include <nn/fs.hpp>
 
-namespace exl {
+namespace pkcl {
 class FileLogger {
 public:
 	void init();
@@ -30,4 +30,4 @@ private:
 		//
 	}    
 };
-};
+}

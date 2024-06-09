@@ -20,14 +20,14 @@
 #include "hooks/lua_hooks.h"
 #include "hooks/nvn_hooks.h"
 
-exl::Mouse *exl::Mouse::instance = nullptr;
-exl::Keyboard *exl::Keyboard::instance = nullptr;
-exl::OffsetManager *exl::OffsetManager::instance = nullptr;
-LuaStateManager *LuaStateManager::instance = nullptr;
+pkcl::Mouse *pkcl::Mouse::instance = nullptr;
+pkcl::Keyboard *pkcl::Keyboard::instance = nullptr;
+pkcl::OffsetManager *pkcl::OffsetManager::instance = nullptr;
+pkcl::LuaStateManager *pkcl::LuaStateManager::instance = nullptr;
 
 UI *ui;
-exl::TcpLogger *sock = exl::TcpLogger::getInstance();
-exl::FileLogger *fileLog = exl::FileLogger::getInstance();
+pkcl::TcpLogger *sock = pkcl::TcpLogger::getInstance();
+pkcl::FileLogger *fileLog = pkcl::FileLogger::getInstance();
 
 typedef struct {
     uint64_t unk;
@@ -61,7 +61,7 @@ HOOK_DEFINE_TRAMPOLINE(nnMainHook) {
         strcpy(buf, p);
         buf[sz] = '\n';
         buf[sz+1] = 0;
-        exl::TcpLogger::PrintString(buf);
+        pkcl::TcpLogger::PrintString(buf);
         Orig(unk);
         
     }
@@ -73,7 +73,7 @@ HOOK_DEFINE_TRAMPOLINE(nnMainHook) {
 
 bool nvnImguiInitialize()
 {
-    exl::TcpLogger::PrintString("Initializing UI\n");
+    pkcl::TcpLogger::PrintString("Initializing UI\n");
 
     ui = new UI("Poke-Client", {250.0f, 600.0f});
 
@@ -93,7 +93,7 @@ extern "C" void exl_main(void *x0, void *x1) {
     exl::hook::Initialize();
     
     //Setup offset manager before hooks are set
-	auto offsetMan = exl::OffsetManager::getInstance();
+	auto offsetMan = pkcl::OffsetManager::getInstance();
     offsetMan->SetBaseAddr(exl::util::modules::GetTargetStart());
     offsetMan->SetTitleID(exl::setting::ProgramId);
 

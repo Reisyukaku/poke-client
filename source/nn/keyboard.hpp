@@ -116,7 +116,7 @@ constexpr int key_mapping[][2] = {
     {ImGuiKey_KeypadEqual,    static_cast<const int>(nn::hid::KeyboardKey::NumPadEquals)},
 };
 
-namespace exl {
+namespace pkcl {
 class Keyboard {
 public:
 	static Keyboard* getInstance() {

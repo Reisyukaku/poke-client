@@ -53,11 +53,11 @@ private:
 		editor->WriteFn = HexForm::WriteData;
 		editor->ReadFn = HexForm::ReadData;
 
-		keyboard = exl::Keyboard::getInstance();
+		keyboard = pkcl::Keyboard::getInstance();
 	}
 
     uintptr_t DataAddr;
 	size_t DataSize;
-	exl::Keyboard *keyboard;
+	pkcl::Keyboard *keyboard;
 	static MemoryEditor *editor;
 };

@@ -18,7 +18,7 @@ enum class SocketState {
     DISCONNECTED = 3
 };
 
-namespace exl {
+namespace pkcl {
 class TcpLogger {
 public:
 	static TcpLogger* getInstance() {

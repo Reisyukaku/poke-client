@@ -13,9 +13,9 @@ constexpr inline auto SocketPoolSize = SocketAllocatorSize + TransferMemorySize;
 
 char socketPool[SocketPoolSize] __attribute__((aligned(0x4000)));
 
-exl::TcpLogger *exl::TcpLogger::instance = nullptr;
+pkcl::TcpLogger *pkcl::TcpLogger::instance = nullptr;
 
-nn::Result exl::TcpLogger::init(const char *ip, u16 port) {
+nn::Result pkcl::TcpLogger::init(const char *ip, u16 port) {
     in_addr hostAddress = { 0 };
     sockaddr serverAddress = { 0 };
 
@@ -60,11 +60,11 @@ nn::Result exl::TcpLogger::init(const char *ip, u16 port) {
     return result;
 }
 
-void exl::TcpLogger::close() {
+void pkcl::TcpLogger::close() {
     mState = SocketState::UNINITIALIZED;
 }
 
-void exl::TcpLogger::PrintHex(char *buffer, size_t size) {
+void pkcl::TcpLogger::PrintHex(char *buffer, size_t size) {
     char b[4] = {};
     int i = 0;
     while(i++ < size){
@@ -73,7 +73,7 @@ void exl::TcpLogger::PrintHex(char *buffer, size_t size) {
     }
 }
 
-void exl::TcpLogger::PrintString(const char *fmt, ...) {
+void pkcl::TcpLogger::PrintString(const char *fmt, ...) {
     if (getInstance()->mState != SocketState::CONNECTED)
         return;
 
@@ -86,7 +86,7 @@ void exl::TcpLogger::PrintString(const char *fmt, ...) {
     nn::socket::Send(getInstance()->mSocketFd, buffer, sizeof(buffer), 0);
 }
 
-const char *exl::TcpLogger::receiveMessage() {
+const char *pkcl::TcpLogger::receiveMessage() {
     if (getInstance()->mState != SocketState::CONNECTED)
         return nullptr;
 

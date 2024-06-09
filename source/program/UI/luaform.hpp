@@ -32,9 +32,6 @@ private:
     LuaForm()
     {
         Name = "Lua Interface";
-
-        logger = exl::FileLogger::getInstance();
-        offsetMan = exl::OffsetManager::getInstance();
         scriptDir = "sd:/luaScripts/";
         
         scriptList = nullptr;
@@ -50,8 +47,6 @@ private:
 
     void Run(std::string file);
     std::vector<std::string> Logs;
-    exl::FileLogger *logger;
-    exl::OffsetManager *offsetMan;
     s64 scriptCnt;
     std::string selectedScript;
     nn::fs::DirectoryEntry* scriptList;

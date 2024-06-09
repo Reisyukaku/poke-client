@@ -16,14 +16,14 @@ MemoryBuffer::MemoryBuffer(size_t size) {
             .SetStorage(memBuffer, alignedSize);
 
     if (!pool.Initialize(&bd->memPoolBuilder)) {
-        exl::TcpLogger::PrintString("Failed to Create Memory Pool!\n");
+        pkcl::TcpLogger::PrintString("Failed to Create Memory Pool!\n");
         return;
     }
 
     bd->bufferBuilder.SetDevice(bd->device).SetDefaults().SetStorage(&pool, 0, alignedSize);
 
     if (!buffer.Initialize(&bd->bufferBuilder)) {
-        exl::TcpLogger::PrintString("Failed to Init Buffer!\n");
+        pkcl::TcpLogger::PrintString("Failed to Init Buffer!\n");
         return;
     }
 
@@ -45,14 +45,14 @@ MemoryBuffer::MemoryBuffer(size_t size, nvn::MemoryPoolFlags flags) {
             .SetStorage(memBuffer, alignedSize);
 
     if (!pool.Initialize(&bd->memPoolBuilder)) {
-        exl::TcpLogger::PrintString("Failed to Create Memory Pool!\n");
+        pkcl::TcpLogger::PrintString("Failed to Create Memory Pool!\n");
         return;
     }
 
     bd->bufferBuilder.SetDevice(bd->device).SetDefaults().SetStorage(&pool, 0, alignedSize);
 
     if (!buffer.Initialize(&bd->bufferBuilder)) {
-        exl::TcpLogger::PrintString("Failed to Init Buffer!\n");
+        pkcl::TcpLogger::PrintString("Failed to Init Buffer!\n");
         return;
     }
 
@@ -71,14 +71,14 @@ MemoryBuffer::MemoryBuffer(size_t size, void *bufferPtr, nvn::MemoryPoolFlags fl
             .SetStorage(memBuffer, size);
 
     if (!pool.Initialize(&bd->memPoolBuilder)) {
-        exl::TcpLogger::PrintString("Failed to Create Memory Pool!\n");
+        pkcl::TcpLogger::PrintString("Failed to Create Memory Pool!\n");
         return;
     }
 
     bd->bufferBuilder.SetDevice(bd->device).SetDefaults().SetStorage(&pool, 0, size);
 
     if (!buffer.Initialize(&bd->bufferBuilder)) {
-        exl::TcpLogger::PrintString("Failed to Init Buffer!\n");
+        pkcl::TcpLogger::PrintString("Failed to Init Buffer!\n");
         return;
     }
 

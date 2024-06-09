@@ -4,7 +4,7 @@
 #include <map>
 #include "../types.h"
 
-namespace exl {
+namespace pkcl {
 class OffsetManager {
 public:
 	static OffsetManager* getInstance() {

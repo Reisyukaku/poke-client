@@ -8,7 +8,7 @@ constexpr int mouse_mapping[][2] = {
     {ImGuiMouseButton_Middle, static_cast<const int>(nn::hid::MouseButton::Middle)},
 };
 
-namespace exl {
+namespace pkcl {
 class Mouse {
 public:
 	static Mouse* getInstance() {

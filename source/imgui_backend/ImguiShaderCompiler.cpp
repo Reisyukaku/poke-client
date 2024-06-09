@@ -70,35 +70,35 @@ const char *shaderNames[] = {
 };
 
 extern "C" void *glslc_Alloc(size_t size, size_t alignment, void *user_data = nullptr) {
-    exl::TcpLogger::PrintString("Allocating ptr with size: %x aligned by %x\n", size, alignment);
+    pkcl::TcpLogger::PrintString("Allocating ptr with size: %x aligned by %x\n", size, alignment);
     return nn::init::GetAllocator()->Allocate(ALIGN_UP(size, alignment));
 }
 
 extern "C" void glslc_Free(void *ptr, void *user_data = nullptr) {
-    exl::TcpLogger::PrintString("Freeing ptr: %p\n", ptr);
+    pkcl::TcpLogger::PrintString("Freeing ptr: %p\n", ptr);
     nn::init::GetAllocator()->Free(ptr);
 }
 
 extern "C" void *glslc_Realloc(void *ptr, size_t size, void *user_data = nullptr) {
-    exl::TcpLogger::PrintString("Reallocating ptr: %p to size: %x\n", ptr, size);
+    pkcl::TcpLogger::PrintString("Reallocating ptr: %p to size: %x\n", ptr, size);
     return nn::init::GetAllocator()->Reallocate(ptr, size);
 }
 
 void NOINLINE ReadCompiledShader(GLSLCoutput *compileData) {
 
-    exl::TcpLogger::PrintString("Shader Count: %d\n", compileData->numSections);
+    pkcl::TcpLogger::PrintString("Shader Count: %d\n", compileData->numSections);
 
     for (int i = 0; i < compileData->numSections; ++i) {
         if (compileData->headers[i].genericHeader.common.type != GLSLCsectionTypeEnum::GLSLC_SECTION_TYPE_GPU_CODE)
             continue;
         auto compInfo = &compileData->headers[i].gpuCodeHeader;
 
-        exl::TcpLogger::PrintString("Shader Stage: %s\n", shaderNames[compInfo->stage]);
-        exl::TcpLogger::PrintString("Section Size: %x\n", compInfo->common.size);
-        exl::TcpLogger::PrintString("Control Offset: %x\n", compInfo->common.size + compInfo->controlOffset);
-        exl::TcpLogger::PrintString("Control Size: %x\n", compInfo->controlSize);
-        exl::TcpLogger::PrintString("Data Offset: %x\n", compInfo->common.size + compInfo->dataOffset);
-        exl::TcpLogger::PrintString("Data Size: %x\n", compInfo->dataSize);
+        pkcl::TcpLogger::PrintString("Shader Stage: %s\n", shaderNames[compInfo->stage]);
+        pkcl::TcpLogger::PrintString("Section Size: %x\n", compInfo->common.size);
+        pkcl::TcpLogger::PrintString("Control Offset: %x\n", compInfo->common.size + compInfo->controlOffset);
+        pkcl::TcpLogger::PrintString("Control Size: %x\n", compInfo->controlSize);
+        pkcl::TcpLogger::PrintString("Data Offset: %x\n", compInfo->common.size + compInfo->dataOffset);
+        pkcl::TcpLogger::PrintString("Data Size: %x\n", compInfo->dataSize);
 
     }
 }
@@ -184,14 +184,14 @@ CompiledData NOINLINE CreateShaderBinary(GLSLCoutput *compileData, const char *s
 
 bool ImguiShaderCompiler::CheckIsValidVersion(nvn::Device *device) {
 
-    exl::TcpLogger::PrintString("Checking if GLSLC subsdk is on a valid version.\n");
+    pkcl::TcpLogger::PrintString("Checking if GLSLC subsdk is on a valid version.\n");
 
     nn::gfx::detail::GlslcDll *glslcDll = nn::gfx::detail::GlslcDll::GetInstance();
 
     if (glslcDll->IsInitialized()) {
         auto versionInfo = glslcDll->GlslcGetVersion();
-        exl::TcpLogger::PrintString("GLSLC Major Version: %d\n", versionInfo.apiMajor);
-        exl::TcpLogger::PrintString("GLSLC Minor Version: %d\n", versionInfo.apiMinor);
+        pkcl::TcpLogger::PrintString("GLSLC Major Version: %d\n", versionInfo.apiMajor);
+        pkcl::TcpLogger::PrintString("GLSLC Minor Version: %d\n", versionInfo.apiMinor);
 
         int minMajorVersion = 0;
         int maxMajorVersion = 0;
@@ -199,29 +199,29 @@ bool ImguiShaderCompiler::CheckIsValidVersion(nvn::Device *device) {
         int maxMinorVersion = 0;
 
         device->GetInteger(nvn::DeviceInfo::GLSLC_MIN_SUPPORTED_GPU_CODE_MAJOR_VERSION, &minMajorVersion);
-        exl::TcpLogger::PrintString("NVN Api Min Major Version: %d\n", minMajorVersion);
+        pkcl::TcpLogger::PrintString("NVN Api Min Major Version: %d\n", minMajorVersion);
         device->GetInteger(nvn::DeviceInfo::GLSLC_MAX_SUPPORTED_GPU_CODE_MAJOR_VERSION, &maxMajorVersion);
-        exl::TcpLogger::PrintString("NVN Api Max Major Version: %d\n", maxMajorVersion);
+        pkcl::TcpLogger::PrintString("NVN Api Max Major Version: %d\n", maxMajorVersion);
         device->GetInteger(nvn::DeviceInfo::GLSLC_MIN_SUPPORTED_GPU_CODE_MINOR_VERSION, &minMinorVersion);
-        exl::TcpLogger::PrintString("NVN Api Min Minor Version: %d\n", minMinorVersion);
+        pkcl::TcpLogger::PrintString("NVN Api Min Minor Version: %d\n", minMinorVersion);
         device->GetInteger(nvn::DeviceInfo::GLSLC_MAX_SUPPORTED_GPU_CODE_MINOR_VERSION, &maxMinorVersion);
-        exl::TcpLogger::PrintString("NVN Api Max Minor Version: %d\n", maxMinorVersion);
+        pkcl::TcpLogger::PrintString("NVN Api Max Minor Version: %d\n", maxMinorVersion);
 
         if ((versionInfo.apiMajor >= minMajorVersion && versionInfo.apiMajor <= maxMajorVersion) &&
             (versionInfo.apiMinor >= minMinorVersion && versionInfo.apiMinor <= maxMinorVersion)) {
-            exl::TcpLogger::PrintString("NVN Api supports GLSLC version!\n");
+            pkcl::TcpLogger::PrintString("NVN Api supports GLSLC version!\n");
             return true;
         } else if (minMajorVersion == 1 && maxMajorVersion == 1) {
-            exl::TcpLogger::PrintString("Unable to verify if version is valid. Continuing to use GLSLC.\n");
+            pkcl::TcpLogger::PrintString("Unable to verify if version is valid. Continuing to use GLSLC.\n");
             return true;
         }
 
-        exl::TcpLogger::PrintString("Current NVN Api is incompatible with supplied GLSLC binary!\nTry using a GLSLC binary from a different game.\n");
+        pkcl::TcpLogger::PrintString("Current NVN Api is incompatible with supplied GLSLC binary!\nTry using a GLSLC binary from a different game.\n");
         return false;
 
 
     } else {
-        exl::TcpLogger::PrintString("GLSLC Instance is not Initialized! Or unable to find function pointers.\n");
+        pkcl::TcpLogger::PrintString("GLSLC Instance is not Initialized! Or unable to find function pointers.\n");
         return false;
     }
 
@@ -231,27 +231,27 @@ void ImguiShaderCompiler::InitializeCompiler() {
 
     nn::gfx::detail::GlslcDll *glslcDll = nn::gfx::detail::GlslcDll::GetInstance();
 
-    exl::TcpLogger::PrintString("Setting Glslc Alloc funcs.\n");
+    pkcl::TcpLogger::PrintString("Setting Glslc Alloc funcs.\n");
 
     glslcDll->GlslcSetAllocator(glslc_Alloc, glslc_Free, glslc_Realloc, nullptr);
 
-    exl::TcpLogger::PrintString("Funcs setup.\n");
+    pkcl::TcpLogger::PrintString("Funcs setup.\n");
 }
 
 CompiledData ImguiShaderCompiler::CompileShader(const char *shaderName) {
 
     nn::gfx::detail::GlslcDll *glslcDll = nn::gfx::detail::GlslcDll::GetInstance();
 
-    exl::TcpLogger::PrintString("Running compiler for File(s): %s\n", shaderName);
+    pkcl::TcpLogger::PrintString("Running compiler for File(s): %s\n", shaderName);
 
     GLSLCcompileObject initInfo{};
     initInfo.options = glslcDll->GlslcGetDefaultOptions();
 
     if (!glslcDll->GlslcInitialize(&initInfo)) {
-        exl::TcpLogger::PrintString("Unable to Init with info.\n");
+        pkcl::TcpLogger::PrintString("Unable to Init with info.\n");
         return {};
     } else {
-        exl::TcpLogger::PrintString("GLSLC initialized!\n");
+        pkcl::TcpLogger::PrintString("GLSLC initialized!\n");
     }
 
     const char *shaders[6];
@@ -268,19 +268,19 @@ CompiledData ImguiShaderCompiler::CompileShader(const char *shaderName) {
     initInfo.input.count = 2;
 
     if (!(shaders[0] && shaders[1])) {
-        exl::TcpLogger::PrintString("Failed to load Shader Source(s). Unable to compile.\n");
+        pkcl::TcpLogger::PrintString("Failed to load Shader Source(s). Unable to compile.\n");
         return {};
     }
 
-    exl::TcpLogger::PrintString("Got Shaders. Attempting to Compile.\n");
+    pkcl::TcpLogger::PrintString("Got Shaders. Attempting to Compile.\n");
 
     if (glslcDll->GlslcCompile(&initInfo)) {
-        exl::TcpLogger::PrintString("Successfully Compiled Shaders!\n");
+        pkcl::TcpLogger::PrintString("Successfully Compiled Shaders!\n");
     } else {
-        exl::TcpLogger::PrintString("%s", initInfo.lastCompiledResults->compilationStatus->infoLog);
+        pkcl::TcpLogger::PrintString("%s", initInfo.lastCompiledResults->compilationStatus->infoLog);
 
-        exl::TcpLogger::PrintString("Vert Shader Source:\n%s\n", shaders[0]);
-        exl::TcpLogger::PrintString("Frag Shader Source:\n%s\n", shaders[1]);
+        pkcl::TcpLogger::PrintString("Vert Shader Source:\n%s\n", shaders[0]);
+        pkcl::TcpLogger::PrintString("Frag Shader Source:\n%s\n", shaders[1]);
     }
 
     glslcDll->Finalize(); // finalize compiler

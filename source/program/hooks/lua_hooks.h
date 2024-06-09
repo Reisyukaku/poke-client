@@ -20,7 +20,7 @@ HOOK_DEFINE_TRAMPOLINE(luaprint) {
 HOOK_DEFINE_TRAMPOLINE(luaNewState) {
 	static void *Callback(void *L1, void *L2) {
         void *L = Orig(L1, L2);
-        LuaStateManager::getInstance()->SetLuaState(L);
+        pkcl::LuaStateManager::getInstance()->SetLuaState(L);
         return L;
     }
 };
@@ -28,7 +28,7 @@ HOOK_DEFINE_TRAMPOLINE(luaNewState) {
 HOOK_DEFINE_TRAMPOLINE(trscn) {
 	static int Callback(void *L) {
         char * s = lua_toString(L, 2, NULL);
-        exl::TcpLogger::PrintString("%s\n", s);
+        pkcl::TcpLogger::PrintString("%s\n", s);
         return Orig(L);
     }
 };

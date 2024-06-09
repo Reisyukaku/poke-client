@@ -36,15 +36,15 @@ namespace exl::diag {
         #endif
         // If this ever needs to be updated to a better color:
         // https://chrisyeh96.github.io/2020/03/28/terminal-colors.html
-        exl::TcpLogger::PrintString("\x1b[31m");
-        exl::TcpLogger::PrintString("\n\nAssertion failed: %s = %u\n", ctx.expr, ctx.value);
-        exl::TcpLogger::PrintString("At %s:%u\n", ctx.file, ctx.line);
-        exl::TcpLogger::PrintString("  %s\n", ctx.func);
+        pkcl::TcpLogger::PrintString("\x1b[31m");
+        pkcl::TcpLogger::PrintString("\n\nAssertion failed: %s = %u\n", ctx.expr, ctx.value);
+        pkcl::TcpLogger::PrintString("At %s:%u\n", ctx.file, ctx.line);
+        pkcl::TcpLogger::PrintString("  %s\n", ctx.func);
         if (ctx.format != nullptr) {
-            exl::TcpLogger::PrintString(ctx.format, ctx.args);
-            exl::TcpLogger::PrintString("\n");
+            pkcl::TcpLogger::PrintString(ctx.format, ctx.args);
+            pkcl::TcpLogger::PrintString("\n");
         }
-        exl::TcpLogger::PrintString("\x1b[0m");
+        pkcl::TcpLogger::PrintString("\x1b[0m");
 
         svcBreak(0x6942021, ctx.value, 0);
         UNREACHABLE;

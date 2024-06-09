@@ -37,9 +37,9 @@ public:
     }
 	
 private:
-    exl::Mouse *mouse;
-    exl::Keyboard *keyboard;
-    exl::OffsetManager *offsetMan;
+    pkcl::Mouse *mouse;
+    pkcl::Keyboard *keyboard;
+    pkcl::OffsetManager *offsetMan;
     std::string Name;
     ImVec2 WinSize;
     bool isVisible;

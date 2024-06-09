@@ -2,9 +2,9 @@
 
 UI::UI(std::string name, ImVec2 winSize) : Name(name), WinSize(winSize), isVisible(true)
 {
-    mouse = exl::Mouse::getInstance();
-    keyboard = exl::Keyboard::getInstance();
-    offsetMan = exl::OffsetManager::getInstance();
+    mouse = pkcl::Mouse::getInstance();
+    keyboard = pkcl::Keyboard::getInstance();
+    offsetMan = pkcl::OffsetManager::getInstance();
 
     hexForm = HexForm::getInstance();
     //hexForm->SetAddr(offsetMan->GetAddr(0x43811c0));
@@ -14,7 +14,7 @@ UI::UI(std::string name, ImVec2 winSize) : Name(name), WinSize(winSize), isVisib
     settingsForm = SettingsForm::getInstance();
     aboutForm = AboutForm::getInstance();
 
-    ThemeManager::SetTheme(ThemeManager::Themes::Default);
+    pkcl::ThemeManager::SetTheme(pkcl::ThemeManager::Themes::Default);
     //ImGui::SetNextWindowCollapsed(true);
 }
 

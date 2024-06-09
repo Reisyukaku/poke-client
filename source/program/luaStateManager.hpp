@@ -4,6 +4,7 @@
 #include "../types.h"
 #include "hooks/lua.h"
 
+namespace pkcl {
 class LuaStateManager {
 public:
 	void *GetLuaState() {
@@ -31,3 +32,4 @@ private:
 	LuaStateManager(const LuaStateManager&);
 	LuaStateManager& operator=(const LuaStateManager&);
 };
+}

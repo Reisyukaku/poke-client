@@ -2,7 +2,7 @@
 
 void lua_hooks()
 {
-    auto offsetMan = exl::OffsetManager::getInstance();
+    auto offsetMan = pkcl::OffsetManager::getInstance();
     lua_toString = reinterpret_cast<_luaToString>(offsetMan->GetAddr("LuaToString"));
     lua_setTop = reinterpret_cast<_luaSetTop>(offsetMan->GetAddr("LuaSetTop"));
     lua_getTop = reinterpret_cast<_luaGetTop>(offsetMan->GetAddr("LuaGetTop"));
