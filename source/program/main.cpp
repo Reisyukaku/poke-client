@@ -9,7 +9,6 @@
 #include "filelogger.hpp"
 #include "tcplogger.hpp"
 #include "UI/infoform.hpp"
-#include "hooks/lua.h"
 #include "utils.hpp"
 #include <map>
 #include <string>
@@ -19,6 +18,7 @@
 #include <cstring>
 #include "hooks/lua_hooks.h"
 #include "hooks/nvn_hooks.h"
+#include "hooks/game_hooks.h"
 
 pkcl::Mouse *pkcl::Mouse::instance = nullptr;
 pkcl::Keyboard *pkcl::Keyboard::instance = nullptr;
@@ -29,19 +29,6 @@ UI *ui;
 pkcl::TcpLogger *sock = pkcl::TcpLogger::getInstance();
 pkcl::FileLogger *fileLog = pkcl::FileLogger::getInstance();
 
-typedef struct {
-    uint64_t unk;
-    uint64_t FnvHash;
-    char * path;
-    uint64_t pathLen;
-    uint64_t unk2;
-    int fsType;
-} FileStruct;
-
-/*
-* ---------------------------------------------
-*/
-
 HOOK_DEFINE_TRAMPOLINE(nnMainHook) {
     static void Callback()
     {
@@ -51,25 +38,6 @@ HOOK_DEFINE_TRAMPOLINE(nnMainHook) {
         Orig();
     }
 };
-
-/*HOOK_DEFINE_TRAMPOLINE(trpfd) {
-	static void Callback(void *unk) {
-        char *p = *(char**)(*(unsigned long*)((long)unk+0x40)+0x38);
-        size_t sz=strlen(p);
-        char buf[sz+2];
-        buf[0] = 0;
-        strcpy(buf, p);
-        buf[sz] = '\n';
-        buf[sz+1] = 0;
-        pkcl::TcpLogger::PrintString(buf);
-        Orig(unk);
-        
-    }
-};*/
-
-/*
-* ---------------------------------------------
-*/
 
 bool nvnImguiInitialize()
 {
@@ -102,9 +70,7 @@ extern "C" void exl_main(void *x0, void *x1) {
 	//Hooks
     nvn_hooks();
     lua_hooks();
-
-    //trpfd::InstallAtOffset(0xa17fe4);
-    
+    game_hooks();
 }
 
 extern "C" NORETURN void exl_exception_entry() {

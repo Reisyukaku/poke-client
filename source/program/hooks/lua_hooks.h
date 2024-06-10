@@ -4,14 +4,13 @@
 #include "offsetManager.hpp"
 #include "luaStateManager.hpp"
 #include "lib.hpp"
-#include "lua.h"
 #include "tcplogger.hpp"
 
 HOOK_DEFINE_TRAMPOLINE(luaprint) {
 	static int Callback(void *L) {
-        int nresults = lua_getTop(L);
+        int nresults = LuaH::getTop(L);
         for(int i = 0, j = -1; i < nresults; i++)
-            InfoForm::getInstance()->AddString(lua_toString(L, j--, NULL));
+            InfoForm::getInstance()->AddString(LuaH::toString(L, j--, NULL));
         lua_Pop(L, nresults);
         return 0;
     }
@@ -27,7 +26,7 @@ HOOK_DEFINE_TRAMPOLINE(luaNewState) {
 
 HOOK_DEFINE_TRAMPOLINE(trscn) {
 	static int Callback(void *L) {
-        char * s = lua_toString(L, 2, NULL);
+        char * s = LuaH::toString(L, 2, NULL);
         pkcl::TcpLogger::PrintString("%s\n", s);
         return Orig(L);
     }

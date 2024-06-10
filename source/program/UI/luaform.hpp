@@ -10,7 +10,6 @@
 #include "nn/mouse.hpp"
 #include "nn/fs.hpp"
 #include "form.hpp"
-#include "hooks/lua.h"
 #include "types.h"
 
 class LuaForm : public BasicForm{

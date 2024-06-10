@@ -65,12 +65,20 @@ void pkcl::TcpLogger::close() {
 }
 
 void pkcl::TcpLogger::PrintHex(char *buffer, size_t size) {
-    char b[4] = {};
-    int i = 0;
-    while(i++ < size){
-        nn::util::SNPrintf(b, 4, "%02X%s", buffer[i], (i % 16 == 0 && i > 0) ? "\n" : " ");
-        nn::socket::Send(getInstance()->mSocketFd, b, 4, 0);
+    char buf[(size * 3) + 2] = {0};
+    const char *hex = "0123456789ABCDEF";
+    u8 i = 0, j = 0;
+    while(i < size){
+        u8 num1 = buffer[i] & 0xF;
+        u8 num2 = (buffer[i] >> 4) & 0xF;
+        
+        buf[j++] = hex[num2];
+        buf[j++] = hex[num1];
+        buf[j++] = (i++ % 16 == 15) ? '\n' : ' ';
     }
+    buf[(size * 3) + 1] = '\n';
+
+    nn::socket::Send(getInstance()->mSocketFd, buf, (size * 3) + 1, 0);
 }
 
 void pkcl::TcpLogger::PrintString(const char *fmt, ...) {
@@ -79,11 +87,11 @@ void pkcl::TcpLogger::PrintString(const char *fmt, ...) {
 
     va_list args;
     va_start(args, fmt);
-    char buffer[0x1000] = {};
+    char buffer[0x1000] = {0};
 
     nn::util::VSNPrintf(buffer, sizeof(buffer), fmt, args);
 
-    nn::socket::Send(getInstance()->mSocketFd, buffer, sizeof(buffer), 0);
+    nn::socket::Send(getInstance()->mSocketFd, buffer, strlen(buffer), 0);
 }
 
 const char *pkcl::TcpLogger::receiveMessage() {
