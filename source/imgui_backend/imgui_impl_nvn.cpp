@@ -281,7 +281,8 @@ namespace ImguiNvnBackend {
         io.MouseDrawCursor = true;
         io.ConfigFlags |= ImGuiConfigFlags_IsTouchScreen;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-        //io.BackendFlags |= ImGuiBackendFlags_HasGamepad;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        io.BackendFlags |= ImGuiBackendFlags_HasGamepad;
         io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;
 
         bool isDockedMode = nn::oe::GetOperationMode() == nn::oe::OperationMode_Docked;
