@@ -88,7 +88,7 @@ void NOINLINE ReadCompiledShader(GLSLCoutput *compileData) {
 
     pkcl::TcpLogger::PrintString("Shader Count: %d\n", compileData->numSections);
 
-    for (int i = 0; i < compileData->numSections; ++i) {
+    for (int i = 0; i < (int)compileData->numSections; ++i) {
         if (compileData->headers[i].genericHeader.common.type != GLSLCsectionTypeEnum::GLSLC_SECTION_TYPE_GPU_CODE)
             continue;
         auto compInfo = &compileData->headers[i].gpuCodeHeader;
@@ -113,7 +113,7 @@ CompiledData NOINLINE CreateShaderBinary(GLSLCoutput *compileData, const char *s
 
     size_t binarySize = 0;
 
-    for (int i = 0; i < compileData->numSections; ++i) {
+    for (int i = 0; i < (int)compileData->numSections; ++i) {
         if (compileData->headers[i].genericHeader.common.type == GLSLCsectionTypeEnum::GLSLC_SECTION_TYPE_GPU_CODE) {
             binarySize = ALIGN_UP(binarySize + compileData->headers[i].genericHeader.common.size, 0x100);
         }
@@ -130,7 +130,7 @@ CompiledData NOINLINE CreateShaderBinary(GLSLCoutput *compileData, const char *s
     u32 headerInfo[4] = {};
 
     // place control sections first (as we dont need to align it)
-    for (int i = 0; i < compileData->numSections; ++i) {
+    for (int i = 0; i < (int)compileData->numSections; ++i) {
         if (compileData->headers[i].genericHeader.common.type != GLSLCsectionTypeEnum::GLSLC_SECTION_TYPE_GPU_CODE)
             continue;
 
@@ -143,7 +143,7 @@ CompiledData NOINLINE CreateShaderBinary(GLSLCoutput *compileData, const char *s
     }
 
     // place data sections next
-    for (int i = 0; i < compileData->numSections; ++i) {
+    for (int i = 0; i < (int)compileData->numSections; ++i) {
         if (compileData->headers[i].genericHeader.common.type != GLSLCsectionTypeEnum::GLSLC_SECTION_TYPE_GPU_CODE)
             continue;
         auto compInfo = &compileData->headers[i].gpuCodeHeader;
@@ -207,8 +207,8 @@ bool ImguiShaderCompiler::CheckIsValidVersion(nvn::Device *device) {
         device->GetInteger(nvn::DeviceInfo::GLSLC_MAX_SUPPORTED_GPU_CODE_MINOR_VERSION, &maxMinorVersion);
         pkcl::TcpLogger::PrintString("NVN Api Max Minor Version: %d\n", maxMinorVersion);
 
-        if ((versionInfo.apiMajor >= minMajorVersion && versionInfo.apiMajor <= maxMajorVersion) &&
-            (versionInfo.apiMinor >= minMinorVersion && versionInfo.apiMinor <= maxMinorVersion)) {
+        if (((int)versionInfo.apiMajor >= minMajorVersion && (int)versionInfo.apiMajor <= maxMajorVersion) &&
+            ((int)versionInfo.apiMinor >= minMinorVersion && (int)versionInfo.apiMinor <= maxMinorVersion)) {
             pkcl::TcpLogger::PrintString("NVN Api supports GLSLC version!\n");
             return true;
         } else if (minMajorVersion == 1 && maxMajorVersion == 1) {

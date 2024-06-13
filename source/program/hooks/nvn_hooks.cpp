@@ -5,6 +5,19 @@
 #include <nn/init.hpp>
 #include "../../imgui_backend/imgui_impl_nvn.hpp"
 
+nvn::Device *nvnDevice;
+nvn::Queue *nvnQueue;
+nvn::CommandBuffer *nvnCmdBuf;
+
+nvn::CommandBufferInitializeFunc cmdBufInit_ptr;
+nvn::QueueInitializeFunc queueInit_ptr;
+nvn::QueuePresentTextureFunc presentTexture_ptr;
+nvn::WindowSetCropFunc windowSetCrop_ptr;
+
+nvn::PolygonStateSetPolygonModeFunc polyStateSetMode_ptr;
+
+bool hasInitImGui = false;
+
 static void* (*mallocFuncPtr)(size_t size);
 static void (*freeFuncPtr)(void *ptr);
 
