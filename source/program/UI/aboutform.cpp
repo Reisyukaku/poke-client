@@ -7,7 +7,7 @@
 AboutForm * AboutForm::instance = nullptr;
 
 void AboutForm::Draw() {
-    /*ImGui::SetNextWindowSize(ImVec2(500.0f, 250.0f), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(500.0f, 250.0f), ImGuiCond_FirstUseEver);
 	if (!ImGui::Begin(Name.c_str(), &isVisible, ImGuiWindowFlags_NoScrollbar)){
 		ImGui::End();
 		return;
@@ -24,19 +24,6 @@ void AboutForm::Draw() {
     
 
     
-	ImGui::End();*/
-	//ImGui::ShowDemoWindow();
-	ImGui::Begin("Properties");
-
-	static char tagBuffer[256];
-
-	memset(tagBuffer, 0, sizeof(tagBuffer));
-
-	if (ImGui::InputText("Input", tagBuffer, IM_ARRAYSIZE(tagBuffer)))
-	{
-		// ...
-	}
-
 	ImGui::End();
 
 }
