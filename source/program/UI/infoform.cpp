@@ -3,7 +3,7 @@
 InfoForm * InfoForm::instance = nullptr;
 
 void InfoForm::Draw() {
-    ImGui::SetNextWindowSize(ImVec2(500.0f, 250.0f), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(560.0f, 250.0f), ImGuiCond_FirstUseEver);
 	if (!ImGui::Begin(Name.c_str(), &isVisible, ImGuiWindowFlags_NoScrollbar)){
 		ImGui::End();
 		return;
@@ -17,11 +17,18 @@ void InfoForm::Draw() {
     
     ImGui::Separator();
     
-    if(ImGui::Button("Write to SD", ImVec2(220, 0))) {
-        logger->Log(Logs);
+    if(ImGui::Button("Write to SD", ImVec2(180, 0))) {
+        pkcl::FileLogger::getInstance()->Log(Logs);
+        Logs.clear();
     }
     ImGui::SameLine();
-    if(ImGui::Button("Clear", ImVec2(220, 0))) {
+    if(ImGui::Button("Send over TCP", ImVec2(180, 0))) {
+        for(auto &l : Logs)
+            pkcl::TcpLogger::PrintString("%s\n", l.c_str());
+        Logs.clear();
+    }
+    ImGui::SameLine();
+    if(ImGui::Button("Clear", ImVec2(180, 0))) {
         Logs.clear();
     }
     

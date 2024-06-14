@@ -2,6 +2,7 @@
 
 #include <string>
 #include <cstring>
+#include <unistd.h>
 #include <map>
 #include "../types.h"
 #include "nn/socket.hpp"
@@ -33,6 +34,7 @@ public:
     static void PrintHex(char *buffer, size_t size);
     static const char* receiveMessage();
     void close();
+    int GetDesc();
     bool IsConnected(){
         return mState == SocketState::CONNECTED;
     }

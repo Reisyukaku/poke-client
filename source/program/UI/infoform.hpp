@@ -4,6 +4,7 @@
 #include <deque>
 #include "imgui/imgui_nvn.h"
 #include "filelogger.hpp"
+#include "tcplogger.hpp"
 #include "nn/hid.h"
 #include "nn/mouse.hpp"
 #include "form.hpp"
@@ -32,7 +33,6 @@ private:
     InfoForm()
     {
         Name = "Info Log";
-        logger = pkcl::FileLogger::getInstance();
     }
 
     void AddToQueue(std::string str) {
@@ -41,5 +41,4 @@ private:
         Logs.push_back(str);
     }
     std::deque<std::string> Logs;
-    pkcl::FileLogger *logger;
 };

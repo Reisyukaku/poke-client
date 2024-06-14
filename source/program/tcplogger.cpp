@@ -57,6 +57,12 @@ nn::Result pkcl::TcpLogger::init(const char *ip, u16 port) {
 
     mState = result.isSuccess() ? SocketState::CONNECTED : SocketState::DISCONNECTED;
 
+    fflush(stdout);
+    dup2(getInstance()->mSocketFd, STDOUT_FILENO);
+
+    fflush(stderr);
+    dup2(getInstance()->mSocketFd, STDERR_FILENO);
+
     return result;
 }
 

@@ -4,7 +4,7 @@
 #define GIT_COMMIT_HASH "?"
 #endif
 
-AboutForm * AboutForm::instance = nullptr;
+AboutForm *AboutForm::instance = nullptr;
 
 void AboutForm::Draw() {
     ImGui::SetNextWindowSize(ImVec2(500.0f, 250.0f), ImGuiCond_FirstUseEver);
@@ -21,9 +21,6 @@ void AboutForm::Draw() {
 		"- Exlaunch by shadowninja108\n"
 	);
 	ImGui::EndChild();
-    
 
-    
 	ImGui::End();
-
 }

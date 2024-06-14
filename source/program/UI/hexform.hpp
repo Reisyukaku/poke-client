@@ -52,12 +52,9 @@ private:
 		editor = new MemoryEditor();
 		editor->WriteFn = HexForm::WriteData;
 		editor->ReadFn = HexForm::ReadData;
-
-		keyboard = pkcl::Keyboard::getInstance();
 	}
 
     uintptr_t DataAddr;
 	size_t DataSize;
-	pkcl::Keyboard *keyboard;
 	static MemoryEditor *editor;
 };

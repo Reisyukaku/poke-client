@@ -21,8 +21,8 @@ typedef struct {
 
 HOOK_DEFINE_TRAMPOLINE(trpfd) {
 	static void Callback(trp_struct *c) {
-        pkcl::TcpLogger::PrintHex((char*)c->fileDesc, 0x40);
-        pkcl::TcpLogger::PrintString("%016llX|%s\n", c->fileDesc->hash, c->fileDesc->filename);
+        //pkcl::TcpLogger::PrintHex((char*)c->fileDesc, 0x40);
+        //pkcl::TcpLogger::PrintString("%016llX|%s\n", c->fileDesc->hash, c->fileDesc->filename);
         /*char *path = strchr(c->fileDesc->filename, ':');
         if(path != NULL)
         {

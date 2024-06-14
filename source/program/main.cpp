@@ -35,6 +35,7 @@ HOOK_DEFINE_TRAMPOLINE(nnMainHook) {
         //Init loggers
         fileLog->init();
         sock->init(TCPLOG_IP, 3080);
+        
         Orig();
     }
 };
