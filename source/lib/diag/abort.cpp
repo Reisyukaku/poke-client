@@ -37,7 +37,7 @@ namespace exl::diag {
         // If this ever needs to be updated to a better color:
         // https://chrisyeh96.github.io/2020/03/28/terminal-colors.html
         printf("\x1b[31m");
-        printf("\n\nAssertion failed: %s = %u\n", ctx.expr, ctx.value);
+        printf("\n\nAssertion failed: %s = %lu\n", ctx.expr, ctx.value);
         printf("At %s:%u\n", ctx.file, ctx.line);
         printf("  %s\n", ctx.func);
         if (ctx.format != nullptr) {

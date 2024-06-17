@@ -70,7 +70,7 @@ const char *shaderNames[] = {
 };
 
 extern "C" void *glslc_Alloc(size_t size, size_t alignment, void *user_data = nullptr) {
-    printf("Allocating ptr with size: %x aligned by %x\n", size, alignment);
+    printf("Allocating ptr with size: %lx aligned by %lx\n", size, alignment);
     return nn::init::GetAllocator()->Allocate(ALIGN_UP(size, alignment));
 }
 
@@ -80,7 +80,7 @@ extern "C" void glslc_Free(void *ptr, void *user_data = nullptr) {
 }
 
 extern "C" void *glslc_Realloc(void *ptr, size_t size, void *user_data = nullptr) {
-    printf("Reallocating ptr: %p to size: %x\n", ptr, size);
+    printf("Reallocating ptr: %p to size: %lx\n", ptr, size);
     return nn::init::GetAllocator()->Reallocate(ptr, size);
 }
 

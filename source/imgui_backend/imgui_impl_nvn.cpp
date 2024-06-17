@@ -145,8 +145,6 @@ namespace ImguiNvnBackend {
             printf("Failed to load Switch System Font! Falling back to default ImGui font.\n");
         }
 
-        io.Fonts->AddFontDefault();
-
         // convert imgui font texels
 
         unsigned char *pixels;
@@ -432,9 +430,9 @@ namespace ImguiNvnBackend {
             if (bd->vtxBuffer) {
                 bd->vtxBuffer->Finalize();
                 IM_FREE(bd->vtxBuffer);
-                printf("Resizing Vertex Buffer to Size: %d\n", totalVtxSize);
+                printf("Resizing Vertex Buffer to Size: %ld\n", totalVtxSize);
             } else {
-                printf("Initializing Vertex Buffer to Size: %d\n", totalVtxSize);
+                printf("Initializing Vertex Buffer to Size: %ld\n", totalVtxSize);
             }
 
             bd->vtxBuffer = IM_NEW(MemoryBuffer)(totalVtxSize);
@@ -448,9 +446,9 @@ namespace ImguiNvnBackend {
                 bd->idxBuffer->Finalize();
                 IM_FREE(bd->idxBuffer);
 
-                printf("Resizing Index Buffer to Size: %d\n", totalIdxSize);
+                printf("Resizing Index Buffer to Size: %ld\n", totalIdxSize);
             } else {
-                printf("Initializing Index Buffer to Size: %d\n", totalIdxSize);
+                printf("Initializing Index Buffer to Size: %ld\n", totalIdxSize);
             }
 
             bd->idxBuffer = IM_NEW(MemoryBuffer)(totalIdxSize);
