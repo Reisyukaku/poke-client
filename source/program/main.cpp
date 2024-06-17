@@ -45,7 +45,7 @@ bool nvnImguiInitialize()
     pkcl::TcpLogger::PrintString("Initializing UI\n");
 
     ui = new UI("Poke-Client", {250.0f, 600.0f});
-
+    
     return true;
 }
 

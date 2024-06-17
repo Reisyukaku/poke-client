@@ -34,7 +34,7 @@ public:
     static void PrintHex(char *buffer, size_t size);
     static const char* receiveMessage();
     void close();
-    int GetDesc();
+    static ssize_t stdio_write(struct _reent* r, void *fd, const char* ptr, size_t len);
     bool IsConnected(){
         return mState == SocketState::CONNECTED;
     }
