@@ -27,7 +27,7 @@ HOOK_DEFINE_TRAMPOLINE(luaNewState) {
 HOOK_DEFINE_TRAMPOLINE(trscn) {
 	static int Callback(void *L) {
         char * s = LuaH::toString(L, 2, NULL);
-        pkcl::TcpLogger::PrintString("%s\n", s);
+        printf("%s\n", s);
         return Orig(L);
     }
 };

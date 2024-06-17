@@ -42,7 +42,7 @@ HOOK_DEFINE_TRAMPOLINE(nnMainHook) {
 
 bool nvnImguiInitialize()
 {
-    pkcl::TcpLogger::PrintString("Initializing UI\n");
+    printf("Initializing UI\n");
 
     ui = new UI("Poke-Client", {250.0f, 600.0f});
     

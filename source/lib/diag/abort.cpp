@@ -36,15 +36,15 @@ namespace exl::diag {
         #endif
         // If this ever needs to be updated to a better color:
         // https://chrisyeh96.github.io/2020/03/28/terminal-colors.html
-        pkcl::TcpLogger::PrintString("\x1b[31m");
-        pkcl::TcpLogger::PrintString("\n\nAssertion failed: %s = %u\n", ctx.expr, ctx.value);
-        pkcl::TcpLogger::PrintString("At %s:%u\n", ctx.file, ctx.line);
-        pkcl::TcpLogger::PrintString("  %s\n", ctx.func);
+        printf("\x1b[31m");
+        printf("\n\nAssertion failed: %s = %u\n", ctx.expr, ctx.value);
+        printf("At %s:%u\n", ctx.file, ctx.line);
+        printf("  %s\n", ctx.func);
         if (ctx.format != nullptr) {
-            pkcl::TcpLogger::PrintString(ctx.format, ctx.args);
-            pkcl::TcpLogger::PrintString("\n");
+            printf(ctx.format, ctx.args);
+            printf("\n");
         }
-        pkcl::TcpLogger::PrintString("\x1b[0m");
+        printf("\x1b[0m");
 
         svcBreak(0x6942021, ctx.value, 0);
         UNREACHABLE;

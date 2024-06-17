@@ -28,7 +28,7 @@ static const devoptab_t std_devop = {
 };
 
 ssize_t pkcl::TcpLogger::stdio_write(struct _reent* r, void *fd, const char* ptr, size_t len) {
-    getInstance()->PrintString(ptr);
+    getInstance()->SendMessage(ptr);
     return len;
 }
 
@@ -104,17 +104,11 @@ void pkcl::TcpLogger::PrintHex(char *buffer, size_t size) {
     nn::socket::Send(getInstance()->mSocketFd, buf, (size * 3) + 1, 0);
 }
 
-void pkcl::TcpLogger::PrintString(const char *fmt, ...) {
+void pkcl::TcpLogger::SendMessage(const char *msg) {
     if (getInstance()->mState != SocketState::CONNECTED)
         return;
 
-    va_list args;
-    va_start(args, fmt);
-    char buffer[0x1000] = {0};
-
-    nn::util::VSNPrintf(buffer, sizeof(buffer), fmt, args);
-
-    nn::socket::Send(getInstance()->mSocketFd, buffer, strlen(buffer), 0);
+    nn::socket::Send(getInstance()->mSocketFd, msg, strlen(msg), 0);
 }
 
 const char *pkcl::TcpLogger::receiveMessage() {

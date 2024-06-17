@@ -24,7 +24,7 @@ void InfoForm::Draw() {
     ImGui::SameLine();
     if(ImGui::Button("Send over TCP", ImVec2(180, 0))) {
         for(auto &l : Logs)
-            pkcl::TcpLogger::PrintString("%s\n", l.c_str());
+            printf("%s\n", l.c_str());
         Logs.clear();
     }
     ImGui::SameLine();

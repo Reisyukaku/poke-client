@@ -97,18 +97,18 @@ namespace ImguiNvnBackend {
 
         io.Fonts->Flags |= ImFontAtlasFlags_NoPowerOfTwoHeight;
         if (!io.Fonts->Build()) {
-            pkcl::TcpLogger::PrintString("Failed to build Font!\n");
+            printf("Failed to build Font!\n");
             return false;
         }
 
-        pkcl::TcpLogger::PrintString("Loaded System Font.\n");
+        printf("Loaded System Font.\n");
 
         return true;
     }
 
     bool setupFont() {
 
-        pkcl::TcpLogger::PrintString("Setting up ImGui Font.\n");
+        printf("Setting up ImGui Font.\n");
 
         auto bd = getBackendData();
 
@@ -125,24 +125,24 @@ namespace ImguiNvnBackend {
         int texMemPoolSize = texDescSize * MaxTexDescriptors;
         int totalPoolSize = ALIGN_UP(sampMemPoolSize + texMemPoolSize, 0x1000);
         if (!MemoryPoolMaker::createPool(&bd->sampTexMemPool, totalPoolSize)) {
-            pkcl::TcpLogger::PrintString("Failed to Create Texture/Sampler Memory Pool!\n");
+            printf("Failed to Create Texture/Sampler Memory Pool!\n");
             return false;
         }
 
         if (!bd->samplerPool.Initialize(&bd->sampTexMemPool, 0, MaxSampDescriptors)) {
-            pkcl::TcpLogger::PrintString("Failed to Create Sampler Pool!\n");
+            printf("Failed to Create Sampler Pool!\n");
             return false;
         }
 
         if (!bd->texPool.Initialize(&bd->sampTexMemPool, sampMemPoolSize, MaxTexDescriptors)) {
-            pkcl::TcpLogger::PrintString("Failed to Create Texture Pool!\n");
+            printf("Failed to Create Texture Pool!\n");
             return false;
         }
 
         // load switch font data into imgui
 
         if (!loadSystemFont()) {
-            pkcl::TcpLogger::PrintString("Failed to load Switch System Font! Falling back to default ImGui font.\n");
+            printf("Failed to load Switch System Font! Falling back to default ImGui font.\n");
         }
 
         io.Fonts->AddFontDefault();
@@ -156,7 +156,7 @@ namespace ImguiNvnBackend {
 
         if (!MemoryPoolMaker::createPool(&bd->fontMemPool, ALIGN_UP(texPoolSize, 0x1000),
                                          nvn::MemoryPoolFlags::CPU_UNCACHED | nvn::MemoryPoolFlags::GPU_CACHED)) {
-            pkcl::TcpLogger::PrintString("Failed to Create Font Memory Pool!\n");
+            printf("Failed to Create Font Memory Pool!\n");
             return false;
         }
 
@@ -168,7 +168,7 @@ namespace ImguiNvnBackend {
                 .SetStorage(&bd->fontMemPool, 0);
 
         if (!bd->fontTexture.Initialize(&bd->texBuilder)) {
-            pkcl::TcpLogger::PrintString("Failed to Create Font Texture!\n");
+            printf("Failed to Create Font Texture!\n");
             return false;
         }
 
@@ -192,7 +192,7 @@ namespace ImguiNvnBackend {
                 .SetWrapMode(nvn::WrapMode::CLAMP, nvn::WrapMode::CLAMP, nvn::WrapMode::CLAMP);
 
         if (!bd->fontSampler.Initialize(&bd->samplerBuilder)) {
-            pkcl::TcpLogger::PrintString("Failed to Init Font Sampler!\n");
+            printf("Failed to Init Font Sampler!\n");
             return false;
         }
 
@@ -205,19 +205,19 @@ namespace ImguiNvnBackend {
         bd->fontTexHandle = bd->device->GetTextureHandle(bd->textureId, bd->samplerId);
         io.Fonts->SetTexID(&bd->fontTexHandle);
 
-        pkcl::TcpLogger::PrintString("Finished.\n");
+        printf("Finished.\n");
 
         return true;
     }
 
     bool setupShaders(u8 *shaderBinary, ulong binarySize) {
 
-        pkcl::TcpLogger::PrintString("Setting up ImGui Shaders.\n");
+        printf("Setting up ImGui Shaders.\n");
 
         auto bd = getBackendData();
 
         if (!bd->shaderProgram.Initialize(bd->device)) {
-            pkcl::TcpLogger::PrintString("Failed to Initialize Shader Program!");
+            printf("Failed to Initialize Shader Program!");
             return false;
         }
 
@@ -226,7 +226,7 @@ namespace ImguiNvnBackend {
                                                                           nvn::MemoryPoolFlags::SHADER_CODE);
 
         if (!bd->shaderMemory->IsBufferReady()) {
-            pkcl::TcpLogger::PrintString("Shader Memory Pool not Ready! Unable to continue.\n");
+            printf("Shader Memory Pool not Ready! Unable to continue.\n");
             return false;
         }
 
@@ -243,7 +243,7 @@ namespace ImguiNvnBackend {
         fragShaderData.control = shaderBinary + offsetData.mFragmentControlOffset;
 
         if (!bd->shaderProgram.SetShaders(2, bd->shaderDatas)) {
-            pkcl::TcpLogger::PrintString("Failed to Set shader data for program.\n");
+            printf("Failed to Set shader data for program.\n");
             return false;
         }
 
@@ -254,7 +254,7 @@ namespace ImguiNvnBackend {
         bd->uniformMemory = IM_NEW(MemoryBuffer)(UBOSIZE);
 
         if (!bd->uniformMemory->IsBufferReady()) {
-            pkcl::TcpLogger::PrintString("Uniform Memory Pool not Ready! Unable to continue.\n");
+            printf("Uniform Memory Pool not Ready! Unable to continue.\n");
             return false;
         }
 
@@ -266,7 +266,7 @@ namespace ImguiNvnBackend {
 
         bd->streamState.SetDefaults().SetStride(sizeof(ImDrawVert));
 
-        pkcl::TcpLogger::PrintString("Finished.\n");
+        printf("Finished.\n");
 
         return true;
     }
@@ -308,15 +308,15 @@ namespace ImguiNvnBackend {
         bd->mShaderUBO.isUseSrgb = true;
 
         if (createShaders()) {
-            pkcl::TcpLogger::PrintString("Shader Binaries Loaded! Setting up Render Data.\n");
+            printf("Shader Binaries Loaded! Setting up Render Data.\n");
 
             if (setupShaders(bd->imguiShaderBinary.ptr, bd->imguiShaderBinary.size) && setupFont()) {
-                pkcl::TcpLogger::PrintString("Rendering Setup!\n");
+                printf("Rendering Setup!\n");
 
                 bd->isInitialized = true;
 
             } else {
-                pkcl::TcpLogger::PrintString("Failed to Setup Render Data!\n");
+                printf("Failed to Setup Render Data!\n");
             }
         }
     }
@@ -408,12 +408,12 @@ namespace ImguiNvnBackend {
 
         // we dont need to process any data if it isnt valid
         if (!drawData->Valid) {
-            pkcl::TcpLogger::PrintString("Draw Data was Invalid! Skipping Render.");
+            printf("Draw Data was Invalid! Skipping Render.");
             return;
         }
         // if we dont have any command lists to draw, we can stop here
         if (drawData->CmdListsCount == 0) {
-            pkcl::TcpLogger::PrintString("Command List was Empty! Skipping Render.\n");
+            printf("Command List was Empty! Skipping Render.\n");
             return;
         }
 
@@ -422,7 +422,7 @@ namespace ImguiNvnBackend {
 
         // if something went wrong during backend setup, don't try to render anything
         if (!bd->isInitialized) {
-            pkcl::TcpLogger::PrintString("Backend Data was not fully initialized!\n");
+            printf("Backend Data was not fully initialized!\n");
             return;
         }
 
@@ -432,9 +432,9 @@ namespace ImguiNvnBackend {
             if (bd->vtxBuffer) {
                 bd->vtxBuffer->Finalize();
                 IM_FREE(bd->vtxBuffer);
-                pkcl::TcpLogger::PrintString("Resizing Vertex Buffer to Size: %d\n", totalVtxSize);
+                printf("Resizing Vertex Buffer to Size: %d\n", totalVtxSize);
             } else {
-                pkcl::TcpLogger::PrintString("Initializing Vertex Buffer to Size: %d\n", totalVtxSize);
+                printf("Initializing Vertex Buffer to Size: %d\n", totalVtxSize);
             }
 
             bd->vtxBuffer = IM_NEW(MemoryBuffer)(totalVtxSize);
@@ -448,9 +448,9 @@ namespace ImguiNvnBackend {
                 bd->idxBuffer->Finalize();
                 IM_FREE(bd->idxBuffer);
 
-                pkcl::TcpLogger::PrintString("Resizing Index Buffer to Size: %d\n", totalIdxSize);
+                printf("Resizing Index Buffer to Size: %d\n", totalIdxSize);
             } else {
-                pkcl::TcpLogger::PrintString("Initializing Index Buffer to Size: %d\n", totalIdxSize);
+                printf("Initializing Index Buffer to Size: %d\n", totalIdxSize);
             }
 
             bd->idxBuffer = IM_NEW(MemoryBuffer)(totalIdxSize);
@@ -459,7 +459,7 @@ namespace ImguiNvnBackend {
 
         // if we fail to resize/init either buffers, end execution before we try to use said invalid buffer(s)
         if (!(bd->vtxBuffer->IsBufferReady() && bd->idxBuffer->IsBufferReady())) {
-            pkcl::TcpLogger::PrintString("Cannot Draw Data! Buffers are not Ready.\n");
+            printf("Cannot Draw Data! Buffers are not Ready.\n");
             return;
         }
 
