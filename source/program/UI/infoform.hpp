@@ -25,10 +25,11 @@ public:
 		return instance;
 	};
 
+    InfoForm(const InfoForm&) = delete;
+	InfoForm& operator=(const InfoForm&) = delete;
+
 private:
     static InfoForm* instance;
-	InfoForm(const InfoForm&);
-	InfoForm& operator=(const InfoForm&);
 
     InfoForm()
     {

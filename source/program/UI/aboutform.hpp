@@ -16,10 +16,11 @@ public:
 		return instance;
 	};
 
+    AboutForm(const AboutForm&) = delete;
+	AboutForm& operator=(const AboutForm&) = delete;
+
 private:
     static AboutForm* instance;
-	AboutForm(const AboutForm&);
-	AboutForm& operator=(const AboutForm&);
 
     AboutForm()
     {

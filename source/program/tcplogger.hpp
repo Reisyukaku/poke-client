@@ -21,13 +21,7 @@ enum class SocketState {
 
 namespace pkcl {
 class TcpLogger {
-public:
-	static TcpLogger* getInstance() {
-		if (instance == nullptr)
-			instance = new TcpLogger();
-		return instance;
-	};
-    
+public:    
     nn::Result init(const char* ip, u16 port);
 
     static void SendMessage(const char* msg);
@@ -38,6 +32,15 @@ public:
     bool IsConnected(){
         return mState == SocketState::CONNECTED;
     }
+
+    static TcpLogger* getInstance() {
+		if (instance == nullptr)
+			instance = new TcpLogger();
+		return instance;
+	};
+
+    TcpLogger(const TcpLogger&) = delete;
+	TcpLogger& operator=(const TcpLogger&) = delete;
     
 protected:
     SocketState mState;
@@ -49,9 +52,5 @@ private:
 	TcpLogger() {
 		//
 	}
-	
-	TcpLogger(const TcpLogger&);
-	TcpLogger& operator=(const TcpLogger&);
-
 };
 };

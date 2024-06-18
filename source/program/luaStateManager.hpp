@@ -69,16 +69,17 @@ public:
 			instance = new LuaStateManager();
 		return instance;
 	};
+
+	LuaStateManager(const LuaStateManager&) = delete;
+	LuaStateManager& operator=(const LuaStateManager&) = delete;
 	
-private:    
+private:
+	static LuaStateManager* instance;
+	
 	LuaStateManager() {
 		luaState = nullptr;
 	}
     
     void *luaState;
-	
-    static LuaStateManager* instance;
-	LuaStateManager(const LuaStateManager&);
-	LuaStateManager& operator=(const LuaStateManager&);
 };
 }

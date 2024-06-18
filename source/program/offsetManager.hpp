@@ -6,13 +6,7 @@
 
 namespace pkcl {
 class OffsetManager {
-public:
-	static OffsetManager* getInstance() {
-		if (instance == nullptr)
-			instance = new OffsetManager();
-		return instance;
-	};
-	
+public:	
 	void SetTitleID(u64 tid) {
         Title = tid;
     }
@@ -40,19 +34,26 @@ public:
         
         return ret;
     }
+
+    static OffsetManager* getInstance() {
+		if (instance == nullptr)
+			instance = new OffsetManager();
+		return instance;
+	};
+
+    OffsetManager(const OffsetManager&) = delete;
+	OffsetManager& operator=(const OffsetManager&) = delete;
 	
-private:    
+private:
+    static OffsetManager* instance;
+
 	OffsetManager() {
         BaseAddr = 0;
         Title = 0;
 	}
     
     u64 Title;
-    uintptr_t BaseAddr;
-	
-    static OffsetManager* instance;
-	OffsetManager(const OffsetManager&);
-	OffsetManager& operator=(const OffsetManager&);
+    uintptr_t BaseAddr;	
     
     std::map<std::string, uintptr_t> PLA_offsets = { //1.0.0
         {"LuaNewState", 0x6cf00},

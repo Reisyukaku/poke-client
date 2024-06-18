@@ -34,11 +34,12 @@ public:
 			instance = new HexForm();
 		return instance;
 	};
+
+	HexForm(const HexForm&) = delete;
+	HexForm& operator=(const HexForm&) = delete;
 	
 private:
 	static HexForm* instance;
-	HexForm(const HexForm&);
-	HexForm& operator=(const HexForm&);
 
 	static void WriteData(ImU8 *data, size_t off, ImU8 d);
 	static ImU8 ReadData(const ImU8* data, size_t off);

@@ -18,13 +18,14 @@ public:
 		return instance;
 	};
 
+	FileLogger(const FileLogger&) = delete;
+	FileLogger& operator=(const FileLogger&) = delete;
+
 private:
+	static FileLogger* instance;
+	
     nn::fs::FileHandle handleOut;
     std::string logPath;
-    
-    static FileLogger* instance;
-	FileLogger(const FileLogger&);
-	FileLogger& operator=(const FileLogger&);
     
 	FileLogger() : logPath("sd:/logs.txt") {
 		//

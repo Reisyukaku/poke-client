@@ -118,13 +118,7 @@ constexpr int key_mapping[][2] = {
 
 namespace pkcl {
 class Keyboard {
-public:
-	static Keyboard* getInstance() {
-		if (instance == nullptr)
-			instance = new Keyboard();
-		return instance;
-	};
-	
+public:	
 	void Poll() {
         prevState = state;
 		nn::hid::GetKeyboardState(&state);
@@ -148,9 +142,18 @@ public:
         return state.samplingNumber;
     }
     
+    static Keyboard* getInstance() {
+		if (instance == nullptr)
+			instance = new Keyboard();
+		return instance;
+	};
+
+    Keyboard(const Keyboard&) = delete;
+	Keyboard& operator=(const Keyboard&) = delete;
 	
 private:
 	static Keyboard* instance;
+
     nn::hid::KeyboardState state;
 	nn::hid::KeyboardState prevState;
     std::map<u32, char> keyMap;
@@ -183,8 +186,5 @@ private:
         else
             io.AddInputCharacter("1234567890"[(int)key - (key <= nn::hid::KeyboardKey::D0 ? (int)nn::hid::KeyboardKey::D1 : (int)nn::hid::KeyboardKey::NumPad1)]);
     }
-	
-	Keyboard(const Keyboard&);
-	Keyboard& operator=(const Keyboard&);
 };
 };

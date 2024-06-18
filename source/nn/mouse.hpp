@@ -10,13 +10,7 @@ constexpr int mouse_mapping[][2] = {
 
 namespace pkcl {
 class Mouse {
-public:
-	static Mouse* getInstance() {
-		if (instance == nullptr)
-			instance = new Mouse();
-		return instance;
-	};
-	
+public:	
 	void Poll()	{
 		nn::hid::GetMouseState(&state);
 	}
@@ -30,6 +24,14 @@ public:
 		}
 	}
 	
+	static Mouse* getInstance() {
+		if (instance == nullptr)
+			instance = new Mouse();
+		return instance;
+	};
+
+	Mouse(const Mouse&) = delete;
+	Mouse& operator=(const Mouse&) = delete;
 	
 private:
 	static Mouse* instance;
@@ -38,8 +40,5 @@ private:
 	Mouse() {
 		nn::hid::InitializeMouse();
 	}
-	
-	Mouse(const Mouse&);
-	Mouse& operator=(const Mouse&);
 };
 };

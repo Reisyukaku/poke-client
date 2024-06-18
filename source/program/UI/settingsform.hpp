@@ -25,13 +25,15 @@ public:
 		return instance;
 	};
 
+    SettingsForm(const SettingsForm&) = delete;
+	SettingsForm& operator=(const SettingsForm&) = delete;
+
+
 protected:
     bool wireframeMode;
 
 private:
     static SettingsForm* instance;
-	SettingsForm(const SettingsForm&);
-	SettingsForm& operator=(const SettingsForm&);
 
     SettingsForm()
     {
