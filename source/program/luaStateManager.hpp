@@ -14,19 +14,6 @@ typedef int (*_luaLoadFile)(void*, const char *, const char*);
 typedef void (*_luapushstring)(void*, char*);
 typedef int (*_luaType)(void*, int);
 
-static const char luaTypes[][11] = {
-    "nil",
-    "boolean",
-    "userdata",
-    "number",
-    "string",
-    "table",
-    "function",
-    "userdata",
-    "thread",
-    "upvalue",
-    "proto",
-};
 #define lua_Pop(L,n) LuaH::setTop(L, -(n)-1)
 #define LUA_MULTRET -1
 

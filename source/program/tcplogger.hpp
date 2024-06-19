@@ -9,6 +9,7 @@
 #include "nn/result.h"
 #include "nn/util.h"
 #include <stdarg.h>
+#include "offsetManager.hpp"
 
 #define PACKET_MAX_SIZE 0x500
 
