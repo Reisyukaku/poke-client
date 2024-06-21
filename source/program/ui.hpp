@@ -31,6 +31,10 @@ public:
     void ToggleVisibility() {
         isVisible = !isVisible;
     }
+
+    void ToggleDemo() {
+        showDemo = !showDemo;
+    }
     
     bool IsVisible() {
         return isVisible;
@@ -43,6 +47,7 @@ private:
     std::string Name;
     ImVec2 WinSize;
     bool isVisible;
+    bool showDemo;
 
     HexForm *hexForm = nullptr;
     InfoForm *infoForm = nullptr;

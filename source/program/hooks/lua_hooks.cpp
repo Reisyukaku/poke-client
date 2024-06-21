@@ -11,4 +11,5 @@ void lua_hooks()
     auto offsetMan = pkcl::OffsetManager::getInstance();
     luaNewState::InstallAtOffset(offsetMan->GetOffset("LuaNewState"));
     luaprint::InstallAtOffset(offsetMan->GetOffset("LuaPrint"));
+    luapanic::InstallAtOffset(offsetMan->GetOffset("LuaPanic"));
 }

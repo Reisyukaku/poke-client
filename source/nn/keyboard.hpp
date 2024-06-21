@@ -116,33 +116,29 @@ constexpr int key_mapping[][2] = {
     {ImGuiKey_KeypadEqual,    static_cast<const int>(nn::hid::KeyboardKey::NumPadEquals)},
 };
 
-namespace pkcl {
-class Keyboard {
+namespace pkcl 
+{
+class Keyboard 
+{
 public:	
-	void Poll() {
+	void Poll() 
+    {
         prevState = state;
 		nn::hid::GetKeyboardState(&state);
 	}
     
-    void Update() {
-        ImGuiIO &io = ImGui::GetIO();
+    void Update() 
+    {
         for (auto [im_k, nx_k]: key_mapping) {
-            if (IsPressed((nn::hid::KeyboardKey) nx_k)) {
-                if(IsAlphaNumeric((nn::hid::KeyboardKey) nx_k))
-                    AddChar((nn::hid::KeyboardKey) nx_k);
-                else 
-                    io.AddKeyEvent((ImGuiKey) im_k, true);
-            } else if (IsReleased((nn::hid::KeyboardKey) nx_k)) {
-                io.AddKeyEvent((ImGuiKey) im_k, false);
-            }
+            if (IsPressed((nn::hid::KeyboardKey) nx_k))
+                ImGui_ImplNX_AddKeyEvent((ImGuiKey) im_k, true);
+            else if(IsReleased((nn::hid::KeyboardKey) nx_k))
+                ImGui_ImplNX_AddKeyEvent((ImGuiKey) im_k, false);
         }
     }
-
-    s64 GetSampleNum(){
-        return state.samplingNumber;
-    }
     
-    static Keyboard* getInstance() {
+    static Keyboard* getInstance() 
+    {
 		if (instance == nullptr)
 			instance = new Keyboard();
 		return instance;
@@ -158,7 +154,8 @@ private:
 	nn::hid::KeyboardState prevState;
     std::map<u32, char> keyMap;
     
-	Keyboard() {
+	Keyboard() 
+    {
 		nn::hid::InitializeKeyboard();
 	}
 
@@ -172,19 +169,46 @@ private:
         return !state.keys.isBitSet(nx_k) && prevState.keys.isBitSet(nx_k);
     }
 
-    bool IsAlphaNumeric(nn::hid::KeyboardKey key)
-    {
-        return ((key >= nn::hid::KeyboardKey::A) && (key <= nn::hid::KeyboardKey::D0)) || ((key >= nn::hid::KeyboardKey::NumPad1) && (key <= nn::hid::KeyboardKey::NumPad0));
-    }
-
-    void AddChar(nn::hid::KeyboardKey key) 
+    void ImGui_ImplNX_AddKeyEvent(ImGuiKey key, bool down)
     {
         ImGuiIO &io = ImGui::GetIO();
-        bool caps = state.keys.isBitSet(nn::hid::KeyboardKey::LeftShift) || state.keys.isBitSet(nn::hid::KeyboardKey::RightShift);
-        if(key <= nn::hid::KeyboardKey::Z)
-            io.AddInputCharacter((caps ? 'A' : 'a') + ((int)key - (int)nn::hid::KeyboardKey::A));
-        else
-            io.AddInputCharacter("1234567890"[(int)key - (key <= nn::hid::KeyboardKey::D0 ? (int)nn::hid::KeyboardKey::D1 : (int)nn::hid::KeyboardKey::NumPad1)]);
+        //Add mod events from keys
+        if(key == ImGuiKey_LeftShift || key == ImGuiKey_RightShift)
+            io.AddKeyEvent(ImGuiMod_Shift, down);
+        if(key == ImGuiKey_LeftCtrl || key == ImGuiKey_RightCtrl)
+            io.AddKeyEvent(ImGuiMod_Ctrl, down);
+        if(key == ImGuiKey_LeftAlt || key == ImGuiKey_RightAlt)
+            io.AddKeyEvent(ImGuiMod_Alt, down);
+        
+        //Add other key events
+        io.AddKeyEvent(key, down);
+
+        if(!down) return;
+
+        //Add char to input buffer if applicable
+        if(key >= ImGuiKey_0 && key <= ImGuiKey_9)
+        {
+            if(ImGui::IsKeyDown(ImGuiKey_ModShift))
+                io.AddInputCharacter(")!@#$%^&*("[(key - ImGuiKey_0)]);
+            else
+                io.AddInputCharacter("0123456789"[(key - ImGuiKey_0)]);
+        }
+        if(key >= ImGuiKey_Apostrophe && key <= ImGuiKey_RightBracket)
+        {
+            if(ImGui::IsKeyDown(ImGuiKey_ModShift))
+                io.AddInputCharacter("\"<_>?:+{|}"[(key - ImGuiKey_Apostrophe)]);
+            else
+                io.AddInputCharacter("',-./;=[\\]"[(key - ImGuiKey_Apostrophe)]);
+        }
+        if(key >= ImGuiKey_A && key <= ImGuiKey_Z)
+        {
+            io.AddInputCharacter((ImGui::IsKeyDown(ImGuiKey_ModShift) ? 'A' : 'a') + (key - ImGuiKey_A));
+        }
+        if(key == ImGuiKey_Space)
+            io.AddInputCharacter(' ');
+
+        if(key == ImGuiKey_Tab)
+            io.AddInputCharacter('\t');
     }
 };
 };

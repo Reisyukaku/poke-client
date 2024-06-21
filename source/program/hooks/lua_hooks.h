@@ -12,10 +12,16 @@ HOOK_DEFINE_TRAMPOLINE(luaprint) {
         for(int i = 0, j = -1; i < nresults; i++){
             std::string str = LuaH::toString(L, j--, NULL);
             InfoForm::getInstance()->AddString(str);
-            fprintf(stdout, "[Lua][Print] %s\n", str.c_str());
         }
         lua_Pop(L, nresults);
         return 0;
+    }
+};
+
+HOOK_DEFINE_TRAMPOLINE(luapanic) {
+	static void Callback(lua_State *L) {
+        std::string str = LuaH::toString(L, -1, NULL);
+        printf("[Lua][Panic] %s\n", str.c_str());
     }
 };
 

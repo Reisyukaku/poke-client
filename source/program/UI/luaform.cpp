@@ -2,20 +2,11 @@
 
 LuaForm * LuaForm::instance = nullptr;
 
-void LuaForm::Run(std::string file) {
-
+void LuaForm::Execute(char *cmd)
+{
     void* L = pkcl::LuaStateManager::getInstance()->GetLuaState();
-    
-    nn::fs::FileHandle lua;
-    long sz;
-    nn::fs::OpenFile(&lua, file.c_str(), nn::fs::OpenMode_Read);
-    nn::fs::GetFileSize(&sz, lua);
-    char buffer[sz];
-    memset(buffer, 0, sz);
-    nn::fs::ReadFile(lua, 0, buffer, sz);
-    nn::fs::CloseFile(lua);
-    
-    LuaH::loadBuffer(L, buffer, sz, "poke-client VM", NULL);
+
+    LuaH::loadBuffer(L, cmd, strlen(cmd), "poke-client VM", NULL);
     int ret = LuaH::pcallk(L, 0, LUA_MULTRET, 0, 0, 0);
     if(!ret){
         int nresults = LuaH::getTop(L);
@@ -43,6 +34,20 @@ void LuaForm::Run(std::string file) {
         Logs.push_back(std::string("Error in lua:\n") + std::string(LuaH::toString(L, -1, NULL)));
 }
 
+void LuaForm::Run(std::string file) {
+    
+    nn::fs::FileHandle lua;
+    long sz;
+    nn::fs::OpenFile(&lua, file.c_str(), nn::fs::OpenMode_Read);
+    nn::fs::GetFileSize(&sz, lua);
+    char buffer[sz];
+    memset(buffer, 0, sz);
+    nn::fs::ReadFile(lua, 0, buffer, sz);
+    nn::fs::CloseFile(lua);
+    
+    LuaForm::Execute(buffer);
+}
+
 void LuaForm::Draw() {
     ImGui::SetNextWindowSize(ImVec2(800.0f, 400.0f), ImGuiCond_FirstUseEver);
 	if (!ImGui::Begin(Name.c_str(), &isVisible, ImGuiWindowFlags_NoScrollbar)){
@@ -50,12 +55,22 @@ void LuaForm::Draw() {
 		return;
 	}
     
-    ImGui::BeginChild("##scrolling", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()));
+    ImGui::BeginChild("##scrolling", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()-30));
 	for(auto &l : Logs)
         ImGui::Text(l.c_str());
         
 	ImGui::EndChild();
     
+    ImGui::SetNextItemWidth(800);
+    bool isEnter = ImGui::IsKeyPressed(ImGuiKey_Enter);
+    static char term[100] = {0};
+    ImGui::InputText("##console", term, IM_ARRAYSIZE(term));
+    if(isEnter)
+    {
+        Execute(term);
+        memset(term, 0, 100);
+    }
+
     ImGui::Separator();
     
     if(ImGui::Button("Run Selected Script", ImVec2(220, 0))) {

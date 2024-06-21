@@ -63,7 +63,8 @@ private:
         {"LuaSetTop", 0x4ff10},
         {"LuaGetTop", 0x4fef0},
         {"LuaType", 0},
-        {"LuaPrint", 0}
+        {"LuaPrint", 0},
+        {"LuaPanic", 0}
     };
     
     std::map<std::string, uintptr_t> Sword_offsets = { //1.0.0
@@ -74,7 +75,8 @@ private:
         {"LuaSetTop", 0},
         {"LuaGetTop", 0},
         {"LuaType", 0},
-        {"LuaPrint", 0}
+        {"LuaPrint", 0},
+        {"LuaPanic", 0}
     };
     
     std::map<std::string, uintptr_t> SV_offsets = { //1.0.0
@@ -85,7 +87,8 @@ private:
         {"LuaSetTop", 0x99df80},
         {"LuaGetTop", 0x99df60},
         {"LuaType", 0xa4dd50},
-        {"LuaPrint", 0x45f80}
+        {"LuaPrint", 0x45f80},
+        {"LuaPanic", 0x2374ce4}
     };
 };
 };

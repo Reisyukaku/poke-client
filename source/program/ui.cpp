@@ -50,6 +50,10 @@ void UI::Draw() {
     if(luaForm->IsOpen()) luaForm->Draw();
     if(settingsForm->IsOpen()) settingsForm->Draw();
     if(aboutForm->IsOpen()) aboutForm->Draw();
+    if(showDemo) ImGui::ShowDemoWindow();
+    
+    if(ImGui::IsKeyPressed(ImGuiKey_F1, false))
+        ToggleDemo();
     
     ImGui::End();
 }

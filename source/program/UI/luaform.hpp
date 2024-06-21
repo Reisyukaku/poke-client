@@ -5,6 +5,7 @@
 #include "imgui/imgui_nvn.h"
 #include "filelogger.hpp"
 #include "offsetManager.hpp"
+#include "keyboard.hpp"
 #include "luaStateManager.hpp"
 #include "nn/hid.h"
 #include "nn/mouse.hpp"
@@ -45,6 +46,7 @@ private:
     }
 
     void Run(std::string file);
+    void Execute(char *cmd);
     std::vector<std::string> Logs;
     s64 scriptCnt;
     std::string selectedScript;
