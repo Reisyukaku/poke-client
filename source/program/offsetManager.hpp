@@ -56,25 +56,25 @@ private:
     uintptr_t BaseAddr;	
     
     std::map<std::string, uintptr_t> PLA_offsets = { //1.0.0
-        {"LuaNewState", 0x6cf00},
-        {"LuaLoadbuffer", 0x555e0},
-        {"LuaPCall", 0x52e10},
-        {"LuaToString", 0x50da0},
-        {"LuaSetTop", 0x4ff10},
-        {"LuaGetTop", 0x4fef0},
-        {"LuaType", 0},
-        {"LuaPrint", 0},
-        {"LuaPanic", 0}
+        {"LuaNewState", 0x6cf00},                   //lua_newstate
+        {"LuaLoadbuffer", 0x555e0},                 //luaL_loadbufferx
+        {"LuaPCall", 0x52e10},                      //lua_pcallk
+        {"LuaToString", 0x50da0},                   //lua_tostring
+        {"LuaSetTop", 0x4ff10},                     //lua_settop
+        {"LuaGetTop", 0x4fef0},                     //lua_gettop
+        {"LuaType", 0},                             //lua_type
+        {"LuaPrint", 0},                            //luaB_print
+        {"LuaPanic", 0}                             //panic
     };
     
     std::map<std::string, uintptr_t> Sword_offsets = { //1.0.0
-        {"LuaNewState", 0},
-        {"LuaLoadbuffer", 0},
-        {"LuaPCall", 0},
-        {"LuaToString", 0},
-        {"LuaSetTop", 0},
-        {"LuaGetTop", 0},
-        {"LuaType", 0},
+        {"LuaNewState", 0x1666940},
+        {"LuaLoadbuffer", 0x165e160},
+        {"LuaPCall", 0x1661c90},
+        {"LuaToString", 0x165fd50},
+        {"LuaSetTop", 0x165ef30},
+        {"LuaGetTop", 0x165ef10},
+        {"LuaType", 0x165f320},
         {"LuaPrint", 0},
         {"LuaPanic", 0}
     };

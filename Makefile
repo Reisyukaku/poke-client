@@ -21,7 +21,7 @@ include $(DEVKITPRO)/libnx/switch_rules
 #     - <Project name>.json
 #     - config.json
 #---------------------------------------------------------------------------------
-export TARGET		:=	$(notdir $(CURDIR))
+export TARGET		:=	main
 
 #----------------------------- User configuration -----------------------------
 # PROGRAM_ID is titleID of the game
@@ -161,7 +161,7 @@ $(BUILD):
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 	@mkdir -p $(DIST_DIR)
 	@mv $(TARGET).nso $(DIST_DIR)/$(BINARY_NAME)
-	@mv $(TARGET).npdm $(DIST_DIR)/main.npdm
+	@mv $(TARGET).npdm $(DIST_DIR)/$(TARGET).npdm
 	
 
 #---------------------------------------------------------------------------------
