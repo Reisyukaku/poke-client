@@ -24,6 +24,11 @@ public:
 		return instance;
 	};
 
+    void AddOutString(std::string str)
+    {
+        out_log.push_back(str);
+    }
+
 private:
     static LuaForm* instance;
 	LuaForm(const LuaForm&);
@@ -45,9 +50,9 @@ private:
         }
     }
 
-    void Run(std::string file);
-    void Execute(char *cmd);
-    std::vector<std::string> Logs;
+    void ExecuteFile(std::string file);
+    void ExecuteCmd(char *cmd);
+    std::vector<std::string> out_log, dbg_log;
     s64 scriptCnt;
     std::string selectedScript;
     nn::fs::DirectoryEntry* scriptList;

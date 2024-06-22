@@ -22,12 +22,6 @@ void InfoForm::Draw() {
         Logs.clear();
     }
     ImGui::SameLine();
-    if(ImGui::Button("Send over TCP", ImVec2(180, 0))) {
-        for(auto &l : Logs)
-            printf("[Lua][Print] %s\n", l.c_str());
-        Logs.clear();
-    }
-    ImGui::SameLine();
     if(ImGui::Button("Clear", ImVec2(180, 0))) {
         Logs.clear();
     }

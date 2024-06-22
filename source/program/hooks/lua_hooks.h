@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../UI/infoform.hpp"
+#include "../UI/luaform.hpp"
 #include "offsetManager.hpp"
 #include "luaStateManager.hpp"
 #include "lib.hpp"
@@ -11,7 +11,7 @@ HOOK_DEFINE_TRAMPOLINE(luaprint) {
         int nresults = LuaH::getTop(L);
         for(int i = 0, j = -1; i < nresults; i++){
             std::string str = LuaH::toString(L, j--, NULL);
-            InfoForm::getInstance()->AddString(str);
+            LuaForm::getInstance()->AddOutString(str);
         }
         lua_Pop(L, nresults);
         return 0;

@@ -2,7 +2,7 @@
 
 LuaForm * LuaForm::instance = nullptr;
 
-void LuaForm::Execute(char *cmd)
+void LuaForm::ExecuteCmd(char *cmd)
 {
     void* L = pkcl::LuaStateManager::getInstance()->GetLuaState();
 
@@ -10,7 +10,7 @@ void LuaForm::Execute(char *cmd)
     int ret = LuaH::pcallk(L, 0, LUA_MULTRET, 0, 0, 0);
     if(!ret){
         int nresults = LuaH::getTop(L);
-        Logs.push_back(std::string("Returned ") + std::to_string(nresults) + std::string(" results."));
+        dbg_log.push_back(std::string("Returned ") + std::to_string(nresults) + std::string(" results."));
         for(int i = 0, j = -1; i < nresults; i++){
             int retType = LuaH::ltype(L,j);
             std::string res = pkcl::LuaStateManager::GetReturnTypeStr(retType) + std::string(": ");
@@ -26,15 +26,15 @@ void LuaForm::Execute(char *cmd)
                     res += std::string("<ommited>");
                     break;
             }
-            Logs.push_back(res.c_str());
+            dbg_log.push_back(res.c_str());
         }
         lua_Pop(L, nresults);
     }
     else
-        Logs.push_back(std::string("Error in lua:\n") + std::string(LuaH::toString(L, -1, NULL)));
+        dbg_log.push_back(std::string("Error in lua:\n") + std::string(LuaH::toString(L, -1, NULL)));
 }
 
-void LuaForm::Run(std::string file) {
+void LuaForm::ExecuteFile(std::string file) {
     
     nn::fs::FileHandle lua;
     long sz;
@@ -45,46 +45,76 @@ void LuaForm::Run(std::string file) {
     nn::fs::ReadFile(lua, 0, buffer, sz);
     nn::fs::CloseFile(lua);
     
-    LuaForm::Execute(buffer);
+    LuaForm::ExecuteCmd(buffer);
 }
 
 void LuaForm::Draw() {
+    const float bottom_elem = ImGui::GetFrameHeightWithSpacing() + 30;
+    const float dbg_elem = 150;
+
     ImGui::SetNextWindowSize(ImVec2(800.0f, 400.0f), ImGuiCond_FirstUseEver);
 	if (!ImGui::Begin(Name.c_str(), &isVisible, ImGuiWindowFlags_NoScrollbar)){
 		ImGui::End();
 		return;
 	}
+
+    ImGui::BeginGroup();
+    ImGui::Text("Output");
     
-    ImGui::BeginChild("##scrolling", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()-30));
-	for(auto &l : Logs)
+    ImGui::BeginChild("##scrolling_out", ImVec2(0, -(bottom_elem + dbg_elem)), ImGuiChildFlags_Border);
+	for(auto &l : out_log)
         ImGui::Text(l.c_str());
         
 	ImGui::EndChild();
+    ImGui::EndGroup();
+
+    ImGui::BeginGroup();
+    ImGui::Text("Debug");
     
-    ImGui::SetNextItemWidth(800);
+    ImGui::BeginChild("##scrolling_dbg", ImVec2(0, -bottom_elem), ImGuiChildFlags_Border);
+	for(auto &l : dbg_log)
+        ImGui::Text(l.c_str());
+        
+	ImGui::EndChild();
+    ImGui::EndGroup();
+    
+    ImGui::Separator();
+
+    ImGui::BeginChild("##footer", ImVec2(0, 0));
+
+    ImGui::SetNextItemWidth(-1);
     bool isEnter = ImGui::IsKeyPressed(ImGuiKey_Enter);
     static char term[100] = {0};
     ImGui::InputText("##console", term, IM_ARRAYSIZE(term));
     if(isEnter)
     {
-        Execute(term);
+        ExecuteCmd(term);
         memset(term, 0, 100);
     }
 
-    ImGui::Separator();
-    
     if(ImGui::Button("Run Selected Script", ImVec2(220, 0))) {
         if(scriptCnt > 0 && selectedScript != "")
-            Run(scriptDir + selectedScript);
+            ExecuteFile(scriptDir + selectedScript);
     }
     ImGui::SameLine();
-    if(ImGui::Button("Clear", ImVec2(220, 0))) {
-        Logs.clear();
+    if(ImGui::Button("Log", ImVec2(100, 0))) {
+        for(auto &l : out_log)
+            printf("[Lua][Output] %s\n", l.c_str());
+        out_log.clear();
+
+        for(auto &l : dbg_log)
+            printf("[Lua][Debug] %s\n", l.c_str());
+        dbg_log.clear();
+    }
+    ImGui::SameLine();
+    if(ImGui::Button("Clear", ImVec2(100, 0))) {
+        out_log.clear();
+        dbg_log.clear();
     }
     
     ImGui::SameLine();
     
-    ImGui::SetNextItemWidth(300);
+    ImGui::SetNextItemWidth(-1);
     if (ImGui::BeginCombo("##combo", selectedScript.c_str())) {
         for (int n = 0; n < scriptCnt; n++) {
             std::string file(scriptList[n].m_Name);
@@ -96,6 +126,7 @@ void LuaForm::Draw() {
         }
         ImGui::EndCombo();
     }
-    
+    ImGui::EndChild();
+
 	ImGui::End();
 }
