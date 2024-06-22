@@ -16,6 +16,8 @@ nvn::WindowSetCropFunc windowSetCrop_ptr;
 
 nvn::PolygonStateSetPolygonModeFunc polyStateSetMode_ptr;
 
+SettingsForm *settings = SettingsForm::getInstance();
+
 bool hasInitImGui = false;
 
 static void* (*mallocFuncPtr)(size_t size);
@@ -97,7 +99,7 @@ void presentTexture(nvn::Queue *queue, nvn::Window *window, int texIndex) {
 }
 
 void polyStateSetMode(nvn::PolygonState *buf, nvn::PolygonMode mode) {
-    polyStateSetMode_ptr(buf, SettingsForm::getInstance()->WireframeEnabled() ? nvn::PolygonMode::LINE : nvn::PolygonMode::FILL);
+    polyStateSetMode_ptr(buf, settings->WireframeEnabled() ? nvn::PolygonMode::LINE : nvn::PolygonMode::FILL);
 }
 
 nvn::GenericFuncPtrFunc deviceGetProc(nvn::Device *device, const char *procName) {
