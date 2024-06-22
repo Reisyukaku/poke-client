@@ -2,6 +2,22 @@
 
 LuaForm * LuaForm::instance = nullptr;
 
+void LuaForm::LoadScriptList()
+{
+    printf("Loading lua scripts\n");
+    pkcl::FilesystemManager::getInstance()->TryMountSD();
+    nn::fs::DirectoryHandle dirHandle;
+    if(R_SUCCEEDED(nn::fs::OpenDirectory(&dirHandle, scriptDir.c_str(), nn::fs::OpenDirectoryMode_All))){
+        nn::fs::GetDirectoryEntryCount(&scriptCnt, dirHandle);
+        if(scriptCnt > 0){
+            scriptList = new nn::fs::DirectoryEntry[scriptCnt];
+            nn::fs::ReadDirectory(&scriptCnt, scriptList, dirHandle, scriptCnt);
+        }
+    }
+    else
+        printf("Error: Failed to open lua script dir\n");
+}
+
 void LuaForm::ExecuteCmd(char *cmd)
 {
     void* L = pkcl::LuaStateManager::getInstance()->GetLuaState();
@@ -116,13 +132,15 @@ void LuaForm::Draw() {
     
     ImGui::SetNextItemWidth(-1);
     if (ImGui::BeginCombo("##combo", selectedScript.c_str())) {
-        for (int n = 0; n < scriptCnt; n++) {
-            std::string file(scriptList[n].m_Name);
-            bool isSelected = (selectedScript == file);
-            if (ImGui::Selectable(file.c_str(), isSelected))
-                selectedScript = file;
-            if (isSelected)
-                ImGui::SetItemDefaultFocus();
+        if(scriptList != nullptr){
+            for (int n = 0; n < scriptCnt; n++) {
+                std::string file(scriptList[n].m_Name);
+                bool isSelected = (selectedScript == file);
+                if (ImGui::Selectable(file.c_str(), isSelected))
+                    selectedScript = file;
+                if (isSelected)
+                    ImGui::SetItemDefaultFocus();
+            }
         }
         ImGui::EndCombo();
     }

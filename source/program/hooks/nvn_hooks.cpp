@@ -62,6 +62,7 @@ NVNboolean cmdBufInit(nvn::CommandBuffer *buffer, nvn::Device *device) {
         nvnImguiInitialize();
 
         hasInitImGui = true;
+        printf("ImGui finished init!\n");
     }
 
     return result;

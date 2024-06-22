@@ -54,17 +54,17 @@ private:
     
     u64 Title;
     uintptr_t BaseAddr;	
-    
+
     std::map<std::string, uintptr_t> PLA_offsets = { //1.0.0
-        {"LuaNewState", 0x6cf00},                   //lua_newstate
-        {"LuaLoadbuffer", 0x555e0},                 //luaL_loadbufferx
-        {"LuaPCall", 0x52e10},                      //lua_pcallk
-        {"LuaToString", 0x50da0},                   //lua_tostring
-        {"LuaSetTop", 0x4ff10},                     //lua_settop
-        {"LuaGetTop", 0x4fef0},                     //lua_gettop
-        {"LuaType", 0},                             //lua_type
-        {"LuaPrint", 0},                            //luaB_print
-        {"LuaPanic", 0}                             //panic
+        {"LuaNewState", 0x6cf00},       //lua_newstate
+        {"LuaLoadbuffer", 0x555e0},     //luaL_loadbufferx
+        {"LuaPCall", 0x52e10},          //lua_pcallk
+        {"LuaToString", 0x50da0},       //lua_tostring
+        {"LuaSetTop", 0x4ff10},         //lua_settop
+        {"LuaGetTop", 0x4fef0},         //lua_gettop
+        {"LuaType", 0x50310},           //lua_type
+        {"LuaPrint", 0},                //luaB_print
+        {"LuaPanic", 0}                 //panic
     };
     
     std::map<std::string, uintptr_t> Sword_offsets = { //1.0.0

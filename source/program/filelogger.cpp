@@ -2,13 +2,9 @@
 
 pkcl::FileLogger *pkcl::FileLogger::instance = nullptr;
 
-void pkcl::FileLogger::init()
-{
-    nn::fs::MountSdCardForDebug("sd");
-}
-
 void pkcl::FileLogger::Log(std::string str)
 {
+    pkcl::FilesystemManager::getInstance()->TryMountSD();
     nn::fs::DirectoryEntryType type;
     Result rc = nn::fs::GetEntryType(&type, logPath.c_str());
     if (rc == 0x202)
@@ -23,6 +19,7 @@ void pkcl::FileLogger::Log(std::string str)
 
 void pkcl::FileLogger::Log(std::deque<std::string> logs)
 {
+    pkcl::FilesystemManager::getInstance()->TryMountSD();
     nn::fs::DirectoryEntryType type;
     Result rc = nn::fs::GetEntryType(&type, logPath.c_str());
     if (rc == 0x202)

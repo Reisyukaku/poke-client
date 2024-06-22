@@ -24,18 +24,15 @@ pkcl::Mouse *pkcl::Mouse::instance = nullptr;
 pkcl::Keyboard *pkcl::Keyboard::instance = nullptr;
 pkcl::OffsetManager *pkcl::OffsetManager::instance = nullptr;
 pkcl::LuaStateManager *pkcl::LuaStateManager::instance = nullptr;
+pkcl::FilesystemManager *pkcl::FilesystemManager::instance = nullptr;
 
 UI *ui;
 pkcl::TcpLogger *sock = pkcl::TcpLogger::getInstance();
-pkcl::FileLogger *fileLog = pkcl::FileLogger::getInstance();
 
 HOOK_DEFINE_TRAMPOLINE(nnMainHook) {
     static void Callback()
     {
-        //Init loggers
-        fileLog->init();
         sock->init(TCPLOG_IP, 3080);
-        
         Orig();
     }
 };

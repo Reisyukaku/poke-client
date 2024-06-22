@@ -7,6 +7,7 @@
 #include "offsetManager.hpp"
 #include "keyboard.hpp"
 #include "luaStateManager.hpp"
+#include "filesystemManager.hpp"
 #include "nn/hid.h"
 #include "nn/mouse.hpp"
 #include "nn/fs.hpp"
@@ -17,6 +18,13 @@ class LuaForm : public BasicForm{
 public:
     
     void Draw() override;
+
+    void LoadScriptList();
+
+    void AddOutString(std::string str)
+    {
+        out_log.push_back(str);
+    }
     
 	static LuaForm* getInstance() {
 		if (instance == nullptr)
@@ -24,30 +32,15 @@ public:
 		return instance;
 	};
 
-    void AddOutString(std::string str)
-    {
-        out_log.push_back(str);
-    }
-
 private:
     static LuaForm* instance;
 	LuaForm(const LuaForm&);
 	LuaForm& operator=(const LuaForm&);
 
-    LuaForm()
+    LuaForm() : scriptList(nullptr)
     {
         Name = "Lua Interface";
         scriptDir = "sd:/luaScripts/";
-        
-        scriptList = nullptr;
-        nn::fs::DirectoryHandle dirHandle;
-        if(!nn::fs::OpenDirectory(&dirHandle, scriptDir.c_str(), nn::fs::OpenDirectoryMode_All)){
-            nn::fs::GetDirectoryEntryCount(&scriptCnt, dirHandle);
-            if(scriptCnt > 0){
-                scriptList = new nn::fs::DirectoryEntry[scriptCnt];
-                nn::fs::ReadDirectory(&scriptCnt, scriptList, dirHandle, scriptCnt);
-            }
-        }
     }
 
     void ExecuteFile(std::string file);

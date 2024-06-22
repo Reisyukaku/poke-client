@@ -22,4 +22,4 @@
 #define NUM_ARGS(...) NUM_ARGS_(__VA_ARGS__, 6, 5, 4, 3, 2, 1)
 #define VA_MACRO(MACRO, ...) APPEND(MACRO, NUM_ARGS(__VA_ARGS__))(__VA_ARGS__)
 
-#define INSTALL_AT_OFFSET(x, y) if(y) x::InstallAtOffset(y);
+#define INSTALL_AT_OFFSET(x, y) if(y != 0) x::InstallAtOffset(y);

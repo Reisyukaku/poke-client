@@ -7,10 +7,12 @@ UI::UI(std::string name, ImVec2 winSize) : Name(name), WinSize(winSize), isVisib
     offsetMan = pkcl::OffsetManager::getInstance();
 
     hexForm = HexForm::getInstance();
-    hexForm->SetAddr(offsetMan->GetAddr(0x43f5b38)); //(0x43811c0));
+    hexForm->SetAddr(offsetMan->GetAddr(0));
+
+    luaForm = LuaForm::getInstance();
+    luaForm->LoadScriptList();
 
     infoForm = InfoForm::getInstance();
-    luaForm = LuaForm::getInstance();
     settingsForm = SettingsForm::getInstance();
     aboutForm = AboutForm::getInstance();
 

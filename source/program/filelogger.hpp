@@ -4,6 +4,7 @@
 #include <deque>
 #include <string>
 #include <nn/fs.hpp>
+#include "filesystemManager.hpp"
 
 namespace pkcl {
 class FileLogger {
@@ -26,6 +27,7 @@ private:
 	
     nn::fs::FileHandle handleOut;
     std::string logPath;
+	bool mounted = false;
     
 	FileLogger() : logPath("sd:/logs.txt") {
 		//
