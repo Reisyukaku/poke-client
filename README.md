@@ -12,7 +12,7 @@ Designed to be ran on real hardware.
 - Mouse and keyboard support
 
 ## Screenshot
-![sv](https://i.imgur.com/5wCTwOr.jpeg)
+![sv](https://i.imgur.com/xjGxu0a.jpeg)
 
 ## Building
 Run `make -j8`
