@@ -7,6 +7,7 @@
 #include "tcplogger.hpp"
 #include "nn/hid.h"
 #include "nn/mouse.hpp"
+#include "nvn/GfxSystem.hpp"
 #include "form.hpp"
 #include "types.h"
 
@@ -14,9 +15,10 @@ class InfoForm : public BasicForm{
 public:
     
     void Draw() override;
-    
-    void AddString(std::string s) {
-        AddToQueue(s);
+
+    void SetNvnInfo(pkcl::NvnInfo info)
+    {
+        nvnInfo = info;
     }
 	
     static InfoForm* getInstance() {
@@ -30,16 +32,10 @@ public:
 
 private:
     static InfoForm* instance;
-
+    pkcl::NvnInfo nvnInfo;
+    
     InfoForm()
     {
         Name = "Info Log";
     }
-
-    void AddToQueue(std::string str) {
-        if(Logs.size() > 100)
-            Logs.pop_front();
-        Logs.push_back(str);
-    }
-    std::deque<std::string> Logs;
 };

@@ -71,7 +71,7 @@ const char *shaderNames[] = {
 
 extern "C" void *glslc_Alloc(size_t size, size_t alignment, void *user_data = nullptr) {
     printf("Allocating ptr with size: %lx aligned by %lx\n", size, alignment);
-    return nn::init::GetAllocator()->Allocate(ALIGN_UP(size, alignment));
+    return nn::init::GetAllocator()->Allocate(size, alignment);
 }
 
 extern "C" void glslc_Free(void *ptr, void *user_data = nullptr) {
@@ -161,26 +161,6 @@ CompiledData NOINLINE CreateShaderBinary(GLSLCoutput *compileData, const char *s
     return {binaryBuffer, binarySize};
 
 }
-
-/*const char *GetShaderSource(const char *path) {
-    nn::fs::FileHandle handle;
-
-    //EXL_ASSERT(FsHelper::isFileExist(path), "Failed to Find File!");
-
-    R_ABORT_UNLESS(nn::fs::OpenFile(&handle, path, nn::fs::OpenMode_Read))
-
-    long size = 0;
-    nn::fs::GetFileSize(&size, handle);
-    char *sourceFile = (char *) glslc_Alloc(size + 1, 8);
-
-    R_ABORT_UNLESS(nn::fs::ReadFile(handle, 0, sourceFile, size))
-
-    nn::fs::CloseFile(handle);
-
-    sourceFile[size] = '\0';
-
-    return sourceFile;
-}*/
 
 bool ImguiShaderCompiler::CheckIsValidVersion(nvn::Device *device) {
 

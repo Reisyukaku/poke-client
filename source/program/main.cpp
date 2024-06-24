@@ -8,6 +8,7 @@
 #include "nn/keyboard.hpp"
 #include "filelogger.hpp"
 #include "tcplogger.hpp"
+#include "nvn/GfxSystem.hpp"
 #include "UI/infoform.hpp"
 #include "utils.hpp"
 #include <map>
@@ -25,6 +26,7 @@ pkcl::Keyboard *pkcl::Keyboard::instance = nullptr;
 pkcl::OffsetManager *pkcl::OffsetManager::instance = nullptr;
 pkcl::LuaStateManager *pkcl::LuaStateManager::instance = nullptr;
 pkcl::FilesystemManager *pkcl::FilesystemManager::instance = nullptr;
+pkcl::GfxSystem *pkcl::GfxSystem::instance = nullptr;
 
 UI *ui;
 pkcl::TcpLogger *sock = pkcl::TcpLogger::getInstance();

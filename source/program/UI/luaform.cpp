@@ -93,10 +93,8 @@ void LuaForm::Draw() {
         
 	ImGui::EndChild();
     ImGui::EndGroup();
-    
-    ImGui::Separator();
 
-    ImGui::BeginChild("##footer", ImVec2(0, 0));
+    ImGui::BeginChild("##footer", ImVec2(0, 0), ImGuiWindowFlags_NoScrollbar);
 
     ImGui::SetNextItemWidth(-1);
     bool isEnter = ImGui::IsKeyPressed(ImGuiKey_Enter);

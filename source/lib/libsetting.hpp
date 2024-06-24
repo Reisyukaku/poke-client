@@ -2,6 +2,8 @@
 
 #include "types.h"
 
+#define PKCL_ENABLE_NVN_DEBUG_LAYER
+
 #define EXL_LOAD_KIND_KIP       0
 #define EXL_LOAD_KIND_ASRTLD    1
 #define EXL_LOAD_KIND_MODULE    2
