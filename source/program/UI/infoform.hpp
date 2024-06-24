@@ -33,9 +33,9 @@ public:
 private:
     static InfoForm* instance;
     pkcl::NvnInfo nvnInfo;
-    
+
     InfoForm()
     {
-        Name = "Info Log";
+        Name = "Info";
     }
 };

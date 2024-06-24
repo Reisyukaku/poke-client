@@ -53,6 +53,8 @@ NVNboolean deviceInit(nvn::Device *device, const nvn::DeviceBuilder *builder) {
     gfx->GetDevice()->GetInteger(nvn::DeviceInfo::API_MAJOR_VERSION, &info.versionMaj);
     gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_DEBUG_LAYER, &info.supportDbg);
     gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_PASSTHROUGH_GEOMETRY_SHADERS, &info.supportPassGeoShdr);
+    gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_FRAGMENT_SHADER_INTERLOCK, &info.supportFragInter);
+    gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_ADVANCED_BLEND_MODES, &info.supportAdvBlend);
     InfoForm::getInstance()->SetNvnInfo(info);
     return result;
 }

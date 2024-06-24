@@ -10,6 +10,8 @@ public:
     int versionMaj;
     int supportDbg;
     int supportPassGeoShdr;
+    int supportFragInter;
+    int supportAdvBlend;
 };
 
 class GfxSystem {

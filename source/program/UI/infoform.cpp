@@ -29,6 +29,8 @@ void InfoForm::Draw() {
     ImGui::Text("Device Support");
     ImGui::Text(" Debug layer: %s", TOBOOL(nvnInfo.supportDbg));
     ImGui::Text(" Passthrough geometry shaders: %s", TOBOOL(nvnInfo.supportPassGeoShdr));
+    ImGui::Text(" Fragment shader interlock: %s", TOBOOL(nvnInfo.supportFragInter));
+    ImGui::Text(" Advanaced blend modes: %s", TOBOOL(nvnInfo.supportAdvBlend));
     ImGui::EndGroup();
     ImGui::EndChild();
     
