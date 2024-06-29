@@ -64,6 +64,7 @@ private:
         {"LuaGetTop", 0x4fef0},         //lua_gettop
         {"LuaType", 0x50310},           //lua_type
         {"LuaPrint", 0},                //luaB_print
+        {"LuaToUserdata", 0},           //lua_touserdata
         {"LuaPanic", 0}                 //panic
     };
     
@@ -76,6 +77,7 @@ private:
         {"LuaGetTop", 0x165ef10},
         {"LuaType", 0x165f320},
         {"LuaPrint", 0},
+        {"LuaToUserdata", 0},
         {"LuaPanic", 0}
     };
     
@@ -88,6 +90,7 @@ private:
         {"LuaGetTop", 0x99df60},
         {"LuaType", 0xa4dd50},
         {"LuaPrint", 0x45f80},
+        {"LuaToUserdata", 0x989980},
         {"LuaPanic", 0x2374ce4}
     };
 };

@@ -12,6 +12,19 @@ public:
     int supportPassGeoShdr;
     int supportFragInter;
     int supportAdvBlend;
+    int supportASTC;
+    int supportConservRaster;
+    int supportDrawTex;
+    int supportFragCovToCol;
+    int supportImgWithTexHandle;
+    int supportMinMaxFilter;
+    int supportPostDepthCov;
+    int supportSampleLoc;
+    int supportSparseTileTex;
+    int supportStencil8;
+    int supportTargetIndepRaster;
+    int supportViewSwizzle;
+    int supportZeroUnmapPool;
 };
 
 class GfxSystem {

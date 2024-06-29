@@ -2,6 +2,7 @@
 
 #include "types.h"
 
+//Debug layer requires proper debug driver to utilize properly
 //#define PKCL_ENABLE_NVN_DEBUG_LAYER
 
 #define EXL_LOAD_KIND_KIP       0

@@ -24,18 +24,36 @@ void LuaForm::ExecuteCmd(char *cmd)
 
     LuaH::loadBuffer(L, cmd, strlen(cmd), "poke-client VM", NULL);
     int ret = LuaH::pcallk(L, 0, LUA_MULTRET, 0, 0, 0);
-    if(!ret){
+    if(ret == LUA_OK){
         int nresults = LuaH::getTop(L);
         dbg_log.push_back(std::string("Returned ") + std::to_string(nresults) + std::string(" results."));
-        for(int i = 0, j = -1; i < nresults; i++){
-            int retType = LuaH::ltype(L,j);
+        for(int i = 0, j = -1 * nresults; i < nresults; i++, j++){
+            int retType = LuaH::ltype(L, j);
             std::string res = pkcl::LuaStateManager::GetReturnTypeStr(retType) + std::string(": ");
             switch(retType){
-                case 1: //Bool
-                case 3: //Number
-                case 4: //String
+                case LUA_TBOOLEAN:
+                case LUA_TNUMBER:
+                case LUA_TSTRING:
                 {
-                    res += std::string(LuaH::toString(L, j--, NULL));
+                    res += std::string(LuaH::toString(L, j, NULL));
+                    break;
+                }
+                case LUA_TTABLE:
+                {
+                    //TODO
+                    break;
+                }
+                case LUA_TLIGHTUSERDATA:
+                case LUA_TUSERDATA:
+                {
+                    void* ptr = LuaH::touserdata(L, j);
+                    if(ptr != nullptr)
+                    {
+                        auto hex = Utils::ToHex((char*)ptr, 0x20); //sneak peak since no way to get size
+                        printf("%s\n", hex.c_str());
+                        res += std::string("<logged>");
+                    }
+                    else res += std::string("failed to get");
                     break;
                 }
                 default:
@@ -56,8 +74,7 @@ void LuaForm::ExecuteFile(std::string file) {
     long sz;
     nn::fs::OpenFile(&lua, file.c_str(), nn::fs::OpenMode_Read);
     nn::fs::GetFileSize(&sz, lua);
-    char buffer[sz];
-    memset(buffer, 0, sz);
+    char buffer[sz + 1] = {0};
     nn::fs::ReadFile(lua, 0, buffer, sz);
     nn::fs::CloseFile(lua);
     

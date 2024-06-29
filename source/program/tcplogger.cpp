@@ -87,23 +87,6 @@ void pkcl::TcpLogger::close() {
     mState = SocketState::UNINITIALIZED;
 }
 
-void pkcl::TcpLogger::PrintHex(char *buffer, size_t size) {
-    char buf[(size * 3) + 2] = {0};
-    const char *hex = "0123456789ABCDEF";
-    u8 i = 0, j = 0;
-    while(i < size){
-        u8 num1 = buffer[i] & 0xF;
-        u8 num2 = (buffer[i] >> 4) & 0xF;
-        
-        buf[j++] = hex[num2];
-        buf[j++] = hex[num1];
-        buf[j++] = (i++ % 16 == 15) ? '\n' : ' ';
-    }
-    buf[(size * 3) + 1] = '\n';
-
-    nn::socket::Send(getInstance()->mSocketFd, buf, (size * 3) + 1, 0);
-}
-
 void pkcl::TcpLogger::SendMessage(const char *msg) {
     if (getInstance()->mState != SocketState::CONNECTED)
         return;

@@ -55,6 +55,19 @@ NVNboolean deviceInit(nvn::Device *device, const nvn::DeviceBuilder *builder) {
     gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_PASSTHROUGH_GEOMETRY_SHADERS, &info.supportPassGeoShdr);
     gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_FRAGMENT_SHADER_INTERLOCK, &info.supportFragInter);
     gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_ADVANCED_BLEND_MODES, &info.supportAdvBlend);
+    gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_ASTC_FORMATS, &info.supportASTC);
+    gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_CONSERVATIVE_RASTER, &info.supportConservRaster);
+    gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_DRAW_TEXTURE, &info.supportDrawTex);
+    gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_FRAGMENT_COVERAGE_TO_COLOR, &info.supportFragCovToCol);
+    gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_IMAGES_USING_TEXTURE_HANDLES, &info.supportImgWithTexHandle);
+    gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_MIN_MAX_FILTERING, &info.supportMinMaxFilter);
+    gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_POST_DEPTH_COVERAGE, &info.supportPostDepthCov);
+    gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_SAMPLE_LOCATIONS, &info.supportSampleLoc);
+    gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_SPARSE_TILED_PACKAGED_TEXTURES, &info.supportSparseTileTex);
+    gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_STENCIL8_FORMAT, &info.supportStencil8);
+    gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_TARGET_INDEPENDENT_RASTERIZATION, &info.supportTargetIndepRaster);
+    gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_VIEWPORT_SWIZZLE, &info.supportViewSwizzle);
+    gfx->GetDevice()->GetInteger(nvn::DeviceInfo::SUPPORTS_ZERO_FROM_UNMAPPED_VIRTUAL_POOL_PAGES, &info.supportZeroUnmapPool);
     InfoForm::getInstance()->SetNvnInfo(info);
     return result;
 }

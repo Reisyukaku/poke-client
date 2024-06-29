@@ -26,7 +26,6 @@ public:
     nn::Result init(const char* ip, u16 port);
 
     static void SendMessage(const char* msg);
-    static void PrintHex(char *buffer, size_t size);
     static const char* receiveMessage();
     void close();
     static ssize_t stdio_write(struct _reent* r, void *fd, const char* ptr, size_t len);
