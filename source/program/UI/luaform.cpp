@@ -34,13 +34,9 @@ void LuaForm::ExecuteCmd(char *cmd)
                 case LUA_TBOOLEAN:
                 case LUA_TNUMBER:
                 case LUA_TSTRING:
-                {
-                    res += std::string(LuaH::toString(L, j, NULL));
-                    break;
-                }
                 case LUA_TTABLE:
                 {
-                    //TODO
+                    res += std::string(LuaH::toString(L, j, NULL));
                     break;
                 }
                 case LUA_TLIGHTUSERDATA:
@@ -68,7 +64,8 @@ void LuaForm::ExecuteCmd(char *cmd)
         dbg_log.push_back(std::string("Error in lua:\n") + std::string(LuaH::toString(L, -1, NULL)));
 }
 
-void LuaForm::ExecuteFile(std::string file) {
+void LuaForm::ExecuteFile(std::string file) 
+{
     
     nn::fs::FileHandle lua;
     long sz;
@@ -81,15 +78,35 @@ void LuaForm::ExecuteFile(std::string file) {
     LuaForm::ExecuteCmd(buffer);
 }
 
-void LuaForm::Draw() {
+void LuaForm::DumpClosures()
+{
+    //
+}
+
+void LuaForm::Draw() 
+{
     const float bottom_elem = ImGui::GetFrameHeightWithSpacing() + 30;
     const float dbg_elem = 150;
 
     ImGui::SetNextWindowSize(ImVec2(800.0f, 400.0f), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin(Name.c_str(), &isVisible, ImGuiWindowFlags_NoScrollbar)){
+	if (!ImGui::Begin(Name.c_str(), &isVisible, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_MenuBar)){
 		ImGui::End();
 		return;
 	}
+
+    if (ImGui::BeginMenuBar())
+    {
+        if (ImGui::BeginMenu("Tools"))
+        {
+            if (ImGui::MenuItem("Dump closures")) 
+            {
+                DumpClosures();
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::EndMenuBar();
+    }
+    ImGui::Spacing();
 
     ImGui::BeginGroup();
     ImGui::Text("Output");
@@ -146,9 +163,12 @@ void LuaForm::Draw() {
     ImGui::SameLine();
     
     ImGui::SetNextItemWidth(-1);
-    if (ImGui::BeginCombo("##combo", selectedScript.c_str())) {
-        if(scriptList != nullptr){
-            for (int n = 0; n < scriptCnt; n++) {
+    if (ImGui::BeginCombo("##combo", selectedScript.c_str())) 
+    {
+        if(scriptList != nullptr)
+        {
+            for (int n = 0; n < scriptCnt; n++) 
+            {
                 std::string file(scriptList[n].m_Name);
                 bool isSelected = (selectedScript == file);
                 if (ImGui::Selectable(file.c_str(), isSelected))

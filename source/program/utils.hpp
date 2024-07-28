@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <cstring>
 #include <string>
+#include <offsetManager.hpp>
 
 #define BLANK_STRING 0xCBF29CE484222645
 
@@ -52,5 +53,20 @@ public:
         buf.push_back('\n');
 
         return buf;
+    }
+
+    typedef struct stack_frame {
+        struct stack_frame *fp;
+        uint64_t lr;
+    } stack_frame_t;
+    static inline void Backtrace(int depth = 5)
+    {
+        stack_frame_t *fp;
+
+        __asm volatile ("mov %0, x29" : "=r" (fp));
+
+        printf("Stack trace:\n");
+        for(int i = 0; i < depth; i++, fp = fp->fp)
+            printf("  0x%016lX\n", fp->lr - pkcl::OffsetManager::getInstance()->GetBaseAddr());
     }
 };

@@ -14,6 +14,10 @@ public:
     void SetBaseAddr(uintptr_t addr) {
         BaseAddr = addr;
     }
+
+    uintptr_t GetBaseAddr() {
+        return BaseAddr;
+    }
     
     uintptr_t GetAddr(std::string offsetName) {
         return BaseAddr + GetOffset(offsetName);
@@ -22,12 +26,13 @@ public:
     uintptr_t GetAddr(uintptr_t offset) {
         return BaseAddr + offset;
     }
-    
+
     uintptr_t GetOffset(std::string offsetName) {
         uintptr_t ret = 0;
         switch(Title) {
             case 0x01001F5010DFA000: ret = PLA_offsets[offsetName]; break;
-            case 0x0100ABF008968000: ret = Sword_offsets[offsetName]; break;
+            case 0x01008DB008C2C000:
+            case 0x0100ABF008968000: ret = SwSh_offsets[offsetName]; break;
             case 0x01008F6008C5E000:
             case 0x0100A3D008C5C000: ret = SV_offsets[offsetName]; break;
         }
@@ -68,7 +73,7 @@ private:
         {"LuaPanic", 0}                 //panic
     };
     
-    std::map<std::string, uintptr_t> Sword_offsets = { //1.0.0
+    std::map<std::string, uintptr_t> SwSh_offsets = { //1.0.0
         {"LuaNewState", 0x1666940},
         {"LuaLoadbuffer", 0x165e160},
         {"LuaPCall", 0x1661c90},

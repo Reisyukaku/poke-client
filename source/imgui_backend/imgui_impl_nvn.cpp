@@ -61,7 +61,6 @@ namespace ImguiNvnBackend {
     }
 
     bool createShaders() {
-
         auto bd = getBackendData();
 
         bd->imguiShaderBinary.size = imgui_data_size;

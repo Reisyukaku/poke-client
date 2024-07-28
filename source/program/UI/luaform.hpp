@@ -46,6 +46,7 @@ private:
 
     void ExecuteFile(std::string file);
     void ExecuteCmd(char *cmd);
+    void DumpClosures();
     std::vector<std::string> out_log, dbg_log;
     s64 scriptCnt;
     std::string selectedScript;
