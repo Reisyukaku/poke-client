@@ -4,7 +4,7 @@
 #include "lib/libsetting.hpp"
 #include "tcplogger.hpp"
 #include "filelogger.hpp"
-#include "utils.hpp"
+#include "debug.hpp"
 #include "flatbuffers/trpfd_generated.h"
 #include "flatbuffers/trpfs_generated.h"
 
@@ -32,7 +32,8 @@ typedef struct {
 
 HOOK_DEFINE_TRAMPOLINE(trpfd) {
 	static void *Callback(trp_struct *c) {
-        
+        pkcl::Debug::Backtrace(10);
+        printf("%s\n", c->fileDesc->filename);
         //bool isUnk = false;
         //auto offsetMan = pkcl::OffsetManager::getInstance();
         //find_hash_trpfs_maybe find_hash_trpfs_maybe_ptr = offsetMan->GetAddr(0xa19394);

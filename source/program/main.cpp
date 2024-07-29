@@ -20,6 +20,7 @@
 #include "hooks/lua_hooks.h"
 #include "hooks/nvn_hooks.h"
 #include "hooks/game_hooks.h"
+#include "debug.hpp"
 
 pkcl::Mouse *pkcl::Mouse::instance = nullptr;
 pkcl::Keyboard *pkcl::Keyboard::instance = nullptr;
@@ -64,6 +65,7 @@ extern "C" void exl_main(void *x0, void *x1) {
 	auto offsetMan = pkcl::OffsetManager::getInstance();
     offsetMan->SetBaseAddr(exl::util::modules::GetTargetStart());
     offsetMan->SetTitleID(exl::setting::ProgramId);
+    pkcl::Debug::Initialize();
 
     nnMainHook::InstallAtSymbol("nnMain");
 

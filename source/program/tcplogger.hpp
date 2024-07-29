@@ -49,8 +49,7 @@ private:
 	static TcpLogger* instance;
     int mSocketFd;
     
-	TcpLogger() {
-		//
-	}
+	TcpLogger() {}
+    ~TcpLogger() {}
 };
 };
