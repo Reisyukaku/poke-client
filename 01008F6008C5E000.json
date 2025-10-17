@@ -19,7 +19,52 @@
 	"filesystem_access":	{
 		"permissions":	"0xffffffffffffffff"
 	},
-	"service_access":	["*"],
+	"service_access": [
+		"acc:u0",
+		"aoc:u",
+		"apm",
+		"appletOE",
+		"audin:u",
+		"audout:u",
+		"audren:u",
+		"banana",
+		"bcat:u",
+		"bsd:u",
+		"bsdcfg",
+		"caps:su",
+		"caps:u",
+		"csrng",
+		"friend:u",
+		"fsp-srv",
+		"hid",
+		"htc",
+		"htc:tenv",
+		"htcs",
+		"hwopus",
+		"irs",
+		"ldn:u",
+		"ldr:ro",
+		"lm",
+		"mii:u",
+		"mm:u",
+		"nfc:mf:u",
+		"nfc:user",
+		"nfp:user",
+		"nifm:u",
+		"nim:eca",
+		"nsd:u",
+		"ntc",
+		"nvdrv",
+		"pcm",
+		"pctl",
+		"pl:u",
+		"prepo:u",
+		"set",
+		"sfdnsres",
+		"ssl",
+		"time:u",
+		"vi:u"
+	],
 	"service_host":	[],
 	"kernel_capabilities":	[{
 			"type":	"kernel_flags",
@@ -86,7 +131,7 @@
 				"svcGetThreadContext3":	"0x33",
 				"svcWaitForAddress":	"0x34",
 				"svcSignalToAddress":	"0x35",
-				"svcUnknown":	"0x36",
+				"svcSynchronizePreemptionState":	"0x36",
 				"svcUnknown":	"0x37",
 				"svcUnknown":	"0x38",
 				"svcUnknown":	"0x39",
@@ -173,8 +218,7 @@
 		}, {
 			"type":	"debug_flags",
 			"value":	{
-				"allow_debug":	true,
-				"force_debug":	true
+				"allow_debug":	true
 			}
 		}]
 }

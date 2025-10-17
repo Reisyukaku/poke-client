@@ -35,6 +35,7 @@ public:
             case 0x0100ABF008968000: ret = SwSh_offsets[offsetName]; break;
             case 0x01008F6008C5E000:
             case 0x0100A3D008C5C000: ret = SV_offsets[offsetName]; break;
+            case 0x0100F43008C44000: ret = PLZA_offsets[offsetName]; break;
         }
         
         return ret;
@@ -97,6 +98,19 @@ private:
         {"LuaPrint", 0x45f80},
         {"LuaToUserdata", 0x989980},
         {"LuaPanic", 0x2374ce4}
+    };
+
+    std::map<std::string, uintptr_t> PLZA_offsets = { //1.0.0
+        {"LuaNewState", 0x167bac0},
+        {"LuaLoadbuffer", 0x1665ff0},
+        {"LuaPCall", 0xd4de0},
+        {"LuaToString", 0x69d650},
+        {"LuaSetTop", 0xd4a20},
+        {"LuaGetTop", 0xd4800},
+        {"LuaType", 0x6f9230},
+        {"LuaPrint", 0x1687300},
+        {"LuaToUserdata", 0x32ac10},
+        {"LuaPanic", 0x16b26c4}
     };
 };
 };
