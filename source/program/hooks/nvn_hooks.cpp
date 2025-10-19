@@ -24,7 +24,7 @@ pkcl::OffsetManager *offsetMan = pkcl::OffsetManager::getInstance();
 
 bool hasInitImGui = false;
 
-static void* (*mallocFuncPtr)(size_t size) = nullptr;
+static void* (*mallocFuncPtr)(size_t alignment, size_t size) = nullptr;
 static void* (*reallocFuncPtr)(void *ptr, size_t size) = nullptr;
 static void (*freeFuncPtr)(void *ptr) = nullptr;
 
@@ -104,7 +104,7 @@ void InitializeImguiBackend()
 
         ImGuiMemAllocFunc allocFunc = [](size_t size, void *user_data) {
             assert(mallocFuncPtr != nullptr);
-            return mallocFuncPtr(size);
+            return mallocFuncPtr(0x1000, size);
         };
 
         ImGuiMemFreeFunc freeFunc = [](void *ptr, void *user_data) {
@@ -205,7 +205,7 @@ nvn::GenericFuncPtrFunc deviceGetProc(nvn::Device *device, const char *procName)
 
 void nvn_hooks()
 {
-    nn::ro::LookupSymbol(reinterpret_cast<uintptr_t *>(&mallocFuncPtr), "malloc");
+    nn::ro::LookupSymbol(reinterpret_cast<uintptr_t *>(&mallocFuncPtr), "aligned_alloc");
     nn::ro::LookupSymbol(reinterpret_cast<uintptr_t *>(&reallocFuncPtr), "realloc");
     nn::ro::LookupSymbol(reinterpret_cast<uintptr_t *>(&freeFuncPtr), "free");
 
