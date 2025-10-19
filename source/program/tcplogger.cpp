@@ -1,7 +1,6 @@
 #include "tcplogger.hpp"
 #include "nn/nifm.h"
 #include "nn/socket.hpp"
-#include <dirent.h>
 
 constexpr inline auto DefaultTcpAutoBufferSizeMax      = 192 * 1024; /* 192kb */
 constexpr inline auto MinTransferMemorySize            = (2 * DefaultTcpAutoBufferSizeMax + (128 * 1024));
@@ -15,22 +14,6 @@ constexpr inline auto SocketPoolSize = SocketAllocatorSize + TransferMemorySize;
 char socketPool[SocketPoolSize] __attribute__((aligned(0x4000)));
 
 pkcl::TcpLogger *pkcl::TcpLogger::instance = nullptr;
-
-static const devoptab_t std_devop = {
-    "console",
-    0,
-    NULL,
-    NULL,
-    pkcl::TcpLogger::stdio_write,
-    NULL,
-    NULL,
-    NULL
-};
-
-ssize_t pkcl::TcpLogger::stdio_write(struct _reent* r, void *fd, const char* ptr, size_t len) {
-    getInstance()->SendMessage(ptr);
-    return len;
-}
 
 nn::Result pkcl::TcpLogger::init(const char *ip, u16 port) {
     in_addr hostAddress = { 0 };
@@ -73,12 +56,6 @@ nn::Result pkcl::TcpLogger::init(const char *ip, u16 port) {
     nn::Result result = nn::socket::Connect(mSocketFd, &serverAddress, sizeof(serverAddress));
 
     mState = result.isSuccess() ? SocketState::CONNECTED : SocketState::DISCONNECTED;
-
-    devoptab_list[ STD_OUT ] = &std_devop;
-    setvbuf(stdout, NULL, _IONBF, 0);
-
-    devoptab_list[ STD_ERR ] = &std_devop;
-    setvbuf(stderr, NULL, _IONBF, 0);
     
     return result;
 }

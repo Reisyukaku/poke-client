@@ -2,7 +2,7 @@
 
 void luaWarn (void *ud, const char *message, int tocont)
 {
-    printf("[Lua][Warn] %s\n", message);
+    DEBUG_LOG("[Lua][Warn] %s\n", message);
 }
 
 void lua_hooks()

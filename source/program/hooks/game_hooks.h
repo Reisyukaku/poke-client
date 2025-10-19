@@ -33,7 +33,7 @@ typedef struct {
 HOOK_DEFINE_TRAMPOLINE(trpfd) {
 	static void *Callback(trp_struct *c) {
         pkcl::Debug::Backtrace(10);
-        printf("%s\n", c->fileDesc->filename);
+        DEBUG_LOG("%s\n", c->fileDesc->filename);
         //bool isUnk = false;
         //auto offsetMan = pkcl::OffsetManager::getInstance();
         //find_hash_trpfs_maybe find_hash_trpfs_maybe_ptr = offsetMan->GetAddr(0xa19394);

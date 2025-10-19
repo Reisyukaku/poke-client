@@ -1,5 +1,6 @@
 #include "MemoryBuffer.h"
 #include "imgui_impl_nvn.hpp"
+#include "debug.hpp"
 
 MemoryBuffer::MemoryBuffer(size_t size) {
 
@@ -16,14 +17,14 @@ MemoryBuffer::MemoryBuffer(size_t size) {
             .SetStorage(memBuffer, alignedSize);
 
     if (!pool.Initialize(&bd->memPoolBuilder)) {
-        printf("Failed to Create Memory Pool!\n");
+        DEBUG_LOG("Failed to Create Memory Pool!\n");
         return;
     }
 
     bd->bufferBuilder.SetDevice(bd->device).SetDefaults().SetStorage(&pool, 0, alignedSize);
 
     if (!buffer.Initialize(&bd->bufferBuilder)) {
-        printf("Failed to Init Buffer!\n");
+        DEBUG_LOG("Failed to Init Buffer!\n");
         return;
     }
 
@@ -45,14 +46,14 @@ MemoryBuffer::MemoryBuffer(size_t size, nvn::MemoryPoolFlags flags) {
             .SetStorage(memBuffer, alignedSize);
 
     if (!pool.Initialize(&bd->memPoolBuilder)) {
-        printf("Failed to Create Memory Pool!\n");
+        DEBUG_LOG("Failed to Create Memory Pool!\n");
         return;
     }
 
     bd->bufferBuilder.SetDevice(bd->device).SetDefaults().SetStorage(&pool, 0, alignedSize);
 
     if (!buffer.Initialize(&bd->bufferBuilder)) {
-        printf("Failed to Init Buffer!\n");
+        DEBUG_LOG("Failed to Init Buffer!\n");
         return;
     }
 
@@ -62,23 +63,24 @@ MemoryBuffer::MemoryBuffer(size_t size, nvn::MemoryPoolFlags flags) {
 MemoryBuffer::MemoryBuffer(size_t size, void *bufferPtr, nvn::MemoryPoolFlags flags) {
 
     auto *bd = ImguiNvnBackend::getBackendData();
+    size_t alignedSize = ALIGN_UP(size, 0x1000);
 
     memBuffer = bufferPtr;
 
     bd->memPoolBuilder.SetDefaults()
             .SetDevice(bd->device)
             .SetFlags(flags)
-            .SetStorage(memBuffer, size);
+            .SetStorage(memBuffer, alignedSize);
 
     if (!pool.Initialize(&bd->memPoolBuilder)) {
-        printf("Failed to Create Memory Pool!\n");
+        DEBUG_LOG("Failed to Create Memory Pool!\n");
         return;
     }
 
-    bd->bufferBuilder.SetDevice(bd->device).SetDefaults().SetStorage(&pool, 0, size);
+    bd->bufferBuilder.SetDevice(bd->device).SetDefaults().SetStorage(&pool, 0, alignedSize);
 
     if (!buffer.Initialize(&bd->bufferBuilder)) {
-        printf("Failed to Init Buffer!\n");
+        DEBUG_LOG("Failed to Init Buffer!\n");
         return;
     }
 

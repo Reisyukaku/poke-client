@@ -3,6 +3,14 @@
 #include <string>
 #include <nn/os.hpp>
 #include "offsetManager.hpp"
+#include "filelogger.hpp"
+#include "tcplogger.hpp"
+
+#ifdef _DEBUG_LOGGING
+#define DEBUG_LOG(...) pkcl::FileLogger::getInstance()->Log(__VA_ARGS__)
+#else
+#define DEBUG_LOG(...) ((void)0)
+#endif
 
 namespace pkcl {
 class Debug {
@@ -24,9 +32,9 @@ public:
 
         __asm volatile ("mov %0, x29" : "=r" (fp));
         nn::os::LockMutex(&mutex);
-        printf("Stack trace:\n");
+        DEBUG_LOG("Stack trace:\n");
         for(int i = 0; i < depth && fp; i++, fp = fp->fp)
-            printf("%d)  0x%016lX\n", i, fp->lr - pkcl::OffsetManager::getInstance()->GetBaseAddr());
+            DEBUG_LOG("%d)  0x%016lX\n", i, fp->lr - pkcl::OffsetManager::getInstance()->GetBaseAddr());
         nn::os::UnlockMutex(&mutex);
     }
 

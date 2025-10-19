@@ -10,6 +10,7 @@
 #include "UI/settingsform.hpp"
 #include "UI/infoform.hpp"
 #include "nn/nv.hpp"
+#include "debug.hpp"
 #include "../../nvn/GfxSystem.hpp"
 
 static nvn::DeviceInitializeFunc deviceInitPtr;
@@ -45,10 +46,10 @@ HOOK_DEFINE_TRAMPOLINE(graphicsAlloc)
 {
     static void Callback(nv::AllocateFunction alloc, nv::FreeFunction free, nv::ReallocateFunction realloc, void* ptr) 
     {
-        printf("nv::SetGraphicsAllocator()\n");
+        DEBUG_LOG("nv::SetGraphicsAllocator()\n");
         Orig(alloc, free, realloc, ptr);
         
-        printf("nv::SetGraphicsDevtoolsAllocator()\n");
+        DEBUG_LOG("nv::SetGraphicsDevtoolsAllocator()\n");
         nv::SetGraphicsDevtoolsAllocator(alloc, free, realloc, ptr);
     }
 };

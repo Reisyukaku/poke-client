@@ -28,15 +28,13 @@ export TARGET		:=	main
 # LOAD_KIND_ENUM is the type of hook (0=KIP, 1=ASRTLD, 2=Module)
 # BINARY_NAME is the name the hook will be called (named after a subsdk)
 # DIST_DIR is the dir the file build will be copied to
-# SD_OUT is the optional path to which the final build will be copied to
 
 PROGRAM_ID 		:= 	0100F43008C44000
 LOAD_KIND_ENUM 	:= 	2
 BINARY_NAME 	:= 	subsdk9
 DIST_DIR 		:= 	$(TOPDIR)/deploy
 CONFIG_JSON		:=	$(PROGRAM_ID).json
-SD_OUT 			:= 	I:/atmosphere/contents/$(PROGRAM_ID)/exefs
-TCPLOG_IP		:= 	192.168.1.158
+TCPLOG_IP		:= 	192.168.1.221
 
 #-------------------------- End of user configuration --------------------------
 

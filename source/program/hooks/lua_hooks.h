@@ -4,6 +4,7 @@
 #include "offsetManager.hpp"
 #include "luaStateManager.hpp"
 #include "lib.hpp"
+#include "debug.hpp"
 #include "tcplogger.hpp"
 
 HOOK_DEFINE_TRAMPOLINE(luaprint) {
@@ -21,7 +22,7 @@ HOOK_DEFINE_TRAMPOLINE(luaprint) {
 HOOK_DEFINE_TRAMPOLINE(luapanic) {
 	static void Callback(lua_State *L) {
         std::string str = LuaH::toString(L, -1, NULL);
-        printf("[Lua][Panic] %s\n", str.c_str());
+        DEBUG_LOG("[Lua][Panic] %s\n", str.c_str());
     }
 };
 

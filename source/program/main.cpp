@@ -36,13 +36,15 @@ HOOK_DEFINE_TRAMPOLINE(nnMainHook) {
     static void Callback()
     {
         sock->init(TCPLOG_IP, 3080);
+        if(!sock->IsConnected())
+            DEBUG_LOG("[Error] TCP Not connected!\n");
         Orig();
     }
 };
 
 bool nvnImguiInitialize()
 {
-    printf("Initializing UI\n");
+    DEBUG_LOG("Initializing UI\n");
 
     ui = new UI("Poke-Client", {250.0f, 600.0f});
     

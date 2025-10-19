@@ -1,6 +1,7 @@
 #include "imgui_impl_nvn.hpp"
 #include "imgui_bin.h"
 #include "lib.hpp"
+#include "debug.hpp"
 #include <cmath>
 #include <imgui_internal.h>
 #include "nn/oe.hpp"
@@ -51,7 +52,7 @@ namespace ImguiNvnBackend {
                 ScaleWindow(g.Windows[i], scale);
     }
 
-// backend impl
+    // backend impl
 
     NvnBackendData *getBackendData() {
         NvnBackendData *result = ImGui::GetCurrentContext() ? (NvnBackendData *) ImGui::GetIO().BackendRendererUserData
@@ -64,8 +65,18 @@ namespace ImguiNvnBackend {
         auto bd = getBackendData();
 
         bd->imguiShaderBinary.size = imgui_data_size;
-        bd->imguiShaderBinary.ptr = (u8 *) IM_ALLOC(imgui_data_size);
-
+        
+        size_t alignedSize = ALIGN_UP(imgui_data_size, 0x1000);
+        
+        size_t allocSize = alignedSize + 0x1000;
+        void* rawPtr = IM_ALLOC(allocSize);
+        
+        if (!rawPtr) {
+            DEBUG_LOG("Error allocating shader binary!\n");
+            return false;
+        }
+        
+        bd->imguiShaderBinary.ptr = (u8*)rawPtr;
         memcpy(bd->imguiShaderBinary.ptr, imgui_data, imgui_data_size);
 
         return true;
@@ -96,18 +107,18 @@ namespace ImguiNvnBackend {
 
         io.Fonts->Flags |= ImFontAtlasFlags_NoPowerOfTwoHeight;
         if (!io.Fonts->Build()) {
-            printf("Failed to build Font!\n");
+            DEBUG_LOG("Failed to build Font!\n");
             return false;
         }
 
-        printf("Loaded System Font.\n");
+        DEBUG_LOG("Loaded System Font.\n");
 
         return true;
     }
 
     bool setupFont() {
 
-        printf("Setting up ImGui Font.\n");
+        DEBUG_LOG("Setting up ImGui Font.\n");
 
         auto bd = getBackendData();
 
@@ -124,24 +135,23 @@ namespace ImguiNvnBackend {
         int texMemPoolSize = texDescSize * MaxTexDescriptors;
         int totalPoolSize = ALIGN_UP(sampMemPoolSize + texMemPoolSize, 0x1000);
         if (!MemoryPoolMaker::createPool(&bd->sampTexMemPool, totalPoolSize)) {
-            printf("Failed to Create Texture/Sampler Memory Pool!\n");
+            DEBUG_LOG("Failed to Create Texture/Sampler Memory Pool!\n");
             return false;
         }
 
         if (!bd->samplerPool.Initialize(&bd->sampTexMemPool, 0, MaxSampDescriptors)) {
-            printf("Failed to Create Sampler Pool!\n");
+            DEBUG_LOG("Failed to Create Sampler Pool!\n");
             return false;
         }
 
         if (!bd->texPool.Initialize(&bd->sampTexMemPool, sampMemPoolSize, MaxTexDescriptors)) {
-            printf("Failed to Create Texture Pool!\n");
+            DEBUG_LOG("Failed to Create Texture Pool!\n");
             return false;
         }
 
         // load switch font data into imgui
-
         if (!loadSystemFont()) {
-            printf("Failed to load Switch System Font! Falling back to default ImGui font.\n");
+            DEBUG_LOG("Failed to load Switch System Font! Falling back to default ImGui font.\n");
         }
 
         // convert imgui font texels
@@ -153,7 +163,7 @@ namespace ImguiNvnBackend {
 
         if (!MemoryPoolMaker::createPool(&bd->fontMemPool, ALIGN_UP(texPoolSize, 0x1000),
                                          nvn::MemoryPoolFlags::CPU_UNCACHED | nvn::MemoryPoolFlags::GPU_CACHED)) {
-            printf("Failed to Create Font Memory Pool!\n");
+            DEBUG_LOG("Failed to Create Font Memory Pool!\n");
             return false;
         }
 
@@ -165,7 +175,7 @@ namespace ImguiNvnBackend {
                 .SetStorage(&bd->fontMemPool, 0);
 
         if (!bd->fontTexture.Initialize(&bd->texBuilder)) {
-            printf("Failed to Create Font Texture!\n");
+            DEBUG_LOG("Failed to Create Font Texture!\n");
             return false;
         }
 
@@ -189,7 +199,7 @@ namespace ImguiNvnBackend {
                 .SetWrapMode(nvn::WrapMode::CLAMP, nvn::WrapMode::CLAMP, nvn::WrapMode::CLAMP);
 
         if (!bd->fontSampler.Initialize(&bd->samplerBuilder)) {
-            printf("Failed to Init Font Sampler!\n");
+            DEBUG_LOG("Failed to Init Font Sampler!\n");
             return false;
         }
 
@@ -202,19 +212,19 @@ namespace ImguiNvnBackend {
         bd->fontTexHandle = bd->device->GetTextureHandle(bd->textureId, bd->samplerId);
         io.Fonts->SetTexID(&bd->fontTexHandle);
 
-        printf("Finished.\n");
+        DEBUG_LOG("Finished.\n");
 
         return true;
     }
 
     bool setupShaders(u8 *shaderBinary, ulong binarySize) {
 
-        printf("Setting up ImGui Shaders.\n");
+        DEBUG_LOG("Setting up ImGui Shaders.\n");
 
         auto bd = getBackendData();
 
         if (!bd->shaderProgram.Initialize(bd->device)) {
-            printf("Failed to Initialize Shader Program!");
+            DEBUG_LOG("Failed to Initialize Shader Program!");
             return false;
         }
 
@@ -223,7 +233,7 @@ namespace ImguiNvnBackend {
                                                                           nvn::MemoryPoolFlags::SHADER_CODE);
 
         if (!bd->shaderMemory->IsBufferReady()) {
-            printf("Shader Memory Pool not Ready! Unable to continue.\n");
+            DEBUG_LOG("Shader Memory Pool not Ready! Unable to continue.\n");
             return false;
         }
 
@@ -240,7 +250,7 @@ namespace ImguiNvnBackend {
         fragShaderData.control = shaderBinary + offsetData.mFragmentControlOffset;
 
         if (!bd->shaderProgram.SetShaders(2, bd->shaderDatas)) {
-            printf("Failed to Set shader data for program.\n");
+            DEBUG_LOG("Failed to Set shader data for program.\n");
             return false;
         }
 
@@ -251,7 +261,7 @@ namespace ImguiNvnBackend {
         bd->uniformMemory = IM_NEW(MemoryBuffer)(UBOSIZE);
 
         if (!bd->uniformMemory->IsBufferReady()) {
-            printf("Uniform Memory Pool not Ready! Unable to continue.\n");
+            DEBUG_LOG("Uniform Memory Pool not Ready! Unable to continue.\n");
             return false;
         }
 
@@ -263,7 +273,7 @@ namespace ImguiNvnBackend {
 
         bd->streamState.SetDefaults().SetStride(sizeof(ImDrawVert));
 
-        printf("Finished.\n");
+        DEBUG_LOG("Finished.\n");
 
         return true;
     }
@@ -305,15 +315,15 @@ namespace ImguiNvnBackend {
         bd->mShaderUBO.isUseSrgb = true;
 
         if (createShaders()) {
-            printf("Shader Binaries Loaded! Setting up Render Data.\n");
+            DEBUG_LOG("Shader Binaries Loaded! Setting up Render Data.\n");
 
             if (setupShaders(bd->imguiShaderBinary.ptr, bd->imguiShaderBinary.size) && setupFont()) {
-                printf("Rendering Setup!\n");
+                DEBUG_LOG("Rendering Setup!\n");
 
                 bd->isInitialized = true;
 
             } else {
-                printf("Failed to Setup Render Data!\n");
+                DEBUG_LOG("Failed to Setup Render Data!\n");
             }
         }
     }
@@ -405,12 +415,12 @@ namespace ImguiNvnBackend {
 
         // we dont need to process any data if it isnt valid
         if (!drawData->Valid) {
-            printf("Draw Data was Invalid! Skipping Render.");
+            DEBUG_LOG("Draw Data was Invalid! Skipping Render.");
             return;
         }
         // if we dont have any command lists to draw, we can stop here
         if (drawData->CmdListsCount == 0) {
-            printf("Command List was Empty! Skipping Render.\n");
+            DEBUG_LOG("Command List was Empty! Skipping Render.\n");
             return;
         }
 
@@ -419,35 +429,35 @@ namespace ImguiNvnBackend {
 
         // if something went wrong during backend setup, don't try to render anything
         if (!bd->isInitialized) {
-            printf("Backend Data was not fully initialized!\n");
+            DEBUG_LOG("Backend Data was not fully initialized!\n");
             return;
         }
 
         // initializes/resizes buffer used for all vertex data created by ImGui
-        size_t totalVtxSize = drawData->TotalVtxCount * sizeof(ImDrawVert);
+        size_t totalVtxSize = ALIGN_UP(drawData->TotalVtxCount * sizeof(ImDrawVert), 0x1000);
         if (!bd->vtxBuffer || bd->vtxBuffer->GetPoolSize() < totalVtxSize) {
             if (bd->vtxBuffer) {
                 bd->vtxBuffer->Finalize();
                 IM_FREE(bd->vtxBuffer);
-                printf("Resizing Vertex Buffer to Size: %ld\n", totalVtxSize);
+                DEBUG_LOG("Resizing Vertex Buffer to Size: %ld\n", totalVtxSize);
             } else {
-                printf("Initializing Vertex Buffer to Size: %ld\n", totalVtxSize);
+                DEBUG_LOG("Initializing Vertex Buffer to Size: %ld\n", totalVtxSize);
             }
 
             bd->vtxBuffer = IM_NEW(MemoryBuffer)(totalVtxSize);
         }
 
         // initializes/resizes buffer used for all index data created by ImGui
-        size_t totalIdxSize = drawData->TotalIdxCount * sizeof(ImDrawIdx);
+        size_t totalIdxSize = ALIGN_UP(drawData->TotalIdxCount * sizeof(ImDrawIdx), 0x1000);
         if (!bd->idxBuffer || bd->idxBuffer->GetPoolSize() < totalIdxSize) {
             if (bd->idxBuffer) {
 
                 bd->idxBuffer->Finalize();
                 IM_FREE(bd->idxBuffer);
 
-                printf("Resizing Index Buffer to Size: %ld\n", totalIdxSize);
+                DEBUG_LOG("Resizing Index Buffer to Size: %ld\n", totalIdxSize);
             } else {
-                printf("Initializing Index Buffer to Size: %ld\n", totalIdxSize);
+                DEBUG_LOG("Initializing Index Buffer to Size: %ld\n", totalIdxSize);
             }
 
             bd->idxBuffer = IM_NEW(MemoryBuffer)(totalIdxSize);
@@ -456,7 +466,7 @@ namespace ImguiNvnBackend {
 
         // if we fail to resize/init either buffers, end execution before we try to use said invalid buffer(s)
         if (!(bd->vtxBuffer->IsBufferReady() && bd->idxBuffer->IsBufferReady())) {
-            printf("Cannot Draw Data! Buffers are not Ready.\n");
+            DEBUG_LOG("Cannot Draw Data! Buffers are not Ready.\n");
             return;
         }
 

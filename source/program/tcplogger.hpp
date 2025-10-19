@@ -28,7 +28,7 @@ public:
     static void SendMessage(const char* msg);
     static const char* receiveMessage();
     void close();
-    static ssize_t stdio_write(struct _reent* r, void *fd, const char* ptr, size_t len);
+    
     bool IsConnected(){
         return mState == SocketState::CONNECTED;
     }

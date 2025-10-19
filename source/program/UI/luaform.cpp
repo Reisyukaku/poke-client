@@ -1,10 +1,11 @@
 #include "luaform.hpp"
+#include "debug.hpp"
 
 LuaForm * LuaForm::instance = nullptr;
 
 void LuaForm::LoadScriptList()
 {
-    printf("Loading lua scripts\n");
+    DEBUG_LOG("Loading lua scripts\n");
     pkcl::FilesystemManager::getInstance()->TryMountSD();
     nn::fs::DirectoryHandle dirHandle;
     if(R_SUCCEEDED(nn::fs::OpenDirectory(&dirHandle, scriptDir.c_str(), nn::fs::OpenDirectoryMode_All))){
@@ -15,7 +16,7 @@ void LuaForm::LoadScriptList()
         }
     }
     else
-        printf("Error: Failed to open lua script dir\n");
+        DEBUG_LOG("Error: Failed to open lua script dir\n");
 }
 
 void LuaForm::ExecuteCmd(char *cmd)
@@ -46,7 +47,7 @@ void LuaForm::ExecuteCmd(char *cmd)
                     if(ptr != nullptr)
                     {
                         auto hex = Utils::ToHex((char*)ptr, 0x20); //sneak peak since no way to get size
-                        printf("%s\n", hex.c_str());
+                        DEBUG_LOG("%s\n", hex.c_str());
                         res += std::string("<logged>");
                     }
                     else res += std::string("failed to get");
@@ -147,11 +148,11 @@ void LuaForm::Draw()
     ImGui::SameLine();
     if(ImGui::Button("Log", ImVec2(100, 0))) {
         for(auto &l : out_log)
-            printf("[Lua][Output] %s\n", l.c_str());
+            DEBUG_LOG("[Lua][Output] %s\n", l.c_str());
         out_log.clear();
 
         for(auto &l : dbg_log)
-            printf("[Lua][Debug] %s\n", l.c_str());
+            DEBUG_LOG("[Lua][Debug] %s\n", l.c_str());
         dbg_log.clear();
     }
     ImGui::SameLine();

@@ -5,15 +5,16 @@
 #include <string>
 #include <nn/fs.hpp>
 #include "filesystemManager.hpp"
+#include <nn/os.hpp>
 
 namespace pkcl {
 class FileLogger {
 public:
-	void init();
+	void Log(const char* fmt, ...);
     void Log(std::string str);
     void Log(std::deque<std::string> logs);
-	void LogRaw(char *str, size_t size);
-    
+	void LogRaw(const char *str, size_t size);
+
 	static FileLogger* getInstance() {
 		if (instance == nullptr)
 			instance = new FileLogger();
@@ -25,14 +26,14 @@ public:
 
 private:
 	static FileLogger* instance;
+	nn::os::MutexType m_mutex;
 	
     nn::fs::FileHandle handleOut;
     std::string logName;
 	bool mounted = false;
 	void WriteFile(const char *str, size_t size, bool isBin = false);
     
-	FileLogger() : logName("logs") {
-		//
-	}    
+	FileLogger();
+	~FileLogger();
 };
 }

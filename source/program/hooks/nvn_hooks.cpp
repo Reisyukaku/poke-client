@@ -30,17 +30,17 @@ static void (*freeFuncPtr)(void *ptr) = nullptr;
 
 void DebugLayerCallback(NVNdebugCallbackSource source, NVNdebugCallbackType type, int id, NVNdebugCallbackSeverity severity, const char * message, void* pUser)
 {
-    printf("NVN Debug Layer Callback:\n");
-    printf("  source:    0x%08x\n", source);
-    printf("  type:      0x%08x\n", type);
-    printf("  id:        0x%08x\n", id);
-    printf("  severity:  0x%08x\n", severity);
-    printf("  message:   %s\n",     message);
+    DEBUG_LOG("NVN Debug Layer Callback:\n");
+    DEBUG_LOG("  source:    0x%08x\n", source);
+    DEBUG_LOG("  type:      0x%08x\n", type);
+    DEBUG_LOG("  id:        0x%08x\n", id);
+    DEBUG_LOG("  severity:  0x%08x\n", severity);
+    DEBUG_LOG("  message:   %s\n",     message);
 
 }
 
 NVNboolean deviceInit(nvn::Device *device, const nvn::DeviceBuilder *builder) {
-    printf("nvnDeviceInitialize()\n");
+    DEBUG_LOG("nvnDeviceInitialize()\n");
 
     NVNboolean result = deviceInitPtr(device, builder);
     gfx->SetDevice(device);
@@ -98,7 +98,7 @@ void devSetFlag(nvn::DeviceBuilder *dev, int flags)
 void InitializeImguiBackend()
 {
     if (!hasInitImGui && (gfx->GetDevice() && nvnQueue && nvnCmdBuf)){
-        printf("Initializing ImGui backend\n");
+        DEBUG_LOG("Initializing ImGui backend\n");
 
         IMGUI_CHECKVERSION();
 
@@ -127,7 +127,7 @@ void InitializeImguiBackend()
         nvnImguiInitialize();
 
         hasInitImGui = true;
-        printf("ImGui finished init!\n");
+        DEBUG_LOG("ImGui finished init!\n");
     }
 }
 
@@ -208,6 +208,15 @@ void nvn_hooks()
     nn::ro::LookupSymbol(reinterpret_cast<uintptr_t *>(&mallocFuncPtr), "malloc");
     nn::ro::LookupSymbol(reinterpret_cast<uintptr_t *>(&reallocFuncPtr), "realloc");
     nn::ro::LookupSymbol(reinterpret_cast<uintptr_t *>(&freeFuncPtr), "free");
+
+    if(mallocFuncPtr == nullptr) 
+        DEBUG_LOG("malloc() unable to be dynamically resolved!\n");
+
+    if(reallocFuncPtr == nullptr) 
+        DEBUG_LOG("realloc() unable to be dynamically resolved!\n");
+
+    if(freeFuncPtr == nullptr) 
+        DEBUG_LOG("free() unable to be dynamically resolved!\n");
 
     bootstrapLdr::InstallAtSymbol("nvnBootstrapLoader");
 #ifdef PKCL_ENABLE_NVN_DEBUG_LAYER
