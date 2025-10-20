@@ -1,10 +1,5 @@
 #include "lua_hooks.h"
 
-void luaWarn (void *ud, const char *message, int tocont)
-{
-    DEBUG_LOG("[Lua][Warn] %s\n", message);
-}
-
 void lua_hooks()
 {
     LuaH::Setup();

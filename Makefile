@@ -137,16 +137,12 @@ export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
 ifeq ($(strip $(CONFIG_JSON)),)
-	jsons := $(wildcard *.json)
-	ifneq (,$(findstring $(TARGET).json,$(jsons)))
-		export APP_JSON := $(TOPDIR)/$(PROGRAM_ID).json
-	else
-		ifneq (,$(findstring config.json,$(jsons)))
-			export APP_JSON := $(TOPDIR)/config.json
-		endif
+	jsons := $(wildcard npdm/*.json)
+	ifneq (,$(findstring npdm/$(TARGET).json,$(jsons)))
+		export APP_JSON := $(TOPDIR)/npdm/$(PROGRAM_ID).json
 	endif
 else
-	export APP_JSON := $(TOPDIR)/$(CONFIG_JSON)
+	export APP_JSON := $(TOPDIR)/npdm/$(CONFIG_JSON)
 endif
 
 .PHONY: $(BUILD) clean all

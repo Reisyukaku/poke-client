@@ -148,11 +148,11 @@ void LuaForm::Draw()
     ImGui::SameLine();
     if(ImGui::Button("Log", ImVec2(100, 0))) {
         for(auto &l : out_log)
-            DEBUG_LOG("[Lua][Output] %s\n", l.c_str());
+            pkcl::FileLogger::getInstance()->Log("[Lua][Output] %s\n", l.c_str());
         out_log.clear();
 
         for(auto &l : dbg_log)
-            DEBUG_LOG("[Lua][Debug] %s\n", l.c_str());
+            pkcl::FileLogger::getInstance()->Log("[Lua][Debug] %s\n", l.c_str());
         dbg_log.clear();
     }
     ImGui::SameLine();

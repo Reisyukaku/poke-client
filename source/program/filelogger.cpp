@@ -65,7 +65,6 @@ void pkcl::FileLogger::WriteFile(const char *str, size_t size, bool isBin)
     if (rc == 0x202)
         rc = nn::fs::CreateFile(filename.c_str(), 0);
     
-    s64 offset = 0;
     nn::fs::OpenFile(&handleOut, filename.c_str(), nn::fs::OpenMode_Write | nn::fs::OpenMode_Append);
 
     s64 fileSize = 0;

@@ -1,6 +1,6 @@
 # poke-client
 
-Very WIP tool for debugging and reversing pokemon games. Based on exlaunch.
+Tool for debugging and reversing pokemon games. Based on exlaunch.
 
 Designed to be ran on real hardware.
 

@@ -18,7 +18,7 @@ public:
 	void Update() {
 		ImGuiIO &io = ImGui::GetIO();
 		io.AddMousePosEvent((float)state.x, (float)state.y);
-		for (auto [im_k, nx_k]: mouse_mapping)
+		for (const auto& [im_k, nx_k]: mouse_mapping)
 		{
 			io.AddMouseButtonEvent(im_k, state.buttons.isBitSet((nn::hid::MouseButton) nx_k));
 		}

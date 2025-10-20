@@ -129,7 +129,7 @@ public:
     
     void Update() 
     {
-        for (auto [im_k, nx_k]: key_mapping) {
+        for (const auto& [im_k, nx_k]: key_mapping) {
             if (IsPressed((nn::hid::KeyboardKey) nx_k))
                 ImGui_ImplNX_AddKeyEvent((ImGuiKey) im_k, true);
             else if(IsReleased((nn::hid::KeyboardKey) nx_k))
