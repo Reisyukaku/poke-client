@@ -2,6 +2,8 @@
 
 #include <string>
 #include <functional>
+#include <vector>
+#include "bounded_log.hpp"
 #include "imgui/imgui_nvn.h"
 #include "filelogger.hpp"
 #include "offsetManager.hpp"
@@ -22,7 +24,7 @@ public:
 
     void LoadScriptList();
 
-    void AddOutString(std::string str)
+    void AddOutString(std::string_view str)
     {
         out_log.push_back(str);
     }
@@ -38,7 +40,7 @@ private:
 	LuaForm(const LuaForm&);
 	LuaForm& operator=(const LuaForm&);
 
-    LuaForm() : scriptList(nullptr)
+    LuaForm()
     {
         Name = "Lua Interface";
         scriptDir = "sd:/luaScripts/";
@@ -47,9 +49,9 @@ private:
     void ExecuteFile(std::string file);
     void ExecuteCmd(char *cmd);
     void DumpClosures();
-    std::vector<std::string> out_log, dbg_log;
-    s64 scriptCnt;
+    BoundedLog out_log, dbg_log;
+    s64 scriptCnt = 0;
     std::string selectedScript;
-    nn::fs::DirectoryEntry* scriptList;
+    std::vector<nn::fs::DirectoryEntry> scriptList;
     std::string scriptDir;
 };

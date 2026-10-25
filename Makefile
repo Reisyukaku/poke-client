@@ -1,26 +1,4 @@
-#---------------------------------------------------------------------------------
-.SUFFIXES:
-#---------------------------------------------------------------------------------
-
-ifeq ($(strip $(DEVKITPRO)),)
-$(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>/devkitpro")
-endif
-
 TOPDIR ?= $(CURDIR)
-include $(DEVKITPRO)/libnx/switch_rules
-
-#---------------------------------------------------------------------------------
-# TARGET is the name of the output
-# BUILD is the directory where object files & intermediate files will be placed
-# SOURCES is a list of directories containing source code
-# DATA is a list of directories containing data files
-# INCLUDES is a list of directories containing header files
-#
-# CONFIG_JSON is the filename of the NPDM config file (.json), relative to the project folder.
-#   If not set, it attempts to use one of the following (in this order):
-#     - <Project name>.json
-#     - config.json
-#---------------------------------------------------------------------------------
 export TARGET		:=	main
 
 #----------------------------- User configuration -----------------------------
@@ -37,6 +15,51 @@ CONFIG_JSON		:=	$(PROGRAM_ID).json
 TCPLOG_IP		:= 	192.168.1.221
 
 #-------------------------- End of user configuration --------------------------
+
+# Run the toolchain in the official devkitPro Switch development image.
+# Override DOCKER_IMAGE to select a specific release tag or digest.
+DOCKER ?= docker
+DOCKER_IMAGE ?= devkitpro/devkita64:latest
+DOCKER_FLAGS ?=
+
+ifneq ($(IN_DOCKER),1)
+.DEFAULT_GOAL := all
+.PHONY: all clean build docker-build
+
+# Share one container invocation when multiple goals are requested.
+all clean build: docker-build
+
+docker-build:
+	$(DOCKER) run --rm $(DOCKER_FLAGS) \
+		--user "$(shell id -u):$(shell id -g)" \
+		--volume "$(CURDIR):/work" --workdir /work \
+		--env HOME=/tmp \
+		--env MAKEFLAGS="$(filter-out --jobserver-auth=% --jobserver-fds=%,$(MAKEFLAGS))" \
+		$(DOCKER_IMAGE) make IN_DOCKER=1 $(if $(MAKECMDGOALS),$(MAKECMDGOALS),all)
+
+else
+#---------------------------------------------------------------------------------
+.SUFFIXES:
+#---------------------------------------------------------------------------------
+
+ifeq ($(strip $(DEVKITPRO)),)
+$(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>/devkitpro")
+endif
+
+include $(DEVKITPRO)/libnx/switch_rules
+
+#---------------------------------------------------------------------------------
+# TARGET is the name of the output
+# BUILD is the directory where object files & intermediate files will be placed
+# SOURCES is a list of directories containing source code
+# DATA is a list of directories containing data files
+# INCLUDES is a list of directories containing header files
+#
+# CONFIG_JSON is the filename of the NPDM config file (.json), relative to the project folder.
+#   If not set, it attempts to use one of the following (in this order):
+#     - <Project name>.json
+#     - config.json
+#---------------------------------------------------------------------------------
 
 BUILD		:=	build
 ROOT_SOURCE	:=	$(TOPDIR)/source
@@ -193,3 +216,5 @@ $(OFILES_SRC)	: $(HFILES_BIN)
 #---------------------------------------------------------------------------------------
 endif
 #---------------------------------------------------------------------------------------
+
+endif # IN_DOCKER

@@ -8,6 +8,7 @@ bool MemoryPoolMaker::createPool(nvn::MemoryPool *result, size_t size,
 
     size_t alignedSize = ALIGN_UP(size, 0x1000);
     void *poolPtr = IM_ALLOC(alignedSize);
+    if (!poolPtr) return false;
 
     nvn::MemoryPoolBuilder memPoolBuilder{};
     memPoolBuilder.SetDefaults().SetDevice(bd->device).SetFlags(
@@ -15,6 +16,7 @@ bool MemoryPoolMaker::createPool(nvn::MemoryPool *result, size_t size,
             .SetStorage(poolPtr, alignedSize);
 
     if (!result->Initialize(&memPoolBuilder)) {
+        IM_FREE(poolPtr);
         return false;
     }
 

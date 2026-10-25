@@ -1,15 +1,14 @@
 #pragma once
 
 #include <string>
+#include <optional>
 #include <cstring>
 #include <unistd.h>
 #include <map>
 #include "../types.h"
 #include "nn/socket.hpp"
 #include "nn/result.h"
-#include "nn/util.h"
 #include <stdarg.h>
-#include "offsetManager.hpp"
 
 #define PACKET_MAX_SIZE 0x500
 
@@ -26,7 +25,7 @@ public:
     nn::Result init(const char* ip, u16 port);
 
     static void SendMessage(const char* msg);
-    static const char* receiveMessage();
+    static std::optional<std::string> receiveMessage();
     void close();
     
     bool IsConnected(){
@@ -43,13 +42,15 @@ public:
 	TcpLogger& operator=(const TcpLogger&) = delete;
     
 protected:
-    SocketState mState;
+    SocketState mState = SocketState::UNINITIALIZED;
 
 private:
 	static TcpLogger* instance;
-    int mSocketFd;
+    int mSocketFd = -1;
+    bool networkInitialized = false;
+    bool socketsInitialized = false;
     
 	TcpLogger() {}
-    ~TcpLogger() {}
+    ~TcpLogger() { close(); }
 };
 };

@@ -15,7 +15,11 @@ Designed to be ran on real hardware.
 ![sv](https://i.imgur.com/xjGxu0a.jpeg)
 
 ## Building
-Run `make -j8`
+Install Docker and make sure its daemon is running and accessible to your user, then run:
+
+```sh
+make -j8
+```
 
 Change the TitleID in the makefile and make sure the appropriate named json exists as well.
 

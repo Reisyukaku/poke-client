@@ -19,6 +19,6 @@ void game_hooks()
 
     //PLZA
     #if EXL_PROGRAM_ID == 0x0100F43008C44000
-
+    trpfd::InstallAtOffset(0x2b150);
     #endif
 }
